@@ -1,0 +1,2 @@
+
+$ npm install --save-dev --save-exact @ionic/cli-plugin-ionic1@latest @ionic/cli-plugin-cordova@latest
