@@ -41,16 +41,28 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
+.controller('MeusPetsCtrl', function($scope) {
+  $scope.pets = [
+    { title: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { title: 'Costelinha', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
   ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PetCtrl', function($scope, $stateParams) {
+})
+
+
+.service('localService', function(window){
+  var setCadastro = function(dt){
+    window.localStorage.cadastro = JSON.stringify(dt);
+  }
+
+  var getCadastro = function(dt){
+    return JSON.parse(window.localStorage.cadastro || '{}');
+  }
+
+  return{
+    setCadastro : setCadastro,
+    getCadastro : getCadastro
+  }
 });

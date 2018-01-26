@@ -1,1 +1,76 @@
-/* Empty. Add your own CSS if you like */
+/* Status Bar */
+
+.bar-stable .button.button-clear{
+	color: #FF5F6D;
+}
+.bar.bar-stable .title {
+    color: #FF5F6D;
+}
+.bar.bar-stable {
+    border-bottom: solid 2px #FF5F6D;
+    background-color: #ffffff;
+    background-image: none;
+    color: #FF5F6D;
+}
+
+/* ----------------------- */
+
+.bg-gray{
+	background-color: #f3f3f3;
+}
+
+.middle-container{
+	display: table;
+    width: 100%;
+}
+.middle{
+	vertical-align: middle;
+    display: table-cell;
+    width: 100%;
+}
+
+/* LISTA */
+.item{
+	margin: 10px 0px;
+}
+.item-complex .item-content{
+	padding:10px;
+}
+
+/* IMAGENS */
+.img-rounded{
+	border-radius: 50%;
+	overflow: hidden;
+}
+.img-rounded img{
+	width: 100%;
+	min-height: 100%;
+}
+.bordered{
+	border: solid 2px #FF5F6D;
+}
+
+/* Titulos */
+.titulo{
+	font-size: 20px;
+	color: #FF5F6D;
+}
+
+/* Meus Pets */
+.meuspets .img-rounded{
+	width: 90px;
+	height: 90px;
+	float: left;
+}
+
+.meuspets .pet-infos{
+	padding-left: 20px;
+}
+.meuspets .pet-infos span{
+	display: block;
+	line-height: 25px;
+}
+.item-complex .item-content{
+	display: table;
+    width: 100%;
+}
