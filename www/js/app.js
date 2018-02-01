@@ -32,15 +32,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.novopet', {
+      url: '/novopet',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/novopet.html',
+          controller: 'NovoPetCtrl'
         }
       }
-    })
-    .state('app.meuspets', {
+  })
+
+  .state('app.meuspets', {
       url: '/meuspets',
       views: {
         'menuContent': {
@@ -48,7 +50,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'MeusPetsCtrl'
         }
       }
-    })
+  })
 
   .state('app.single', {
     url: '/meuspets/:petId',

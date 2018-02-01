@@ -19,6 +19,14 @@
 	background-color: #f3f3f3;
 }
 
+.bg-grad{
+	background: #ff5f6d; /* fallback for old browsers */
+	background: -webkit-linear-gradient(135deg, #ff5f6d, #ffc371); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(135deg, #ff5f6d, #ffc371);
+}
+
+.container{margin:15px;}
+
 .middle-container{
 	display: table;
     width: 100%;
@@ -56,6 +64,47 @@
 	color: #FF5F6D;
 }
 
+.btm-bar{
+	background: #ff5f6d; /* fallback for old browsers */
+	background: -webkit-linear-gradient(135deg, #ff5f6d, #ffc371); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(135deg, #ff5f6d, #ffc371); 
+
+	position: absolute;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+}
+.btm-bar .btn-icon{
+	width: 60px;
+    height: 60px;
+    background-color: #fff;
+    margin: 0 auto;
+    border-radius: 50%;
+    margin-top: -6px;
+    color: #FF5F6D;
+    text-align: center;
+    line-height: 50px;
+    font-size: 30px;
+}
+
+/* form */
+.form .line {
+    margin: 20px 0;
+    border-bottom: solid 1px #FF5F6D;
+}
+
+.form .line input{
+	color: #ff5f6d;
+	width: 100%;
+	margin-bottom: -5px;
+    background-color: transparent;
+}
+
+::-webkit-input-placeholder { color: #FF5F6D !important; font-size: 14px; }
+::-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+:-ms-input-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+:-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+
 /* Meus Pets */
 .meuspets .img-rounded{
 	width: 90px;
@@ -70,7 +119,50 @@
 	display: block;
 	line-height: 25px;
 }
+.meuspets .pet-infos span.subtitulo{
+	font-size: 12px;
+    color: #666;
+}
+
 .item-complex .item-content{
 	display: table;
     width: 100%;
+}
+
+.pet-area{
+	display: table;
+}
+.pet-ind {
+    margin: 10px -10px -10px;
+    background: url(../img/textura.jpg) no-repeat;
+    background-size: 100% auto;
+}
+.pet-ind .ind-item {
+    width: 33%;
+    display: inline-block;
+    line-height: 35px;
+    text-align: center;
+    color: #fff;
+}
+
+/*  NOVO PET  */
+.add-image {
+    width: 100%;
+    max-width:400px;
+    height: 300px;
+    border-radius: 10px;
+    text-align: center;
+    padding-top:50px; 
+}
+.add-image span{
+	color: rgba(0,0,0,0.3);
+	font-size:20px;
+	line-height: 40px;
+}
+.add-image img{
+	color: rgba(0,0,0,0.3);
+	width: 40%;
+	margin:0 auto;
+	display: block;
+	opacity: 0.2;
 }

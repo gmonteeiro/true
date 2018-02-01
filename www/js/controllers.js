@@ -41,14 +41,20 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('MeusPetsCtrl', function($scope) {
+.controller('MeusPetsCtrl', function($scope, $state) {
   $scope.pets = [
     { title: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
     { title: 'Costelinha', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
   ];
+
+  $scope.newpost = function(){  $state.go("app.novopet"); }
 })
 
 .controller('PetCtrl', function($scope, $stateParams) {
+})
+
+.controller('NovoPetCtrl', function($scope, $stateParams, $state) {
+
 })
 
 

@@ -2,12 +2,31 @@
 	<ion-content class="bg-gray meuspets">
 		<ion-list>
 			<ion-item ng-repeat="pet in pets" href="#/app/meuspets/{{pet.id}}">
-				<div class="img-rounded bordered"><img ng-src="{{pet.img}}" alt=""></div>
-				<div class="pet-infos middle">
-					<span class="titulo">{{pet.title}}</span>
-					<span class="subtitulo">{{pet.nasc}} | {{pet.peso}}kg </span>
+				<div class="pet-area">
+					<div class="img-rounded bordered"><img ng-src="{{pet.img}}" alt=""></div>
+					<div class="pet-infos middle">
+						<span class="titulo">{{pet.title}}</span>
+						<span class="subtitulo">{{pet.nasc}} | {{pet.peso}}kg </span>
+					</div>
+				</div>
+				<div class="pet-ind">
+					<div class="ind-item">
+						<span class="icon"></span>
+						2 semanas
+					</div>
+					<div class="ind-item">
+						<span class="icon"></span>
+						3 meses
+					</div>
+					<div class="ind-item">
+						<span class="icon"></span>
+						2 dias
+					</div>
 				</div>
 			</ion-item>
 		</ion-list>
 	</ion-content>
+	<div class="btm-bar">
+		<div class="btn-icon" ng-click="newpost()">+</div>
+	</div>
 </ion-view>
