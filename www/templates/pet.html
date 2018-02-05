@@ -1,5 +1,29 @@
-<ion-view view-title="Playlist">
-  <ion-content>
-    <h1>Playlist</h1>
-  </ion-content>
+<ion-view view-title="{{pet.nome}}">
+  	<ion-content class="pet-content">
+    	<div class="img-area">
+    		<img ng-src="{{pet.img}}" alt="">
+    		<div class="pet-ind">
+				<div class="ind-item">
+					<span class="icon"><img src="../img/bug.png" alt=""></span>
+					2 semanas
+				</div>
+				<div class="ind-item">
+					<span class="icon"><img src="../img/vacina.png" alt=""></span>
+					3 meses
+				</div>
+				<div class="ind-item">
+					<span class="icon"><img src="../img/banho.png" alt=""></span>
+					2 dias
+				</div>
+			</div>
+    	</div>
+
+    	<div class="pet-menu">
+    		<div class="pet-menu-item bg-grad"><img src="../img/ficha.png" alt="" class="icone">ficha técnica</div>
+    		<div class="pet-menu-item bg-grad"><img src="../img/seringa.png" alt="" class="icone">carteira de vacina</div>
+    		<div class="pet-menu-item bg-grad"><img src="../img/timeline.png" alt="" class="icone">timeline</div>
+    		<div class="pet-menu-item bg-grad"><img src="../img/banhos.png" alt="" class="icone">banhos</div>
+    		<div class="pet-menu-item bg-grad"><img src="../img/medicamentos.png" alt="" class="icone">medicamentos</div>
+    	</div>
+  	</ion-content>
 </ion-view>

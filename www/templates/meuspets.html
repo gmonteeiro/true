@@ -5,21 +5,21 @@
 				<div class="pet-area">
 					<div class="img-rounded bordered"><img ng-src="{{pet.img}}" alt=""></div>
 					<div class="pet-infos middle">
-						<span class="titulo">{{pet.title}}</span>
+						<span class="titulo">{{pet.nome}}</span>
 						<span class="subtitulo">{{pet.nasc}} | {{pet.peso}}kg </span>
 					</div>
 				</div>
 				<div class="pet-ind">
 					<div class="ind-item">
-						<span class="icon"></span>
+						<span class="icon"><img src="../img/bug.png" alt=""></span>
 						2 semanas
 					</div>
 					<div class="ind-item">
-						<span class="icon"></span>
+						<span class="icon"><img src="../img/vacina.png" alt=""></span>
 						3 meses
 					</div>
 					<div class="ind-item">
-						<span class="icon"></span>
+						<span class="icon"><img src="../img/banho.png" alt=""></span>
 						2 dias
 					</div>
 				</div>
@@ -27,6 +27,6 @@
 		</ion-list>
 	</ion-content>
 	<div class="btm-bar">
-		<div class="btn-icon" ng-click="newpost()">+</div>
+		<div class="btn-icon" ng-click="newpet()">+</div>
 	</div>
 </ion-view>
