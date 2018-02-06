@@ -99,6 +99,40 @@
     margin-top: 18px;
 }
 
+/* IMG AREA */
+.img-area.small{
+    height: 180px;
+    overflow: hidden;
+}
+
+.halph{
+    width: 50%;
+    float: left;
+}
+
+/* BG TITLE */
+.bg-title{
+    height: 100px;
+    background: url('../img/textura.jpg') no-repeat;
+    background-position: 100% 40%;
+    background-size: 100%;
+    margin-bottom:20px;
+}
+.bg-title img{
+    position: absolute;
+    width: 30px;
+    right: 5px;
+    margin-top: 5px
+}
+.bg-title h2{
+    color: #fff;
+    text-align: center;
+    margin:0;
+    text-transform:uppercase;
+    line-height: 100px;
+    font-size: 20px;
+}
+
 /* form */
 .form .line {
     margin: 20px 0;
@@ -317,9 +351,19 @@
     margin-top: 4px;
 }
 
-
-
-
+/*  FICHA  TÉCNICA*/
+.field{
+    margin-bottom: 20px
+}
+.field .field-name{
+    color: #FF5F6D;
+    font-weight: bold;
+}
+.field .field-content{
+    color: #777777;
+    font-weight: lighter;
+    font-size: 16px;
+}
 
 
 

@@ -42,7 +42,8 @@ angular.module('starter.controllers', [])
   $scope.newpet = function(){  $state.go("app.novopet"); }
 })
 
-.controller('PetCtrl', function($scope, $stateParams) {
+.controller('FichaCtrl', function($scope, $state, $stateParams) {
+  console.log($stateParams);
   $scope.pet = {};
   var pets = [
     { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
@@ -50,6 +51,21 @@ angular.module('starter.controllers', [])
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+  console.log($scope.pet);
+})
+
+.controller('PetCtrl', function($scope, $stateParams, $state) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+
+  $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state) {
