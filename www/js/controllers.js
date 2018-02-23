@@ -55,6 +55,46 @@ angular.module('starter.controllers', [])
   console.log($scope.pet);
 })
 
+.controller('TimelineCtrl', function($scope, $state, $stateParams) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+  console.log($scope.pet);
+})
+
+.controller('VacinaCtrl', function($scope, $state, $stateParams) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+  console.log($scope.pet);
+
+  $scope.vacina = function(id){  $state.go("app.vacinaDetalhe", { 'vacId': id }); }
+})
+
+.controller('VacinaDetalheCtrl', function($scope, $state, $stateParams) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.vacId; })[0];
+
+
+
+  console.log($scope.pet);
+})
+
 .controller('PetCtrl', function($scope, $stateParams, $state) {
   $scope.pet = {};
   var pets = [

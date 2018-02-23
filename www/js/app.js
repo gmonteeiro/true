@@ -61,6 +61,36 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         controller: 'PetCtrl'
       }
     }
+  })
+
+  .state('app.timeline', {
+    url: '/timeline/:petId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/timeline.html',
+        controller: 'TimelineCtrl'
+      }
+    }
+  })
+
+  .state('app.vacina', {
+    url: '/vacina/:petId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/vacina.html',
+        controller: 'VacinaCtrl'
+      }
+    }
+  })
+
+  .state('app.vacinaDetalhe', {
+    url: '/vacinaDetalhe/:vacId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/vacina_detalhe.html',
+        controller: 'VacinaDetalheCtrl'
+      }
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/meuspets');
