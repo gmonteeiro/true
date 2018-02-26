@@ -1,28 +1,27 @@
-<ion-view view-title="Meus Veterinários">
-	<ion-content class="bg-gray meuspets">
+<ion-view view-title="Meus Petshops">
+	<ion-content class="bg-gray meuspets petshop vets">
 		<ion-list>
-			<ion-item ng-repeat="vet in vets">
+			<ion-item ng-repeat="petshop in petshops">
 				<div class="pet-area">
-					<div class="img-rounded bordered"><img ng-src="{{vet.img}}" alt=""></div>
 					<div class="pet-infos middle">
-						<span class="titulo">{{vet.nome}}</span>
-						<span class="subtitulo">CRMV: {{vet.crmv}} </span>
+						<span class="titulo">{{petshop.nome}}</span>
+						<span class="subtitulo">{{petshop.endereco}} </span>
 					</div>
 				</div>
 				<div class="pet-ind">
 					<div class="ind-item col-2">
 						<span class="icon"><img src="../img/phone.png" alt=""></span>
-						{{vet.fone}}
+						{{petshop.fone}}
 					</div>
 					<div class="ind-item col-2">
 						<span class="icon"><img src="../img/cellphone.png" alt=""></span>
-						{{vet.celular}}
+						{{petshop.celular}}
 					</div>
 				</div>
 			</ion-item>
 		</ion-list>
 	</ion-content>
 	<div class="btm-bar">
-		<div class="btn-icon" ng-click="newpet()">+</div>
+		<div class="btn-icon" ng-click="newpetshop()">+</div>
 	</div>
 </ion-view>

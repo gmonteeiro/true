@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: '/meuspets',
       views: {
         'menuContent': {
-          templateUrl: 'templates/pet-list.html',
+          templateUrl: 'templates/pet_list.html',
           controller: 'MeusPetsCtrl'
         }
       }
@@ -117,8 +117,38 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: '/meusvets',
       views: {
         'menuContent': {
-          templateUrl: 'templates/vet-list.html',
+          templateUrl: 'templates/vet_list.html',
           controller: 'MeusVetsCtrl'
+        }
+      }
+  })
+
+  .state('app.novovet', {
+      url: '/novovet',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/vet_new.html',
+          controller: 'NovoVetCtrl'
+        }
+      }
+  })
+
+  .state('app.meuspetshops', {
+      url: '/meuspetshops',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/petshop_list.html',
+          controller: 'MeusPetshopsCtrl'
+        }
+      }
+  })
+
+  .state('app.novopetshop', {
+      url: '/novopetshop',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/petshop_new.html',
+          controller: 'NovoPetshopCtrl'
         }
       }
   })
@@ -129,6 +159,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         'menuContent': {
           templateUrl: 'templates/banhos.html',
           controller: 'BanhosCtrl'
+        }
+      }
+  })
+
+  .state('app.minhaconta', {
+      url: '/minhaconta',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/minhaconta.html',
+          controller: 'MinhaContaCtrl'
         }
       }
   });

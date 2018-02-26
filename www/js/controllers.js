@@ -52,7 +52,24 @@ angular.module('starter.controllers', [])
     { id: 2, nome: 'Dr. Augusto', crmv: "SP-1234", clinica: "Clinica Veterinária Augusto", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"../img/no-image-vet.png"}
   ];
 
-  $scope.newpet = function(){  $state.go("app.novopet"); }
+  $scope.newpet = function(){  $state.go("app.novovet"); }
+})
+
+.controller('NovoVetCtrl', function($scope, $state) {
+ 
+})
+
+.controller('MeusPetshopsCtrl', function($scope, $state) {
+  $scope.petshops = [
+    { id: 1, nome: 'Pet Life', fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750"},
+    { id: 2, nome: 'Dr. Pet', fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750"}
+  ];
+
+  $scope.newpetshop = function(){  $state.go("app.novopetshop"); }
+})
+
+.controller('NovoPetshopCtrl', function($scope, $state) {
+ 
 })
 
 .controller('FichaCtrl', function($scope, $state, $stateParams) {
@@ -148,6 +165,10 @@ angular.module('starter.controllers', [])
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
   console.log($scope.pet);
+})
+
+.controller('MinhaContaCtrl', function($scope, $stateParams, $state) {
+  
 })
 
 
