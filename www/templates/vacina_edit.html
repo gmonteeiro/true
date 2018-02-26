@@ -1,0 +1,38 @@
+<ion-view view-title="Editar Vacina">
+  <ion-content class="container btm">
+    <div class="edit-image">
+    	<div class="btn-image"><img src="../img/close-color.png" alt=""></div>
+    	<img src="../img/selo.png" alt="">
+    </div>
+	<div class="form">
+	    <div class="line">
+	    	<input type="text" name="nome" ng-model="vacina.nome" placeholder="V8 - Dose 1">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="17/12/2017">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="retorno" ng-model="vacina.retorno" placeholder="18/01/2018">
+	    </div>
+		<!-- 
+		<div class="line">
+	    	<input type="text" name="lembrete" ng-model="vacina.lembrete" placeholder="Lembrete">
+	    </div> -->
+
+	    <div class="line">
+	    	<input type="text" name="veterinario" ng-model="vacina.veterinario" placeholder="Dr. Gustavo">
+	    </div>
+
+	    <div class="line noline">
+	    	<div class="field-name">Anotações</div>
+	    	<textarea name="anotacoes">Primeira dose da vacina V8</textarea>
+	    </div>
+    </div>
+  </ion-content>
+
+    <div class="btm-bar">
+		<div class="btn-icon" ng-click="newpost()"><img src="../img/checked.png" alt=""></div>
+	</div>
+</ion-view>

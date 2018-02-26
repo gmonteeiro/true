@@ -37,7 +37,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: '/novopet',
       views: {
         'menuContent': {
-          templateUrl: 'templates/novopet.html',
+          templateUrl: 'templates/pet_new.html',
           controller: 'NovoPetCtrl'
         }
       }
@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: '/meuspets',
       views: {
         'menuContent': {
-          templateUrl: 'templates/meuspets.html',
+          templateUrl: 'templates/pet-list.html',
           controller: 'MeusPetsCtrl'
         }
       }
@@ -83,14 +83,54 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
+  .state('app.novavacina', {
+      url: '/novavacina',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/vacina_new.html',
+          controller: 'NovaVacinaCtrl'
+        }
+      }
+  })
+
+  .state('app.vacinaEdit', {
+      url: '/vacinaEdit/:vacId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/vacina_edit.html',
+          controller: 'VacinaEditCtrl'
+        }
+      }
+  })
+
   .state('app.vacinaDetalhe', {
     url: '/vacinaDetalhe/:vacId',
     views: {
       'menuContent': {
-        templateUrl: 'templates/vacina_detalhe.html',
+        templateUrl: 'templates/vacina_detail.html',
         controller: 'VacinaDetalheCtrl'
       }
     }
+  })
+
+  .state('app.meusvets', {
+      url: '/meusvets',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/vet-list.html',
+          controller: 'MeusVetsCtrl'
+        }
+      }
+  })
+
+  .state('app.banhos', {
+      url: '/banhos/:petId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/banhos.html',
+          controller: 'BanhosCtrl'
+        }
+      }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/meuspets');

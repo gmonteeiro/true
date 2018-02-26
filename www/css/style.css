@@ -15,6 +15,17 @@
 .bar .buttons span.back-text{
 	display: none;
 }
+.bar .buttons.buttons-right {
+    width: 30px;
+    height: 30px;
+    top: 10px;
+}
+.bar .buttons-right span {
+    display: block;
+}
+.bar .right-buttons img {
+    width: 100%;
+}
 
 /* ----------------------- */
 
@@ -43,6 +54,15 @@
 .text-hl {
     color: #ff5f6d;
     font-size: 14px;
+}
+
+.link{
+    font-weight: normal !important;
+    text-decoration: underline;
+    color: #FF5F6D !important;
+}
+.col-2{
+    width: 49% !important;
 }
 
 /* LISTA */
@@ -152,12 +172,26 @@
     margin: 20px 0;
     border-bottom: solid 1px #FF5F6D;
 }
+.form .line.noline{
+    border-bottom: none;
+}
 
 .form .line input{
 	color: #ff5f6d;
 	width: 100%;
 	margin-bottom: -5px;
     background-color: transparent;
+}
+.form textarea {
+    width: 100%;
+    margin: 0;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    min-height: 180px;
+    padding: 5px;
+}
+.form .field-name{
+    color: #FF5F6D;
 }
 
 .line.opt{
@@ -379,16 +413,22 @@
     font-size: 16px;
 }
 
+.field img{
+    width: 100%;
+}
+
 /* TIMELINE */
 .timeline{
 	background-color: #f4f4f4;
 }
 .card{
-	padding: 5px 10px;
-	overflow: initial;
-	box-shadow: none;
-	border-radius: 6px;
-	display: inline-block;
+    padding: 5px 10px;
+    overflow: initial;
+    box-shadow: none;
+    border-radius: 6px;
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0;
 }
 
 .card .data {
@@ -443,10 +483,67 @@
     color: #fff;
 }
 
+/* VACINA DETALHES */
+.vacina-detalhe .field .field-name{
+    color: #666;
+}
+.vacina-detalhe .field{
+    margin: 15px 0;
+}
+
+/* EDITAR VACINA */
+.edit-image{
+    margin-top: 10px;
+}
+.edit-image img{
+    width: 100%;
+}
+.edit-image .btn-image{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0px;
+    margin-top: 10px;
+}
 
 
+/* BANHOS */
+.alert .field {
+    background-color: #fff;
+    padding: 10px 25px;
+}
+.alert .alert-sign{
+    float: right;
+    margin-top: -35px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #FF5F6D;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 24px;
+    border-radius: 50%;
+}
 
+.icon-field{
+    margin:10px 0;
+}
+.icon-field img {
+    height: 15px;
+    width: auto;
+    margin-right: 10px;
+    float: left;
+    margin-top: 2px;
+}
+.icon-field span {
+    color: #444444;
+}
 
+/* MEUS VETERINARIOS */
+.vet-ind .ind-item{
+    width: 49%;
+}
 
 
 

@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -21,6 +21,10 @@ angular.module('starter.controllers', [])
     $scope.modal.show();
   };
 
+  $scope.closemenu = function(){
+    $ionicSideMenuDelegate.toggleLeft();
+  }
+
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
@@ -37,6 +41,15 @@ angular.module('starter.controllers', [])
   $scope.pets = [
     { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
     { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.newpet = function(){  $state.go("app.novopet"); }
+})
+
+.controller('MeusVetsCtrl', function($scope, $state) {
+  $scope.vets = [
+    { id: 1, nome: 'Dr. Gustavo', crmv: "SP-1234", clinica: "Pet Life", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"../img/vet-pic.png"},
+    { id: 2, nome: 'Dr. Augusto', crmv: "SP-1234", clinica: "Clinica Veterinária Augusto", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"../img/no-image-vet.png"}
   ];
 
   $scope.newpet = function(){  $state.go("app.novopet"); }
@@ -79,20 +92,26 @@ angular.module('starter.controllers', [])
   console.log($scope.pet);
 
   $scope.vacina = function(id){  $state.go("app.vacinaDetalhe", { 'vacId': id }); }
+  $scope.addVacina = function(id){  $state.go("app.novavacina"); }
 })
 
 .controller('VacinaDetalheCtrl', function($scope, $state, $stateParams) {
-  $scope.pet = {};
-  var pets = [
+  $scope.vacina = {};
+  var vacinas = [
     { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
     { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
   ];
 
-  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.vacId; })[0];
+  $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
+  console.log($scope.vacina);
 
+  $scope.editVacina = function(){  
+    console.log("clicou");
+    $state.go("app.vacinaEdit", { 'vacId': $scope.vacina.id }); }
+})
 
-
-  console.log($scope.pet);
+.controller('VacinaEditCtrl', function($scope, $state, $stateParams) {
+  console.log($stateParams.vacId);
 })
 
 .controller('PetCtrl', function($scope, $stateParams, $state) {
@@ -113,6 +132,22 @@ angular.module('starter.controllers', [])
     console.log(id);
     //$scope.respostas[$scope.quest] = {"res" : id};
   }
+})
+
+.controller('NovaVacinaCtrl', function($scope, $stateParams, $state) {
+  
+})
+
+.controller('BanhosCtrl', function($scope, $stateParams, $state) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+  console.log($scope.pet);
 })
 
 
