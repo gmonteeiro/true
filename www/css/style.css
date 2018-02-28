@@ -26,6 +26,11 @@
 .bar .right-buttons img {
     width: 100%;
 }
+.platform-ios .bar-header .title.title-center.header-item, 
+.platform-ios .bar-header .buttons.buttons-left.header-item,
+.platform-ios .bar-header .button.back-button.buttons.button-clear.header-item{
+    margin-top: 7px;
+}
 
 /* ----------------------- */
 
