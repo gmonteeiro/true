@@ -37,6 +37,62 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate) {
+  $ionicSideMenuDelegate.canDragContent(false);
+
+  $scope.facebookSignIn = function() {
+    facebookConnectPlugin.getLoginStatus(function(success){
+      console.log('getLoginStatus', success.status);
+      if(success.status === 'connected'){
+        //var user = localService.getUser();
+        if(!user.userID || user.userID == 'default'){
+          getFacebookProfileInfo(success.authResponse)
+          .then(function(facebookSignIn) {
+            console.log("fbLoginSuccess");
+            //console.log(facebookSignIn);
+            
+            var user = {
+              authResponse: success.authResponse,
+              userID: facebookSignIn.id,
+              Name: facebookSignIn.name,
+              Email: facebookSignIn.email,
+              likes: facebookSignIn.likes,
+              preference : {'dontshow' : false},
+              picture : "http://graph.facebook.com/" + success.authResponse.userID + "/picture?type=large"
+            };
+            //localService.setUser(user);
+
+            //$state.go('ustart.signup-profile-individual-facebook');
+          }, function(fail){
+            console.log('profile info fail', fail);
+          });
+        }else{
+          console.log("nao tem cadastro");
+          //$state.go('ustart.signup-profile-individual-facebook');
+        }
+      } else {
+        console.log('getLoginStatus', success.status);
+        //($rootScope.sistema === "ANDROID") ? null : $ionicLoading.show();
+        if(success.status === 'connected'){
+          console.log('logout');
+          //logout();
+        }else{
+          console.log('login');
+          //facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], fbLoginSuccess, fbLoginError);
+          // if(firstTime){
+          //     localService.setFirst({'val':3});
+          //     firstTime = false;
+              
+          //     setTimeout(function() {
+          //         $scope.facebookSignIn();
+          //     }, 1800);
+          // }
+        }
+      }
+    })
+  }
+})
+
 .controller('MeusPetsCtrl', function($scope, $state) {
   $scope.pets = [
     { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
@@ -171,6 +227,21 @@ angular.module('starter.controllers', [])
   
 })
 
+
+.service('localService', function(window){
+  var setCadastro = function(dt){
+    window.localStorage.cadastro = JSON.stringify(dt);
+  }
+
+  var getCadastro = function(dt){
+    return JSON.parse(window.localStorage.cadastro || '{}');
+  }
+
+  return{
+    setCadastro : setCadastro,
+    getCadastro : getCadastro
+  }
+})
 
 .service('localService', function(window){
   var setCadastro = function(dt){
