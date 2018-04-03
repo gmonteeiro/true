@@ -26,6 +26,11 @@
 .bar .right-buttons img {
     width: 100%;
 }
+.platform-ios .bar-header .title.title-center.header-item, 
+.platform-ios .bar-header .buttons.buttons-left.header-item,
+.platform-ios .bar-header .button.back-button.buttons.button-clear.header-item{
+    margin-top: 7px;
+}
 
 /* ----------------------- */
 
@@ -85,6 +90,13 @@
 .bordered{
 	border: solid 2px #FF5F6D;
 }
+.img-centered{
+    width: 100%;
+}
+.img-centered img{
+    display: block;
+    margin: 0 auto;
+}
 
 /* Titulos */
 .titulo{
@@ -130,11 +142,12 @@
     float: left;
 }
 
-
 .bg-textured{
-    background: url('../img/textura.jpg') no-repeat;
-    background-position: 100% 40%;
-    background-size: auto 100%;
+    background: url(../img/textura.jpg) no-repeat;
+    background-position: 100%;
+    background-size: 100%;
+    display: inline-block;
+    width: 100%;
 }
 
 /* BG TITLE */
@@ -249,10 +262,30 @@
     background: transparent;
 }
 
-::-webkit-input-placeholder { color: #FF5F6D !important; font-size: 14px; }
-::-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
-:-ms-input-placeholder {  color: #FF5F6D !important; font-size: 14px; }
-:-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+.form .line ::-webkit-input-placeholder { color: #FF5F6D !important; font-size: 14px; }
+.form .line ::-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+.form .line :-ms-input-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+.form .line :-moz-placeholder {  color: #FF5F6D !important; font-size: 14px; }
+
+.form .box{
+    margin-bottom: 10px;
+}
+.form .box input{
+    width: 100%;
+    background-color: rgba(255,255,255,0.3);
+    border:solid 1px rgba(255,255,255,0.9);
+    border-radius: 5px;
+    color: #fff;
+    line-height: 30px;
+    height: 50px;
+    padding-left: 5px;
+    font-size: 18px;
+}
+
+.form .box ::-webkit-input-placeholder { color: #fff !important; font-size: 14px; }
+.form .box ::-moz-placeholder {  color: #fff !important; font-size: 14px; }
+.form .box :-ms-input-placeholder {  color: #fff !important; font-size: 14px; }
+.form .box :-moz-placeholder {  color: #fff !important; font-size: 14px; }
 
 /* Meus Pets */
 .meuspets .img-rounded{
@@ -564,13 +597,15 @@
     padding-left: 00px;
 }
 
-
 /* MINHA CONTA */
 .minhaconta .bg-textured{
     height: 250px;
     padding-top: 20px;
-    margin-bottom: 15px
+    margin-bottom: 15px;
+    background-position: 100% 40%;
+    background-size: auto 100%;
 }
+
 .minhaconta .bg-textured .img-rounded{
     width: 170px;
     height: 170px;
@@ -583,4 +618,30 @@
     display: block;
     font-size: 20px;
     margin-top: 10px;
+}
+
+/* login */
+.login{
+    background-color: #ffbdbf;
+}
+.login .img-centered{
+    margin: 80px 0;
+}
+.login .bg-textured{
+    background-position: 100% 100%;
+    background-size: auto 100%;
+    height: 450px;
+}
+.login .linkbox{
+    color: #fff;
+}
+.linkbox .left{float: left;}
+.linkbox .right{float: right;}
+.divider{width: 100px;border: solid 1px rgba(255,255,255,0.5);margin-bottom: 5px;margin:0 auto;position: relative;top: 50px}
+.fb-area .fb-button{
+    width: 80%;
+    margin:100px auto 0;
+}
+.fb-area .fb-button img{
+    width: 100%;
 }

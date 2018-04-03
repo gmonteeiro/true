@@ -37,10 +37,66 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate) {
+  $ionicSideMenuDelegate.canDragContent(false);
+
+  $scope.facebookSignIn = function() {
+    facebookConnectPlugin.getLoginStatus(function(success){
+      console.log('getLoginStatus', success.status);
+      if(success.status === 'connected'){
+        //var user = localService.getUser();
+        if(!user.userID || user.userID == 'default'){
+          getFacebookProfileInfo(success.authResponse)
+          .then(function(facebookSignIn) {
+            console.log("fbLoginSuccess");
+            //console.log(facebookSignIn);
+            
+            var user = {
+              authResponse: success.authResponse,
+              userID: facebookSignIn.id,
+              Name: facebookSignIn.name,
+              Email: facebookSignIn.email,
+              likes: facebookSignIn.likes,
+              preference : {'dontshow' : false},
+              picture : "http://graph.facebook.com/" + success.authResponse.userID + "/picture?type=large"
+            };
+            //localService.setUser(user);
+
+            //$state.go('ustart.signup-profile-individual-facebook');
+          }, function(fail){
+            console.log('profile info fail', fail);
+          });
+        }else{
+          console.log("nao tem cadastro");
+          //$state.go('ustart.signup-profile-individual-facebook');
+        }
+      } else {
+        console.log('getLoginStatus', success.status);
+        //($rootScope.sistema === "ANDROID") ? null : $ionicLoading.show();
+        if(success.status === 'connected'){
+          console.log('logout');
+          //logout();
+        }else{
+          console.log('login');
+          //facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], fbLoginSuccess, fbLoginError);
+          // if(firstTime){
+          //     localService.setFirst({'val':3});
+          //     firstTime = false;
+              
+          //     setTimeout(function() {
+          //         $scope.facebookSignIn();
+          //     }, 1800);
+          // }
+        }
+      }
+    })
+  }
+})
+
 .controller('MeusPetsCtrl', function($scope, $state) {
   $scope.pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.newpet = function(){  $state.go("app.novopet"); }
@@ -48,8 +104,8 @@ angular.module('starter.controllers', [])
 
 .controller('MeusVetsCtrl', function($scope, $state) {
   $scope.vets = [
-    { id: 1, nome: 'Dr. Gustavo', crmv: "SP-1234", clinica: "Pet Life", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"../img/vet-pic.png"},
-    { id: 2, nome: 'Dr. Augusto', crmv: "SP-1234", clinica: "Clinica Veterinária Augusto", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"../img/no-image-vet.png"}
+    { id: 1, nome: 'Dr. Gustavo', crmv: "SP-1234", clinica: "Pet Life", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"img/vet-pic.png"},
+    { id: 2, nome: 'Dr. Augusto', crmv: "SP-1234", clinica: "Clinica Veterinária Augusto", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"img/no-image-vet.png"}
   ];
 
   $scope.newpet = function(){  $state.go("app.novovet"); }
@@ -76,8 +132,8 @@ angular.module('starter.controllers', [])
   console.log($stateParams);
   $scope.pet = {};
   var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -88,8 +144,8 @@ angular.module('starter.controllers', [])
 .controller('TimelineCtrl', function($scope, $state, $stateParams) {
   $scope.pet = {};
   var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -100,8 +156,8 @@ angular.module('starter.controllers', [])
 .controller('VacinaCtrl', function($scope, $state, $stateParams) {
   $scope.pet = {};
   var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -115,8 +171,8 @@ angular.module('starter.controllers', [])
 .controller('VacinaDetalheCtrl', function($scope, $state, $stateParams) {
   $scope.vacina = {};
   var vacinas = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
@@ -134,8 +190,8 @@ angular.module('starter.controllers', [])
 .controller('PetCtrl', function($scope, $stateParams, $state) {
   $scope.pet = {};
   var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -158,8 +214,8 @@ angular.module('starter.controllers', [])
 .controller('BanhosCtrl', function($scope, $stateParams, $state) {
   $scope.pet = {};
   var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"../img/costelinha.jpeg"}
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
   ];
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -171,6 +227,21 @@ angular.module('starter.controllers', [])
   
 })
 
+
+.service('localService', function(window){
+  var setCadastro = function(dt){
+    window.localStorage.cadastro = JSON.stringify(dt);
+  }
+
+  var getCadastro = function(dt){
+    return JSON.parse(window.localStorage.cadastro || '{}');
+  }
+
+  return{
+    setCadastro : setCadastro,
+    getCadastro : getCadastro
+  }
+})
 
 .service('localService', function(window){
   var setCadastro = function(dt){
