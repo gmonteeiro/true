@@ -7,11 +7,12 @@
 			</div>
 			<div class="form">
 			    <div class="box">
-			    	<input type="text" name="login" ng-model="pet.nome" placeholder="Nome">
+			    	<input type="text" name="login" ng-model="user.login" placeholder="Login">
 			    </div>
 
 			    <div class="box">
-			    	<input type="password" name="senha" ng-model="pet.raca" placeholder="Raça">
+			    	<input class="col-90" type="password" name="senha" ng-model="user.password" placeholder="Senha">
+			    	<div class="btn-send col-30" ng-click="login()">Enviar</div>
 			    </div>
 
 			    <div class="linkbox">

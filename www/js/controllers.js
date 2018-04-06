@@ -37,7 +37,8 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate) {
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading) {
+  $scope.user = {'login':'guisantana9191@gmail.com', 'password':'1234'}
   $ionicSideMenuDelegate.canDragContent(false);
 
   $scope.facebookSignIn = function() {
@@ -91,9 +92,31 @@ angular.module('starter.controllers', [])
       }
     })
   }
+
+  $scope.login = function(){
+    $ionicLoading.show();
+    var credentials = "?login="+$scope.user.login+"&senha="+$scope.user.password;
+    apiService.get("Usuario/AutenticacaoUsuario/", credentials, function(success){
+      console.log(success);
+      $ionicLoading.hide();
+    }, function(err){
+      console.log(err);
+      $ionicLoading.hide();
+    });
+  }
 })
 
-.controller('MeusPetsCtrl', function($scope, $state) {
+.controller('MeusPetsCtrl', function($scope, $state, apiService) {
+
+  // apiService.get("Pet/BuscarPetPorId/?", 1, function(success){
+  //   console.log(success);
+  // }, function(err){
+  //   console.log(err);
+  // });
+
+  
+
+
   $scope.pets = [
     { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
     { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
@@ -111,8 +134,8 @@ angular.module('starter.controllers', [])
   $scope.newpet = function(){  $state.go("app.novovet"); }
 })
 
-.controller('NovoVetCtrl', function($scope, $state) {
- 
+.controller('NovoVetCtrl', function($scope, $state, apiService) {
+ apiService.get();
 })
 
 .controller('MeusPetshopsCtrl', function($scope, $state) {
@@ -243,17 +266,52 @@ angular.module('starter.controllers', [])
   }
 })
 
-.service('localService', function(window){
-  var setCadastro = function(dt){
-    window.localStorage.cadastro = JSON.stringify(dt);
+.service('apiService', function($http){
+  var service = {
+    get: get,
+    post: post,
+    put: put,
+    deleta: deleta
+  };
+
+  var ApiURL = 'https://qualitydigitalserver2.com.br/TruePetAPI/api/';
+
+  function get(url, param, success, failure) {
+    return $http.get(ApiURL + url)
+    .then(function (result) {
+      success(result);
+    }, function (error) {
+      failure(error);
+    });
   }
 
-  var getCadastro = function(dt){
-    return JSON.parse(window.localStorage.cadastro || '{}');
+  function post(url, data, success, failure) {
+    return $http.post(ApiURL + url, data)
+    .then(function (result) {
+      success(result);
+    }, function (error) {
+      failure(error);
+    });
   }
 
-  return{
-    setCadastro : setCadastro,
-    getCadastro : getCadastro
+  function put(url, data, success, failure) {
+    return $http.put(ApiURL + url, data)
+    .then(function (result) {
+      success(result);
+    }, function (error) {
+      failure(error);
+    });
   }
+
+  function deleta(url, param, success, failure) {
+    return $http.delete(ApiURL + url + param)
+    .then(function (result) {
+      success(result);
+    }, function (error) {
+      failure(error);
+    });
+  }
+
+  return service;
+
 });
