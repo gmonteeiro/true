@@ -1,0 +1,33 @@
+<ion-view view-title="Cadastro">
+  <ion-content class="container btm">
+    <div class="bg-grad add-image">
+    	<img src="img/add.png" alt="">
+    	<span>Adicionar Imagem</span>
+    </div>
+	<div class="form">
+	    <div class="line">
+	    	<input type="text" name="nome" ng-model="user.nome" placeholder="Nome">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="email" ng-model="user.email" placeholder="E-mail">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="senha" ng-model="user.senha" placeholder="Senha">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="confsenha" ng-model="user.confsenha" placeholder="Confirme a Senha">
+	    </div>
+
+	    <div class="line">
+	    	<input type="text" name="telefone" ng-model="user.telefone" placeholder="Fone">
+	    </div>
+    </div>
+  </ion-content>
+
+    <div class="btm-bar">
+		<div class="btn-icon" ng-click="signup()"><img src="img/checked.png" alt=""></div>
+	</div>
+</ion-view>

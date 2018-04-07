@@ -40,57 +40,81 @@ angular.module('starter.controllers', [])
 .controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate) {
   $ionicSideMenuDelegate.canDragContent(false);
 
+  $scope.cadastro = function(){
+    $state.go("app.novaconta");
+  }
+
   $scope.facebookSignIn = function() {
     facebookConnectPlugin.getLoginStatus(function(success){
       console.log('getLoginStatus', success.status);
+                                         console.log(success);
       if(success.status === 'connected'){
         //var user = localService.getUser();
-        if(!user.userID || user.userID == 'default'){
-          getFacebookProfileInfo(success.authResponse)
-          .then(function(facebookSignIn) {
-            console.log("fbLoginSuccess");
+        //if(!user.userID || user.userID == 'default'){
+          //getFacebookProfileInfo(success.authResponse)
+          //.then(function(facebookSignIn) {
+            //console.log("fbLoginSuccess");
+                
             //console.log(facebookSignIn);
             
-            var user = {
-              authResponse: success.authResponse,
-              userID: facebookSignIn.id,
-              Name: facebookSignIn.name,
-              Email: facebookSignIn.email,
-              likes: facebookSignIn.likes,
-              preference : {'dontshow' : false},
-              picture : "http://graph.facebook.com/" + success.authResponse.userID + "/picture?type=large"
-            };
+            //var user = {
+              //authResponse: success.authResponse,
+              //userID: facebookSignIn.id,
+              //Name: facebookSignIn.name,
+              //Email: facebookSignIn.email,
+              //likes: facebookSignIn.likes,
+              //preference : {'dontshow' : false},
+              //picture : "http://graph.facebook.com/" + success.authResponse.userID + "/picture?type=large"
+            //};
             //localService.setUser(user);
 
             //$state.go('ustart.signup-profile-individual-facebook');
-          }, function(fail){
-            console.log('profile info fail', fail);
-          });
-        }else{
-          console.log("nao tem cadastro");
+          //}, function(fail){
+            //console.log('profile info fail', fail);
+          //});
+        //}else{
+          //console.log("nao tem cadastro");
           //$state.go('ustart.signup-profile-individual-facebook');
-        }
+        //}
+                                         
+        logout();
       } else {
         console.log('getLoginStatus', success.status);
         //($rootScope.sistema === "ANDROID") ? null : $ionicLoading.show();
         if(success.status === 'connected'){
-          console.log('logout');
-          //logout();
+          console.log('out');
+          logout();
         }else{
           console.log('login');
-          //facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], fbLoginSuccess, fbLoginError);
-          // if(firstTime){
-          //     localService.setFirst({'val':3});
-          //     firstTime = false;
+          facebookConnectPlugin.login(['email', 'public_profile'], function(res){
+            console.log(res);
+          }, function(err){
+            console.log(err);
+          });
+           //if(firstTime){
+               //localService.setFirst({'val':3});
+               //firstTime = false;
               
-          //     setTimeout(function() {
-          //         $scope.facebookSignIn();
+              // setTimeout(function() {
+            //       $scope.facebookSignIn();
           //     }, 1800);
-          // }
+           //}
         }
       }
     })
   }
+            
+            function logout(){
+            facebookConnectPlugin.logout(function () {
+                                         // facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], fbLoginSuccess, fbLoginError);
+                                         
+                                         console.log("logout");
+                                         
+                                         },
+                                         function (fail) {
+                                         console.log(fail);
+                                         });
+            }
 })
 
 .controller('MeusPetsCtrl', function($scope, $state) {
@@ -227,6 +251,11 @@ angular.module('starter.controllers', [])
   
 })
 
+.controller('NovaContaCtrl', function($scope, $stateParams, $state) {
+  $scope.signup = function(){
+    
+  }
+})
 
 .service('localService', function(window){
   var setCadastro = function(dt){
