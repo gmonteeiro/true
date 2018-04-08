@@ -1,8 +1,12 @@
 <ion-view view-title="Cadastro">
   <ion-content class="container btm">
-    <div class="bg-grad add-image">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!user.img">
     	<img src="img/add.png" alt="">
     	<span>Adicionar Imagem</span>
+    </div>
+    <div class="img-container" ng-if="user.img">
+    	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+    	<img ng-src="{{user.img}}" alt="">
     </div>
 	<div class="form">
 	    <div class="line">
@@ -14,11 +18,11 @@
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="senha" ng-model="user.senha" placeholder="Senha">
+	    	<input type="password" name="senha" ng-model="user.senha" placeholder="Senha">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="confsenha" ng-model="user.confsenha" placeholder="Confirme a Senha">
+	    	<input type="password" name="confsenha" ng-model="user.confsenha" placeholder="Confirme a Senha">
 	    </div>
 
 	    <div class="line">

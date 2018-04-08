@@ -1,0 +1,18 @@
+- validacao
+- confirmacao de senha
+
+
+Gui
+- Retornar endereco da imagem ao cadastrar
+- Retornar ID do usuario ao cadastrar
+
+
+
+
+<key>graph.facebook.com</key>
+<dict>
+	<key>NSIncludesSubdomains</key>
+	<true/>
+	<key>NSExceptionAllowsInsecureHTTPLoads</key>
+	<true/>
+</dict>

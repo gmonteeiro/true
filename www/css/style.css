@@ -97,6 +97,21 @@
     display: block;
     margin: 0 auto;
 }
+.img-container{
+    display: inline-block;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.img-container img{
+    width: 100%;
+}
+.img-container img.btn-close{
+    position: absolute;
+    width: 30px;
+    right: 10px;
+    top: 10px;
+}
 
 /* Titulos */
 .titulo{
@@ -644,4 +659,28 @@
 }
 .fb-area .fb-button img{
     width: 100%;
+}
+
+.col-90{
+    float: left;
+    width: 69% !important;
+}
+.col-30{
+    float: right;
+    width: 29%;
+}
+.box{
+    display: inline-block;
+    width: 100%;
+}
+
+.btn-send{
+    background-color: rgba(255,255,255,0.8);
+    border: solid 1px rgba(255,255,255,0.9);
+    border-radius: 5px;
+    color: #FF5F6D;
+    line-height: 45px;
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
 }

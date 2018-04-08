@@ -5,7 +5,10 @@
     <author email="farah@qualitydigital.com.br" href="http://qualitydigital.com.br/">Quality Digital</author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="http://graph.facebook.com/" />
     <allow-intent href="http://*/*" />
+    <allow-intent href="http://graph.facebook.com/*" />
+    <allow-intent href="https://graph.facebook.com/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
@@ -86,5 +89,9 @@
     <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
         <variable name="APP_ID" value="215144862402800" />
         <variable name="APP_NAME" value="True Pets" />
+    </plugin>
+    <plugin name="cordova-plugin-camera" spec="^4.0.2">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="Permitir acesso a Camera" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Permitir acesso a Galeria" />
     </plugin>
 </widget>

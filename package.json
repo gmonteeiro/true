@@ -19,6 +19,10 @@
       "cordova-plugin-facebook4": {
         "APP_ID": "215144862402800",
         "APP_NAME": "True Pets"
+      },
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": "Permitir acesso a Camera",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Permitir acesso a Galeria"
       }
     },
     "platforms": [
@@ -28,6 +32,7 @@
   },
   "dependencies": {
     "cordova-android": "~6.3.0",
+    "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-facebook4": "^1.9.1",
     "cordova-plugin-ionic-webview": "^1.1.16",
