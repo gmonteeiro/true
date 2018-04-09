@@ -1,5 +1,8 @@
 - validacao
 - confirmacao de senha
+- mascara de data
+- mascara de telefone
+- campos tipo email
 
 
 Gui

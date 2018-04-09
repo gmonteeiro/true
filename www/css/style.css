@@ -113,6 +113,15 @@
     top: 10px;
 }
 
+.button.button-positive{
+    background: #ff5f6d; /* fallback for old browsers */
+    background: -webkit-linear-gradient(135deg, #ff5f6d, #ffc371); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(135deg, #ff5f6d, #ffc371); 
+    border:none !important;
+}
+.popup-container .popup{ border-radius: 5px; }
+.popup-container .popup .button{ background-color: #ddd;border-radius: 5px;border:solid 1px #ccc; }
+
 /* Titulos */
 .titulo{
 	font-size: 20px;

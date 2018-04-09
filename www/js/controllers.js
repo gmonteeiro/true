@@ -76,8 +76,9 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $ionicHistory, $q, $ionicHistory) {
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $ionicHistory, $q, $ionicHistory, $ionicPopup) {
   $ionicSideMenuDelegate.canDragContent(false);
+  $scope.user = {}
 
   $scope.cadastro = function(){
     $state.go("app.novaconta");
@@ -109,7 +110,7 @@ angular.module('starter.controllers', [])
                 nome: success.data[0].nome,
                 email: success.data[0].email,
                 telefone: success.data[0].telefone,
-                userID: success.data[0].id,
+                id: success.data[0].id,
                 img: success.data[0].img
               });
 
@@ -150,16 +151,9 @@ angular.module('starter.controllers', [])
 
   var getFacebookProfileInfo = function (authResponse) {
     var info = $q.defer();
-
     facebookConnectPlugin.api('/me?fields=email,name,likes&access_token=' + authResponse.accessToken, null,
-      function (response) {
-      console.log(response);
-          info.resolve(response);
-      },
-        function (response) {
-      console.log(response);
-          info.reject(response);
-        }
+      function (response) { info.resolve(response); },
+      function (response) { info.reject(response);}
     );
     return info.promise;
 };
@@ -188,31 +182,46 @@ angular.module('starter.controllers', [])
     }, function(err){
       console.log(err);
       $ionicLoading.hide();
+      var confirmPopup = $ionicPopup.alert({ title: "Erro ao Logar!", okText: 'ok' });
+      confirmPopup.then(function(){});
     });
   }
 })
 
-.controller('MeusPetsCtrl', function($scope, $state, apiService, localService, $ionicHistory) {
+.controller('MeusPetsCtrl', function($scope, $state, apiService, localService, $ionicHistory, $ionicPopup) {
   var usr = localService.getUsuario();
+  (!usr) ? usr = {} : null;
   console.log(usr);
-  if(!usr.email){
-    $state.go("app.login");
-  }
+
+  if(!usr.email){ $state.go("app.login"); }
   $ionicHistory.clearHistory();
 
-  $scope.pets = localService.getPets();
-  if(!$scope.pets.nome){
-    getPets();
-  }
+  $scope.pets = localService.getPets().list;
+  if(!$scope.pets){ getPets(); }
 
-  getPets = function(){
-    apiService.get("Pet/GetBuscarPetPorUsuario/?idUsuario=", usr.userID, function(success){
-      console.log(success);
+  function getPets(){
+    apiService.get("Pet/GetBuscarPetPorUsuario/?idUsuario=", usr.id, function(res){
+      if(res.data.length > 0){ 
+        localService.setPets({list:res.data});
+        $scope.pets = res.data;
+      }else{
+        alertCad();
+      }
+      console.log(res);
     }, function(err){
       console.log(err);
     });
   }
 
+  function alertCad(){
+    var confirmPopup = $ionicPopup.confirm({
+      title:  'Nenhum Pet cadastrado <br> Deseja cadastrar agora?',
+      cancelText: 'Agora Não',
+      okText: 'Cadastrar'
+    });
+
+    confirmPopup.then(function (res) { if (res) { $state.go('app.novopet');}});
+  }
 
   
 
@@ -225,6 +234,57 @@ angular.module('starter.controllers', [])
   $scope.newpet = function(){  $state.go("app.novopet"); }
 })
 
+.controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup) {
+  $scope.pet = {};
+  var usr = localService.getUsuario();
+  
+  $scope.send = function(){
+    var data = {
+      nome : $scope.pet.nome,
+      base64 : $scope.pet.base64,
+      raca : $scope.pet.raca,
+      dataNascimento : $scope.pet.dataNascimento,
+      sexo : $scope.pet.sexo,
+      peso : $scope.pet.peso,
+      castrado : $scope.pet.castrado,
+      cruzar : $scope.pet.cruzar,
+      img : null,
+      idEspecie : $scope.pet.idEspecie,
+      idUsuario : usr.id,
+      isAtivo : true
+    }
+
+    $ionicLoading.show();
+    apiService.post('pet/PostPet/', data, function(res){
+      $ionicLoading.hide();
+      console.log(res);
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      confirmPopup.then(function(){ $state.go("app.meuspets"); });
+    }, function(err){
+      $ionicLoading.hide();
+      console.log(err);
+    });
+  }
+
+  $scope.setEspecie = function(val){ $scope.pet.idEspecie = val; }
+  $scope.setSexo = function(val){ $scope.pet.sexo = val; }
+  $scope.setCastrado = function(val){ $scope.pet.castrado = val; }
+  $scope.setCruzar = function(val){ $scope.pet.cruzar = val; }
+})
+
+.controller('PetCtrl', function($scope, $stateParams, $state) {
+  $scope.pet = {};
+  var pets = [
+    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
+    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
+  ];
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+
+  $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
+})
+
 .controller('MeusVetsCtrl', function($scope, $state) {
   $scope.vets = [
     { id: 1, nome: 'Dr. Gustavo', crmv: "SP-1234", clinica: "Pet Life", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"img/vet-pic.png"},
@@ -235,7 +295,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('NovoVetCtrl', function($scope, $state, apiService) {
- apiService.get();
+ 
 })
 
 .controller('MeusPetshopsCtrl', function($scope, $state) {
@@ -310,26 +370,6 @@ angular.module('starter.controllers', [])
   console.log($stateParams.vacId);
 })
 
-.controller('PetCtrl', function($scope, $stateParams, $state) {
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
-
-  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-
-
-  $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
-})
-
-.controller('NovoPetCtrl', function($scope, $stateParams, $state) {
-  $scope.setItem = function(id){
-    console.log(id);
-    //$scope.respostas[$scope.quest] = {"res" : id};
-  }
-})
-
 .controller('NovaVacinaCtrl', function($scope, $stateParams, $state) {
   
 })
@@ -364,7 +404,8 @@ angular.module('starter.controllers', [])
       "img":$scope.user.img,
       "base64":$scope.user.base64,
       "isAtivo":true,
-      "idredesocial":$scope.user.facebookID
+      "idredesocial":$scope.user.facebookID,
+      "id":null
     }
 
     $ionicLoading.show();
@@ -375,10 +416,11 @@ angular.module('starter.controllers', [])
       console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       confirmPopup.then(function(){
+        data.id = res.data[0].idUsuario;
+        (res.data[0].imagemUsuario.length > 0) ? data.img = res.data[0].imagemUsuario : null;
         localService.setUsuario(data);
         $state.go("app.meuspets");
-        $scope.modal.hide();
-      })
+      });
     }, function(err){
       $ionicLoading.hide();
       console.log(err);
@@ -386,18 +428,9 @@ angular.module('starter.controllers', [])
   }
 
   $scope.picture = function(){
-    $scope.getPhoto().then(function(res){
-      $scope.user.base64 = res;
-      $scope.user.img = res;
-      //$scope.$apply();
-    }, function(err){
-      console.log(err);
-    });
+    $scope.getPhoto().then(function(res){ $scope.user.base64 = res; $scope.user.img = res; }, function(err){ console.log(err); });
   }
-
-  $scope.delete = function(){
-    $scope.user.img = null;
-  }
+  $scope.delete = function(){ $scope.user.img = null; }
 })
 
 
