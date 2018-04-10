@@ -10,35 +10,35 @@
 	<div class="container">
 		<div class="field">
 			<div class="field-name">Raça</div>
-			<div class="field-content">Bulldog Francês</div>
+			<div class="field-content">{{pet.raca}}</div>
 		</div>
 
 		<div class="field">
 			<div class="field-name">Data de nascimento</div>
-			<div class="field-content">04/07/2015</div>
+			<div class="field-content">{{pet.dataNascimento | date: 'dd/MM/yyyy'}}</div>
 		</div>
 
 		<div class="field halph">
 			<div class="field-name">Idade</div>
-			<div class="field-content">2 Anos e 6 meses</div>
+			<div class="field-content">{{calcAge(pet.dataNascimento)}}</div>
 		</div>
 		<div class="field halph">
 			<div class="field-name">Idade humana</div>
-			<div class="field-content">24 anos</div>
+			<div class="field-content">{{humanAge()}}</div>
 		</div>
 
 		<div class="field halph">
 			<div class="field-name">Sexo</div>
-			<div class="field-content">Macho</div>
+			<div class="field-content">{{(pet.sexo) ? 'Macho' : 'Femea'}}</div>
 		</div>
 		<div class="field halph">
 			<div class="field-name">Castrado</div>
-			<div class="field-content">Sim</div>
+			<div class="field-content">{{(castrado) ? 'Sim' : 'Não'}}</div>
 		</div>
 
 		<div class="field halph">
 			<div class="field-name">Peso</div>
-			<div class="field-content">12kg</div>
+			<div class="field-content">{{pet.peso}}kg</div>
 		</div>
 	</div>
   </ion-content>

@@ -94,7 +94,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
 
   .state('app.novavacina', {
-      url: '/novavacina',
+      url: '/novavacina/:petId',
       views: {
         'menuContent': {
           templateUrl: 'templates/vacina_new.html',

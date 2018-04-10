@@ -3,7 +3,10 @@
 - mascara de data
 - mascara de telefone
 - campos tipo email
-
+- no-image para pets e usuarios
+- fazer fluxo de veterinário
+- terminar de implementar Vacinas
+- esqueci a senha
 
 Gui
 - Retornar endereco da imagem ao cadastrar

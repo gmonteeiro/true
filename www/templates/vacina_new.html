@@ -1,8 +1,12 @@
 <ion-view view-title="Nova Vacina">
   <ion-content class="container btm">
-    <div class="bg-grad add-image">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!vacina.base64">
     	<img src="img/add.png" alt="">
     	<span>Adicionar Selo</span>
+    </div>
+    <div class="img-container" ng-if="vacina.base64">
+    	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+    	<img ng-src="{{vacina.base64}}" alt="">
     </div>
 	<div class="form">
 	    <div class="line">
@@ -22,7 +26,7 @@
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="veterinario" ng-model="vacina.veterinario" placeholder="Veterinario responsável">
+	    	<input type="text" name="veterinario" ng-model="vacina.idVeterinario" placeholder="Veterinario responsável">
 	    </div>
 
 	    <div class="line noline">
@@ -33,6 +37,6 @@
   </ion-content>
 
     <div class="btm-bar">
-		<div class="btn-icon" ng-click="newpost()"><img src="img/checked.png" alt=""></div>
+		<div class="btn-icon" ng-click="send()"><img src="img/checked.png" alt=""></div>
 	</div>
 </ion-view>

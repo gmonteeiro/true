@@ -25,47 +25,20 @@ angular.module('starter.controllers', [])
     $ionicSideMenuDelegate.toggleLeft();
   }
 
-  $scope.sair = function(){
-    localService.setUsuario({});
-    $state.go("app.login");
-  }
+  $scope.sair = function(){ localService.setUsuario({}); localService.setCadastro({}); localService.setPets({}); localService.setVacinas({}); localService.setBanhos({}); $state.go("app.login"); }
 
   $scope.getPhoto = function(){
-    var options = {
-      quality: 100,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: null,
-      allowEdit: true, 
-      targetWidth: 500,
-      targetHeight: 500,
-      encodingType: Camera.EncodingType.JPEG,
-      correctOrientation: true,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false,
-      customMWGBehavior : true
-    };
-
+    var options = { quality: 100, destinationType: Camera.DestinationType.DATA_URL, sourceType: null, allowEdit: true,  targetWidth: 500, targetHeight: 500, encodingType: Camera.EncodingType.JPEG, correctOrientation: true, popoverOptions: CameraPopoverOptions, saveToPhotoAlbum: false, customMWGBehavior : true};
     return $q(function(resolve, reject){
-      $ionicActionSheet.show({
-        buttons: [ { text: "Capturar Imagem" }, { text: "Escolher da Galeria" }],
-        titleText: "Upload",
-        cancelText: "Cancelar",
-        cancel: function () {},
-        buttonClicked: function (index) {
+      $ionicActionSheet.show({buttons: [ { text: "Capturar" }, { text: "Escolher da Galeria" }],titleText: "Adicionar Imagem",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
           switch (index) {
             case 0:
               options.sourceType = Camera.PictureSourceType.CAMERA;
-              navigator.camera.getPicture(function(imageData) {
-                var url = "data:image/jpeg;base64," + imageData;
-                resolve(url);
-              }, function(err) {reject(err)},options);
+              navigator.camera.getPicture(function(imageData) {var url = "data:image/jpeg;base64," + imageData;resolve(url);}, function(err) {reject(err)},options);
               break;
             case 1:
               options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
-              navigator.camera.getPicture(function(imageData) {
-                var url = "data:image/jpeg;base64," + imageData;
-                resolve(url);
-              }, function(err) {reject(err)},options);
+              navigator.camera.getPicture(function(imageData) {var url = "data:image/jpeg;base64," + imageData;resolve(url);}, function(err) {reject(err)},options);
               break;
           }
           return true;
@@ -79,74 +52,34 @@ angular.module('starter.controllers', [])
 .controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $ionicHistory, $q, $ionicHistory, $ionicPopup) {
   $ionicSideMenuDelegate.canDragContent(false);
   $scope.user = {}
-
-  $scope.cadastro = function(){
-    $state.go("app.novaconta");
-  }
-
+  $scope.cadastro = function(){  $state.go("app.novaconta"); }
   $scope.facebookSignIn = function() {
     $ionicLoading.show();
     facebookConnectPlugin.getLoginStatus(function(suc){
       console.log(suc);
-      if(suc.status === 'connected'){                   
-        logout();
-      } else {
+      if(suc.status === 'connected'){ logout(); } else {
         facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], function(res){
-          console.log(res);
-
           apiService.get('Usuario/GetBuscarUsuarioPorIdRedeSocial/?idRedeSocial=', res.authResponse.userID, 
           function(success){
             console.log(success);
-            
-            if(!success.data[0]){
-              getInfos(res);
-            }else{
-              $ionicLoading.hide();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true
-              });
-              
-              localService.setUsuario({
-                nome: success.data[0].nome,
-                email: success.data[0].email,
-                telefone: success.data[0].telefone,
-                id: success.data[0].id,
-                img: success.data[0].img
-              });
-
+            if(!success.data[0]){ getInfos(res); }else{ 
+              $ionicLoading.hide(); $ionicHistory.nextViewOptions({ historyRoot: true });
+              localService.setUsuario({ nome: success.data[0].nome, email: success.data[0].email, telefone: success.data[0].telefone, id: success.data[0].id, img: success.data[0].img});
               $state.go('app.meuspets');
             }
-          }, function(err){
-            console.log(err);
-            getInfos(res);
-          });
-        }, function(err){
-          console.log(err);
-          $ionicLoading.hide();
-        });
+          }, function(err){ console.log(err); getInfos(res); });
+        }, function(err){ console.log(err); $ionicLoading.hide(); });
       }
     })
   }
 
   function getInfos(res){
     getFacebookProfileInfo(res.authResponse).then(function(profileInfo) {
-      console.log("fbLoginSuccess");
-      console.log(profileInfo);
-      var user = {
-        facebookID: profileInfo.id,
-        nome: profileInfo.name,
-        email: profileInfo.email,
-        likes: profileInfo.likes,
-        img: "http://graph.facebook.com/" + profileInfo.id + "/picture?type=large"
-      };
-
+      var user = { facebookID: profileInfo.id, nome: profileInfo.name, email: profileInfo.email, likes: profileInfo.likes, img: "http://graph.facebook.com/" + profileInfo.id + "/picture?type=large"};
       localService.setCadastro(user);
-
       $ionicLoading.hide();
       $state.go('app.novaconta');
-    }, function(fail){
-        console.log('profile info fail', fail);
-    });
+    }, function(fail){ console.log('profile info fail', fail); });
   }
 
   var getFacebookProfileInfo = function (authResponse) {
@@ -159,13 +92,8 @@ angular.module('starter.controllers', [])
 };
 
   function logout(){
-    facebookConnectPlugin.logout(function () {
-      console.log("logout"); 
-      $scope.facebookSignIn();
-    },
-    function (fail) {
-      console.log(fail);
-    });
+    facebookConnectPlugin.logout(function () { $scope.facebookSignIn(); },
+    function (fail) { console.log(fail); });
   }
 
   $scope.login = function(){
@@ -175,9 +103,7 @@ angular.module('starter.controllers', [])
       console.log(res);
       localService.setUsuario(res.data[0]);
       $ionicLoading.hide();
-      $ionicHistory.nextViewOptions({
-        historyRoot: true
-      });
+      $ionicHistory.nextViewOptions({ historyRoot: true });
       $state.go("app.meuspets");
     }, function(err){
       console.log(err);
@@ -201,42 +127,24 @@ angular.module('starter.controllers', [])
 
   function getPets(){
     apiService.get("Pet/GetBuscarPetPorUsuario/?idUsuario=", usr.id, function(res){
-      if(res.data.length > 0){ 
-        localService.setPets({list:res.data});
-        $scope.pets = res.data;
-      }else{
-        alertCad();
-      }
+      if(res.data.length > 0){  localService.setPets({list:res.data}); $scope.pets = res.data; }else{ alertCad(); }
       console.log(res);
-    }, function(err){
-      console.log(err);
-    });
+    }, function(err){ console.log(err); });
   }
 
   function alertCad(){
-    var confirmPopup = $ionicPopup.confirm({
-      title:  'Nenhum Pet cadastrado <br> Deseja cadastrar agora?',
-      cancelText: 'Agora Não',
-      okText: 'Cadastrar'
-    });
-
+    var confirmPopup = $ionicPopup.confirm({ title:  'Nenhum Pet cadastrado <br> Deseja cadastrar agora?', cancelText: 'Agora Não', okText: 'Cadastrar' });
     confirmPopup.then(function (res) { if (res) { $state.go('app.novopet');}});
   }
-
-  
-
-
-  // $scope.pets = [
-  //   { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-  //   { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  // ];
-
   $scope.newpet = function(){  $state.go("app.novopet"); }
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup) {
   $scope.pet = {};
   var usr = localService.getUsuario();
+
+  $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.pet.base64 = res; }, function(err){ console.log(err); });}
+  $scope.delete = function(){ $scope.user.img = null; }
   
   $scope.send = function(){
     var data = {
@@ -255,15 +163,10 @@ angular.module('starter.controllers', [])
     }
 
     $ionicLoading.show();
-    apiService.post('pet/PostPet/', data, function(res){
-      $ionicLoading.hide();
-      console.log(res);
+    apiService.post('pet/PostPet/', data, function(res){ $ionicLoading.hide();
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       confirmPopup.then(function(){ $state.go("app.meuspets"); });
-    }, function(err){
-      $ionicLoading.hide();
-      console.log(err);
-    });
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
   $scope.setEspecie = function(val){ $scope.pet.idEspecie = val; }
@@ -272,15 +175,9 @@ angular.module('starter.controllers', [])
   $scope.setCruzar = function(val){ $scope.pet.cruzar = val; }
 })
 
-.controller('PetCtrl', function($scope, $stateParams, $state) {
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
-
+.controller('PetCtrl', function($scope, $stateParams, $state, localService) {
+  var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-
 
   $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
 })
@@ -311,17 +208,37 @@ angular.module('starter.controllers', [])
  
 })
 
-.controller('FichaCtrl', function($scope, $state, $stateParams) {
-  console.log($stateParams);
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
+.controller('FichaCtrl', function($scope, $state, $stateParams, localService) {
+  var pets = localService.getPets().list;
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
   console.log($scope.pet);
+
+  $scope.calcAge = function(nascimento){
+    var hoje = new Date();
+    var anos  = Math.ceil(Math.abs(new Date(nascimento) - new Date(hoje)) / (1000 * 3600 * 24)) / 365.25;
+    var meses = Math.floor((12*(anos % 1)).toFixed(1));
+    var umeses = (meses == 1) ? 'mês' : 'meses';
+    var uanos = (Math.floor(anos) == 1) ? 'Ano' : 'Anos'; 
+    return Math.floor(anos)+' '+uanos+' e '+meses+' '+umeses;
+  }
+
+  $scope.humanAge = function(){
+    var hoje = new Date();
+    var anos  = Math.floor(Math.ceil(Math.abs(new Date($scope.pet.dataNascimento) - new Date(hoje)) / (1000 * 3600 * 24)) / 365.25);
+    var age = {
+      small:[1, 15, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80],
+      med  :[1, 15, 24, 28, 32, 36, 42, 47, 51, 56, 60, 65, 69, 74, 78, 83, 87],
+      big:  [1, 15, 24, 28, 32, 36, 45, 50, 55, 61, 66, 72, 77, 82, 88, 93, 120]
+    }
+
+    switch(true){ 
+      case $scope.pet.peso < 10: return age.small[anos]+' Anos'; break;
+      case $scope.pet.peso > 9 && $scope.pet.peso < 24: return age.med[anos]+' Anos'; break;
+      case $scope.pet.peso > 23: return age.big[anos]+' Anos'; break;
+    }
+  }
 })
 
 .controller('TimelineCtrl', function($scope, $state, $stateParams) {
@@ -336,19 +253,24 @@ angular.module('starter.controllers', [])
   console.log($scope.pet);
 })
 
-.controller('VacinaCtrl', function($scope, $state, $stateParams) {
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
-
+.controller('VacinaCtrl', function($scope, $state, $stateParams, localService, apiService, $ionicLoading) {
+  var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
-  console.log($scope.pet);
+  $scope.vacinas = localService.getVacinas().list;
+  if(!$scope.vacinas){ getVacinas(); }
 
-  $scope.vacina = function(id){  $state.go("app.vacinaDetalhe", { 'vacId': id }); }
-  $scope.addVacina = function(id){  $state.go("app.novavacina"); }
+  function getVacinas(){
+    $ionicLoading.show();
+    apiService.get("Vacina/GetBuscarTodasVacinasPorPet/?idPet=", $scope.pet.id, function(res){
+      $ionicLoading.hide();
+      //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
+      console.log(res);
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
+  }
+
+  $scope.viewVacina = function(id){  $state.go("app.vacinaDetalhe", { 'vacId': id }); }
+  $scope.addVacina = function(id){  $state.go("app.novavacina", { 'petId': $scope.pet.id }); }
 })
 
 .controller('VacinaDetalheCtrl', function($scope, $state, $stateParams) {
@@ -370,8 +292,23 @@ angular.module('starter.controllers', [])
   console.log($stateParams.vacId);
 })
 
-.controller('NovaVacinaCtrl', function($scope, $stateParams, $state) {
+.controller('NovaVacinaCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
+  $scope.vacina = {};
+  var usr = localService.getUsuario();
+
+  $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.vacina.base64 = res; }, function(err){ console.log(err); });}
+  $scope.delete = function(){ $scope.user.img = null; }
   
+  $scope.send = function(){
+    $scope.vacina.isAtivo = true;
+    $scope.vacina.idPet = $stateParams.petId;
+
+    $ionicLoading.show();
+    apiService.post('vacina/PostVacina/', $scope.vacina, function(res){ $ionicLoading.hide();
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': $scope.vacina.idPet }); });
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
+  }
 })
 
 .controller('BanhosCtrl', function($scope, $stateParams, $state) {
@@ -445,13 +382,23 @@ angular.module('starter.controllers', [])
   var setPets = function(dt){ window.localStorage.pets = JSON.stringify(dt);}
   var getPets = function(){return JSON.parse(window.localStorage.pets || '{}');}
 
+  var setVacinas = function(dt){ window.localStorage.vacinas = JSON.stringify(dt);}
+  var getVacinas = function(){return JSON.parse(window.localStorage.vacinas || '{}');}
+
+  var setBanhos = function(dt){ window.localStorage.banhos = JSON.stringify(dt);}
+  var getBanhos = function(){return JSON.parse(window.localStorage.banhos || '{}');}
+
   return{
     setUsuario : setUsuario,
     getUsuario : getUsuario,
     setCadastro : setCadastro,
     getCadastro : getCadastro,
     setPets : setPets,
-    getPets : getPets
+    getPets : getPets,
+    setVacinas : setVacinas,
+    getVacinas : getVacinas,
+    setBanhos : setBanhos,
+    getBanhos : getBanhos
   }
 })
 
