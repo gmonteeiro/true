@@ -162,8 +162,10 @@ angular.module('starter.controllers', [])
       isAtivo : true
     }
 
+    console.log(JSON.Stringify(data));
+
     $ionicLoading.show();
-    apiService.post('pet/PostPet/', data, function(res){ $ionicLoading.hide();
+    apiService.post('pet/PostPet/', data, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       confirmPopup.then(function(){ $state.go("app.meuspets"); });
     }, function(err){ $ionicLoading.hide(); console.log(err); });
