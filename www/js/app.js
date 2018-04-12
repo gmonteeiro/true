@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

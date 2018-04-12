@@ -7,12 +7,19 @@
 - fazer fluxo de veterinário
 - terminar de implementar Vacinas
 - esqueci a senha
+- apagar foto (novo pet)
+- ajustar espaçamento embaixo (novo pet)
+- login errado vem com retorno array null
+- menu nao aparece depois do cadastro
+- desabilitar swipe pra voltar
+ 
 
 Gui
 - Retornar endereco da imagem ao cadastrar
 - Retornar ID do usuario ao cadastrar
 
-
+Documentacao Mask
+http://candreoliveira.github.io/bower_components/angular-mask/examples/index.html#/
 
 
 <key>graph.facebook.com</key>
