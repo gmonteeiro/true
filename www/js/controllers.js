@@ -123,8 +123,9 @@ angular.module('starter.controllers', [])
   $ionicHistory.clearHistory();
 
   $scope.pets = localService.getPets().list;
-  if(!$scope.pets){ getPets(); }
-
+  console.log($scope.pets);
+  //if(!$scope.pets){ getPets(); }
+  getPets();
   function getPets(){
     apiService.get("Pet/GetBuscarPetPorUsuario/?idUsuario=", usr.id, function(res){
       if(res.data.length > 0){  localService.setPets({list:res.data}); $scope.pets = res.data; }else{ alertCad(); }
@@ -162,10 +163,10 @@ angular.module('starter.controllers', [])
       isAtivo : true
     }
 
-    console.log(JSON.Stringify(data));
-
     $ionicLoading.show();
     apiService.post('pet/PostPet/', data, function(res){ $ionicLoading.hide();console.log(res);
+      console.log(data);
+      //localService.setPets();
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       confirmPopup.then(function(){ $state.go("app.meuspets"); });
     }, function(err){ $ionicLoading.hide(); console.log(err); });
@@ -329,7 +330,7 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('NovaContaCtrl', function($scope, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup) {
+.controller('NovaContaCtrl', function($scope, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, validationService) {
   $scope.user = localService.getCadastro();
   console.log($scope.user);
   $scope.signup = function(){
@@ -347,23 +348,33 @@ angular.module('starter.controllers', [])
       "id":null
     }
 
-    $ionicLoading.show();
-    console.log("enviar");
-    console.log(data);
-    apiService.post('usuario/PostUsuario/', data, function(res){
-      $ionicLoading.hide();
-      console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      confirmPopup.then(function(){
-        data.id = res.data[0].idUsuario;
-        (res.data[0].imagemUsuario.length > 0) ? data.img = res.data[0].imagemUsuario : null;
-        localService.setUsuario(data);
-        $state.go("app.meuspets");
+    if($scope.user.senha == $scope.user.confsenha){
+      var val = validationService.erro([
+        {type:'string',value:data.nome},
+        {type:'email',value:data.email},
+        {type:'senha',value:data.senha}
+      ]).then(function(res){
+        $ionicLoading.show();
+        apiService.post('usuario/PostUsuario/', data, function(res){
+          $ionicLoading.hide();
+          var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+          confirmPopup.then(function(){
+            data.id = res.data[0].idUsuario;
+            (res.data[0].imagemUsuario.length > 0) ? data.img = res.data[0].imagemUsuario : null;
+            localService.setUsuario(data);
+            $state.go("app.meuspets");
+          });
+        }, function(err){
+          $ionicLoading.hide();
+          console.log(err);
+        });
+      }, 
+      function(err){
+        $ionicPopup.alert({ title: err, okText: 'ok' }).then(function(){});
       });
-    }, function(err){
-      $ionicLoading.hide();
-      console.log(err);
-    });
+    }else{
+      $ionicPopup.alert({ title: "Senha não confere com a confirmação", okText: 'ok' }).then(function(){});
+    }
   }
 
   $scope.picture = function(){
@@ -372,7 +383,34 @@ angular.module('starter.controllers', [])
   $scope.delete = function(){ $scope.user.img = null; }
 })
 
+.service('validationService', function($q){
+  var ret = false;
+  var erro = function(fields){
+    var i=0;
+    for (i;i<fields.length;i++){
+      (!fields[i].value) ? fields[i].value = "" : null;
+      if(fields[i].value.length < 1){
+        ret = "Campos obrigatórios"; i = fields.length+1;
+      }else{
+        switch(fields[i].type){
+          case 'email':
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if(!regex.test(fields[i].value)){ ret = "E-mail Inválido"; i = fields.length+1; }
+          break;
 
+          case 'fone': if(fields[i].value.length < 10){ ret = "Telefone inválido"; i = fields.length+1;}; break;
+          case 'senha': if(fields[i].value.length < 6){ ret = "A senha deve conter pelo menos 6 dígitos"; i = fields.length+1;}; break;
+        }  
+      }
+    }
+
+    return $q(function(resolve, reject){
+      if(ret){reject(ret); }else{resolve("validado")}
+    })
+  }
+
+  return {"erro":erro}
+})
 
 .service('localService', function(){
   var setUsuario = function(dt){window.localStorage.usuario = JSON.stringify(dt);}
@@ -424,6 +462,8 @@ angular.module('starter.controllers', [])
   }
 
   function post(url, data, success, failure) {
+    (data.base64) ? data.base64 = data.base64.substring(23, data.base64.length) : null;
+    console.log(JSON.stringify(data));
     return $http.post(ApiURL + url, data)
     .then(function (result) {
       success(result);

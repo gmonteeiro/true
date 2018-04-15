@@ -55,6 +55,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.meuspets', {
       url: '/meuspets',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/pet_list.html',

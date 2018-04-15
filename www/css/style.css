@@ -149,10 +149,17 @@
     text-align: center;
     line-height: 50px;
     font-size: 30px;
+    transition: all 0.5s;
 }
 .btm-bar img {
     width: 40%;
     margin-top: 18px;
+}
+.keyboard-open .btm-bar .btn-icon{
+    position: fixed;
+    bottom: 210px;
+    right: 10px;
+    border: solid 1px #ff5f6d;
 }
 
 /* IMG AREA */
@@ -212,6 +219,9 @@
 }
 
 /* form */
+.form{
+    padding-bottom: 60px;
+}
 .form .line {
     margin: 20px 0;
     border-bottom: solid 1px #FF5F6D;
