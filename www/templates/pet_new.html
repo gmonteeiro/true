@@ -1,4 +1,4 @@
-<ion-view view-title="Novo Pet">
+<ion-view view-title="{{title}}">
   <ion-content class="container btm">
     <div class="bg-grad add-image" ng-click="picture()" ng-if="!pet.base64">
     	<img src="img/add.png" alt="">
@@ -27,26 +27,26 @@
 
 	    <div class="line opt">
 	    	<span class="leg text-hl">Espécie</span>
-	    	<ion-radio ng-click="setEspecie(1)" class="text-hl" name="especie">Canino</ion-radio>
-			<ion-radio ng-click="setEspecie(2)" class="text-hl" name="especie">Felino</ion-radio>
+	    	<ion-radio ng-value="1" ng-model="pet.idEspecie" class="text-hl" name="especie">Canino</ion-radio>
+			<ion-radio ng-value="0" ng-model="pet.idEspecie" class="text-hl" name="especie">Felino</ion-radio>
 	    </div>
 
 	    <div class="line opt">
 	    	<span class="leg text-hl">Sexo</span>
-	    	<ion-radio ng-click="setSexo(1)" class="text-hl" name="sexo">Masculino</ion-radio>
-			<ion-radio ng-click="setSexo(0)" class="text-hl" name="sexo">Feminino</ion-radio>
+	    	<ion-radio ng-value="1" ng-model="pet.sexo" class="text-hl" name="sexo">Masculino</ion-radio>
+			<ion-radio ng-value="0" ng-model="pet.sexo" class="text-hl" name="sexo">Feminino</ion-radio>
 	    </div>
 
 	    <div class="line opt">
 	    	<span class="leg text-hl">Castrado</span>
-	    	<ion-radio ng-click="setCastrado(1)" class="text-hl" name="castrado">Sim</ion-radio>
-			<ion-radio ng-click="setCastrado(0)" class="text-hl" name="castrado">Não</ion-radio>
+	    	<ion-radio ng-value="1" ng-model="pet.castrado" class="text-hl" name="castrado">Sim</ion-radio>
+			<ion-radio ng-value="0" ng-model="pet.castrado" class="text-hl" name="castrado">Não</ion-radio>
 	    </div>
 
 	    <div class="line opt">
 	    	<span class="leg text-hl">Tem interesse em cruzar futuramente?</span>
-	    	<ion-radio ng-click="setCruzar(1)" class="text-hl" name="cruzar">Sim</ion-radio>
-			<ion-radio ng-click="setCruzar(0)" class="text-hl" name="cruzar">Não</ion-radio>
+	    	<ion-radio ng-value="1" ng-model="pet.cruzar" class="text-hl" name="cruzar">Sim</ion-radio>
+			<ion-radio ng-value="0" ng-model="pet.cruzar" class="text-hl" name="cruzar">Não</ion-radio>
 	    </div>
     </div>
   </ion-content>

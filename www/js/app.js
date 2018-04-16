@@ -44,7 +44,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
   })
 
   .state('app.novopet', {
-      url: '/novopet',
+      url: '/novopet/:petId',
       views: {
         'menuContent': {
           templateUrl: 'templates/pet_new.html',
@@ -166,10 +166,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.banhos', {
       url: '/banhos/:petId',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/banhos.html',
           controller: 'BanhosCtrl'
+        }
+      }
+  })
+
+  .state('app.novobanho', {
+      url: '/novobanho/:petId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/banhos_new.html',
+          controller: 'NovoBanhoCtrl'
         }
       }
   })

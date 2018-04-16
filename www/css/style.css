@@ -31,6 +31,13 @@
 .platform-ios .bar-header .button.back-button.buttons.button-clear.header-item{
     margin-top: 7px;
 }
+.config{
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    color: #fff;
+    padding: 2px 5px;
+}
 
 /* ----------------------- */
 

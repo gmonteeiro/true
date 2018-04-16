@@ -1,0 +1,30 @@
+<ion-view view-title="Novo banho">
+  <ion-content class="container btm">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!banho.base64">
+    	<img src="img/add.png" alt="">
+    	<span>Adicionar Imagem</span>
+    </div>
+    <div class="img-container" ng-if="banho.base64">
+    	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+    	<img ng-src="{{banho.base64}}" alt="">
+    </div>
+	<div class="form">
+	    <div class="line">
+	    	<input type="text" name="petshop" ng-model="banho.petshop" placeholder="Petshop">
+	    </div>
+
+	    <div class="line">
+	    	<input type="number" name="valor" ng-model="banho.valor" placeholder="Valor">
+	    </div>
+
+	    <div class="line noline">
+	    	<div class="field-name">Anotações</div>
+	    	<textarea name="notas" ng-model="banho.notas"></textarea>
+	    </div>
+    </div>
+  </ion-content>
+
+    <div class="btm-bar">
+		<div class="btn-icon" ng-click="signup()"><img src="img/checked.png" alt=""></div>
+	</div>
+</ion-view>

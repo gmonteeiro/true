@@ -141,48 +141,66 @@ angular.module('starter.controllers', [])
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup) {
-  $scope.pet = {};
+  var pets = localService.getPets().list;
   var usr = localService.getUsuario();
-
+  if($stateParams.petId){
+    $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+    $scope.title = "Editar Pet";
+  }else{
+    $scope.pet = {};
+    $scope.title = "Novo Pet";
+  } 
+  
+  console.log($scope.pet);
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.pet.base64 = res; }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.user.img = null; }
   
   $scope.send = function(){
-    var data = {
-      nome : $scope.pet.nome,
-      base64 : $scope.pet.base64,
-      raca : $scope.pet.raca,
-      dataNascimento : $scope.pet.dataNascimento,
-      sexo : $scope.pet.sexo,
-      peso : $scope.pet.peso,
-      castrado : $scope.pet.castrado,
-      cruzar : $scope.pet.cruzar,
-      img : null,
-      idEspecie : $scope.pet.idEspecie,
-      idUsuario : usr.id,
-      isAtivo : true
-    }
+    $scope.pet.img = null;
+    $scope.pet.idUsuario = usr.id;
+    $scope.pet.isAtivo = true;
 
     $ionicLoading.show();
-    apiService.post('pet/PostPet/', data, function(res){ $ionicLoading.hide();console.log(res);
-      console.log(data);
-      //localService.setPets();
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      confirmPopup.then(function(){ $state.go("app.meuspets"); });
-    }, function(err){ $ionicLoading.hide(); console.log(err); });
-  }
+    ($stateParams.petId) ? apiService.put('pet/PutPet/', $scope.pet, success, err) : apiService.post('pet/PostPet/', $scope.pet, success, err);
 
-  $scope.setEspecie = function(val){ $scope.pet.idEspecie = val; }
-  $scope.setSexo = function(val){ $scope.pet.sexo = val; }
-  $scope.setCastrado = function(val){ $scope.pet.castrado = val; }
-  $scope.setCruzar = function(val){ $scope.pet.cruzar = val; }
+    function success(res){
+      $ionicLoading.hide();console.log(res);
+      $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' }).then(function(){ $state.go("app.meuspets"); });
+    }
+    function err(err){ $ionicLoading.hide(); console.log(err)};
+  }
 })
 
-.controller('PetCtrl', function($scope, $stateParams, $state, localService) {
+.controller('PetCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
   $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
+
+  $scope.config = function(){
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "Remover" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.novopet", { 'petId': $scope.pet.id }); break;
+          case 1: remove($scope.pet.id); break;
+        }
+        return true;
+      }
+    });
+  }
+
+  var remove = function(id){
+    $ionicLoading.show();
+    apiService.deleta('pet/DeletePet/?idPet=', id, function(res){ $ionicLoading.hide();
+      console.log(res);
+      index = pets.findIndex(x => x.id==id);
+      pets.splice(index, 1);
+      localService.setPets(pets);
+      var confirmPopup = $ionicPopup.alert({ title: "Pet deletado!", okText: 'ok' });
+      confirmPopup.then(function(){ $ionicLoading.hide(); $ionicHistory.clearCache(); $state.go("app.meuspets"); });
+    }, function(err){ $ionicLoading.hide();
+      $ionicPopup.alert({ title: "Erro ao deletar", okText: 'ok' }).then(function(){ });
+      console.log(err); });
+  }
 })
 
 .controller('MeusVetsCtrl', function($scope, $state) {
@@ -314,16 +332,30 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('BanhosCtrl', function($scope, $stateParams, $state) {
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
-
+.controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
+  var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
   console.log($scope.pet);
+
+  getBanhos();
+
+  function getBanhos(){
+    $ionicLoading.show();
+    apiService.get("Banho/BuscarTodosBanhosPorPet/?idPet=", $scope.pet.id, function(res){
+      $ionicLoading.hide();
+      //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
+      console.log(res);
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
+  }
+
+  $scope.novo = function(){
+    $state.go("app.novobanho");
+  }
+})
+
+.controller('NovoBanhoCtrl', function($scope, $stateParams, $state) {
+  
 })
 
 .controller('MinhaContaCtrl', function($scope, $stateParams, $state) {
