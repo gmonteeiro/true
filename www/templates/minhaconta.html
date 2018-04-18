@@ -2,19 +2,19 @@
   <ion-content class="minhaconta"> <!-- scroled -->
 	<div class="bg-textured">
 		<div class="img-rounded">
-			<img src="img/avatar.png" alt="">
+			<img ng-src="{{user.img}}" alt="">
 		</div>
-		<span>Maria Valentina</span>
+		<span>{{user.nome}}</span>
 	</div>
 	<div class="container">
 		<div class="field">
 			<div class="field-name">E-mail</div>
-			<div class="field-content">mvalentina@mail.com</div>
+			<div class="field-content">user.email</div>
 		</div>
 
 		<div class="field">
 			<div class="field-name">Telefone</div>
-			<div class="field-content">(11) 91134-5674</div>
+			<div class="field-content">{{user.telefone}}</div>
 		</div>
 	</div>
   </ion-content>

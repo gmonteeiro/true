@@ -1,22 +1,40 @@
-- validacao
-- confirmacao de senha
-- mascara de data
-- mascara de telefone
-- campos tipo email
+validacao
+confirmacao de senha
+mascara de data
+mascara de telefone
+campos tipo email
 - no-image para pets e usuarios
 - fazer fluxo de veterinário
 - terminar de implementar Vacinas
 - esqueci a senha
-- apagar foto (novo pet)
-- ajustar espaçamento embaixo (novo pet)
+apagar foto (novo pet)
+ajustar espaçamento embaixo (novo pet)
 - login errado vem com retorno array null
 - menu nao aparece depois do cadastro
 - desabilitar swipe pra voltar
+- incluir vacina no local ao salvar
+- input date
  
 
 Gui
-- Retornar endereco da imagem ao cadastrar
-- Retornar ID do usuario ao cadastrar
+Timeline
+- inserir tipo de item
+	- banho
+	- nascimento
+	- manual
+	- vacina
+	- aniversario
+
+- login
+	retorna sucesso mesmo com dados invalidos
+
+- Cadastro de usuário
+	retorno no cadastro está vindo vazio
+
+- Vacina
+	retorno está vindo vazio no cadastro e na edição
+
+
 
 Documentacao Mask
 http://candreoliveira.github.io/bower_components/angular-mask/examples/index.html#/

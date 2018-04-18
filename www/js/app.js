@@ -96,6 +96,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.vacina', {
     url: '/vacina/:petId',
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'templates/vacina.html',

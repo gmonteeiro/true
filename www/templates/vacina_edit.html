@@ -1,38 +1,42 @@
 <ion-view view-title="Editar Vacina">
   <ion-content class="container btm">
-    <div class="edit-image">
-    	<div class="btn-image"><img src="img/close-color.png" alt=""></div>
-    	<img src="img/selo.png" alt="">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!vacina.img">
+    	<img src="img/add.png" alt="">
+    	<span>Adicionar Selo</span>
+    </div>
+    <div class="img-container" ng-if="vacina.img">
+    	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+    	<img ng-src="{{vacina.img}}" alt="">
     </div>
 	<div class="form">
 	    <div class="line">
-	    	<input type="text" name="nome" ng-model="vacina.nome" placeholder="V8 - Dose 1">
+	    	<input type="text" name="nome" ng-model="vacina.nome" placeholder="Nome da vacina">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="17/12/2017">
+	    	<input type="text" name="aplicacao" ng-model="vacina.aplicacao | date: 'dd/MM/yyyy'" placeholder="Aplicacao" mask="99/99/9999">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="retorno" ng-model="vacina.retorno" placeholder="18/01/2018">
+	    	<input type="text" name="retorno" ng-model="vacina.retorno | date: 'dd/MM/yyyy'" placeholder="Retorno" mask="99/99/9999">
 	    </div>
-		<!-- 
+		
 		<div class="line">
 	    	<input type="text" name="lembrete" ng-model="vacina.lembrete" placeholder="Lembrete">
-	    </div> -->
+	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="veterinario" ng-model="vacina.veterinario" placeholder="Dr. Gustavo">
+	    	<input type="text" name="veterinario" ng-model="vacina.idVeterinario" placeholder="Veterinario responsável">
 	    </div>
 
 	    <div class="line noline">
 	    	<div class="field-name">Anotações</div>
-	    	<textarea name="anotacoes">Primeira dose da vacina V8</textarea>
+	    	<textarea name="anotacoes" ng-model="vacina.anotacoes"></textarea>
 	    </div>
     </div>
   </ion-content>
 
     <div class="btm-bar">
-		<div class="btn-icon" ng-click="newpost()"><img src="img/checked.png" alt=""></div>
+		<div class="btn-icon" ng-click="send()"><img src="img/checked.png" alt=""></div>
 	</div>
 </ion-view>

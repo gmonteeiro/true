@@ -571,6 +571,10 @@
 .vacina-detalhe .field{
     margin: 15px 0;
 }
+.vacina-detalhe .field img{
+    border: solid 3px #FF5F6D;
+    border-radius: 5px;
+}
 
 /* EDITAR VACINA */
 .edit-image{

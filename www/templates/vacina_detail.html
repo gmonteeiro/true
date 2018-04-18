@@ -5,27 +5,27 @@
 	<ion-content class="vacina-detalhe container"> <!-- scroled -->
 	    <div class="field">
 			<div class="field-name">Nome da Vacina</div>
-			<div class="field-content">V8 - Dose 1</div>
+			<div class="field-content">{{vacina.nome}}</div>
 		</div>
 
 		<div class="field">
 			<div class="field-name">Aplicação</div>
-			<div class="field-content">17/12/2017</div>
+			<div class="field-content">{{vacina.aplicacao | date: 'dd/MM/yyyy'}}</div>
 		</div>
 
 		<div class="field">
 			<div class="field-name">Retorno</div>
-			<div class="field-content">18/01/2018</div>
+			<div class="field-content">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
 		</div>
 
 		<div class="field">
 			<div class="field-name">Médico responsável</div>
-			<div class="field-content link">Dr. Gustavo</div>
+			<div class="field-content link">{{vacina.nomeVeterinario}}</div>
 		</div>
 
-		<div class="field">
+		<div class="field" ng-if="vacina.img">
 			<div class="field-name">Selo</div>
-			<img src="img/selo.png" alt="">
+			<img ng-src="{{vacina.img}}" alt="">
 		</div>
 	</ion-content>
 </ion-view>
