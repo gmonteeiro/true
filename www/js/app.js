@@ -84,6 +84,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
     }
   })
 
+  .state('app.newtimeline', {
+    url: '/newtimeline/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/timeline_new.html',
+        controller: 'NewTimelineCtrl'
+      }
+    }
+  })
+
   .state('app.vacina', {
     url: '/vacina/:petId',
     views: {

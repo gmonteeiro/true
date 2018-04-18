@@ -262,16 +262,45 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('TimelineCtrl', function($scope, $state, $stateParams) {
-  $scope.pet = {};
-  var pets = [
-    { nome: 'Pipoca', id: 1, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/pipoca.jpeg"},
-    { nome: 'Costelinha', id: 2, nasc: "25-01-2018 00:00:00", peso: "16", medicamento: "10-02-2018 00:00:00", vacina: "25-04-2018 00:00:00", banho: "30-01-2018 00:00:00", img:"img/costelinha.jpeg"}
-  ];
+.controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService) {
+  $scope.itens = localService.getTimeline().list;
+  var pets = localService.getPets().list;
+  var pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
-  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+  getItens();
+  function getItens(){
+    $ionicLoading.show();
+    apiService.get("timeline/GetBuscarTimelinePorPet/?idPet=", pet.id, function(res){
+      $ionicLoading.hide();
+      console.log(res);
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
+  }
 
-  console.log($scope.pet);
+  $scope.new = function(){
+    $state.go("app.newtimeline");
+  }
+
+})
+
+.controller('NewTimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicPopup) {
+  
+  if($stateParams.id){
+    var itens = localService.getTimeline().list;
+    $scope.timeline = itens.filter(function(item) { return item.id == $stateParams.id; })[0];
+    $scope.titulo = "Editar Item";
+  }else{
+    $scope.timeline = {};
+    $scope.titulo = "Adicionar Item";
+  }
+
+  $scope.send = function(){
+    $ionicLoading.show();
+    apiService.post('timeline/PostTimeline/', $scope.timeline, function(res){ $ionicLoading.hide();console.log(res);
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      //confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': $scope.vacina.idPet }); });
+    }, function(err){ $ionicLoading.hide(); console.log(err); });
+  }
+
 })
 
 .controller('VacinaCtrl', function($scope, $state, $stateParams, localService, apiService, $ionicLoading) {
@@ -460,6 +489,9 @@ angular.module('starter.controllers', [])
   var setBanhos = function(dt){ window.localStorage.banhos = JSON.stringify(dt);}
   var getBanhos = function(){return JSON.parse(window.localStorage.banhos || '{}');}
 
+  var setTimeline = function(dt){ window.localStorage.timeline = JSON.stringify(dt);}
+  var getTimeline = function(){return JSON.parse(window.localStorage.timeline || '{}');}
+
   return{
     setUsuario : setUsuario,
     getUsuario : getUsuario,
@@ -469,8 +501,8 @@ angular.module('starter.controllers', [])
     getPets : getPets,
     setVacinas : setVacinas,
     getVacinas : getVacinas,
-    setBanhos : setBanhos,
-    getBanhos : getBanhos
+    setTimeline : setTimeline,
+    getTimeline : getTimeline
   }
 })
 
