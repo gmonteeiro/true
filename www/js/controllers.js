@@ -203,17 +203,31 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('MeusVetsCtrl', function($scope, $state) {
-  $scope.vets = [
-    { id: 1, nome: 'Dr. Gustavo', crmv: "SP-1234", clinica: "Pet Life", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"img/vet-pic.png"},
-    { id: 2, nome: 'Dr. Augusto', crmv: "SP-1234", clinica: "Clinica Veterinária Augusto", fone: "(11) 3343-5678", celular: "(11) 95566-8876", endereco: "Rua Guaraiuva, 750", img:"img/no-image-vet.png"}
-  ];
+.controller('MeusVetsCtrl', function($scope, $state, localService) {
+  $scope.vets = localService.getVets().list;
 
   $scope.newpet = function(){  $state.go("app.novovet"); }
 })
 
-.controller('NovoVetCtrl', function($scope, $state, apiService) {
- 
+.controller('NovoVetCtrl', function($scope, $state, apiService, $ionicLoading, $ionicPopup, $ionicHistory, localService) {
+  var vets = localService.getVeterinarios().list;
+  var usr = localService.getUsuario();
+  $ionicLoading.show();
+
+  $scope.vet = {};
+  $scope.vet.idUsuario = usr.id;
+
+  apiService.post('veterinario/PostVeterinario/', $scope.vet, function(res){
+    $ionicLoading.hide();
+    //vets.push(res.data);
+    //localService.setVeterinarios({list:vets});
+    $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' }).then(function(){ $ionicHistory.clearCache(); $ionicHistory.goBack(); });
+    console.log(res);
+  }, function(err){
+    $ionicLoading.hide();
+    $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){ });
+    console.log(err);
+  });
 })
 
 .controller('MeusPetshopsCtrl', function($scope, $state) {
@@ -436,7 +450,6 @@ angular.module('starter.controllers', [])
       ]).then(function(res){
         $ionicLoading.show();
         apiService.post('usuario/PostUsuario/', data, function(res){
-
           console.log(res);
           $ionicLoading.hide();
           var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
@@ -513,6 +526,12 @@ angular.module('starter.controllers', [])
   var setTimeline = function(dt){ window.localStorage.timeline = JSON.stringify(dt);}
   var getTimeline = function(){return JSON.parse(window.localStorage.timeline || '{}');}
 
+  var setVeterinarios = function(dt){ window.localStorage.veterinarios = JSON.stringify(dt);}
+  var getVeterinarios = function(){return JSON.parse(window.localStorage.veterinarios || '{}');}
+
+  var setPetshops = function(dt){ window.localStorage.petshops = JSON.stringify(dt);}
+  var getPetshops = function(){return JSON.parse(window.localStorage.petshops || '{}');}
+
   return{
     setUsuario : setUsuario,
     getUsuario : getUsuario,
@@ -525,7 +544,11 @@ angular.module('starter.controllers', [])
     setBanhos : setBanhos,
     getBanhos : getBanhos,
     setTimeline : setTimeline,
-    getTimeline : getTimeline
+    getTimeline : getTimeline,
+    setVeterinarios : setVeterinarios,
+    getVeterinarios : getVeterinarios,
+    setPetshops : setPetshops,
+    getPetshops : getPetshops
   }
 })
 

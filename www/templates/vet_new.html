@@ -1,28 +1,32 @@
 <ion-view view-title="Novo Vet">
   <ion-content class="container btm">
-    <div class="bg-grad add-image">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!vet.base64">
     	<img src="img/add.png" alt="">
     	<span>Adicionar Imagem</span>
     </div>
+    <div class="img-container" ng-if="vet.base64">
+    	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+    	<img ng-src="{{vet.base64}}" alt="">
+    </div>
 	<div class="form">
 	    <div class="line">
-	    	<input type="text" name="nome" ng-model="pet.nome" placeholder="Nome">
+	    	<input type="text" name="nome" ng-model="vet.nome" placeholder="Nome">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="crmv" ng-model="pet.crmv" placeholder="CRMV">
+	    	<input type="text" name="crmv" ng-model="vet.crmv" placeholder="CRMV">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="endereco" ng-model="pet.endereco" placeholder="Endereço">
+	    	<input type="text" name="endereco" ng-model="vet.endereco" placeholder="Endereço">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="telefone" ng-model="pet.telefone" placeholder="Telefone">
+	    	<input type="text" name="telefone" ng-model="vet.telefone" placeholder="Telefone">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="celular" ng-model="pet.celular" placeholder="Celular">
+	    	<input type="text" name="celular" ng-model="vet.celular" placeholder="Celular">
 	    </div>
 
     </div>
