@@ -1,22 +1,24 @@
 <ion-view view-title="{{pet.nome}}">
+    <ion-nav-buttons side="right" >
+      <img src="img/config.png" alt="" ng-click="config()">
+    </ion-nav-buttons>
   	<ion-content class="pet-content">
-  		<div class="config bg-grad" ng-click="config()"> ed </div>
     	<div class="img-area">
-    		<img ng-src="{{pet.img}}" alt="">
+    		<img ng-src="{{(pet.img) ? pet.img : 'img/no-image-pet.png'}}" alt="">
     		<div class="pet-ind">
-				<div class="ind-item">
-					<span class="icon"><img src="img/bug.png" alt=""></span>
-					2 semanas
-				</div>
-				<div class="ind-item">
-					<span class="icon"><img src="img/vacina.png" alt=""></span>
-					3 meses
-				</div>
-				<div class="ind-item">
-					<span class="icon"><img src="img/banho.png" alt=""></span>
-					2 dias
-				</div>
-			</div>
+  				<div class="ind-item">
+  					<span class="icon"><img src="img/bug.png" alt=""></span>
+  					2 semanas
+  				</div>
+  				<div class="ind-item">
+  					<span class="icon"><img src="img/vacina.png" alt=""></span>
+  					3 meses
+  				</div>
+  				<div class="ind-item">
+  					<span class="icon"><img src="img/banho.png" alt=""></span>
+  					2 dias
+  				</div>
+			  </div>
     	</div>
 
     	<div class="pet-menu">

@@ -9,11 +9,10 @@ campos tipo email
 - esqueci a senha
 apagar foto (novo pet)
 ajustar espaçamento embaixo (novo pet)
-- login errado vem com retorno array null
-- menu nao aparece depois do cadastro
-- desabilitar swipe pra voltar
 - incluir vacina no local ao salvar
 - input date
+- buscar veterinarios ao logar
+- substituir indicadores
  
 
 Gui
@@ -25,14 +24,17 @@ Timeline
 	- vacina
 	- aniversario
 
-- login
+- login OK
 	retorna sucesso mesmo com dados invalidos
 
 - Cadastro de usuário
-	retorno no cadastro está vindo vazio
+	retorno no cadastro está vindo vazio quando nao passa imagem
 
 - Vacina
 	retorno está vindo vazio no cadastro e na edição
+
+- Usuario nao retorna dados quando nao passa imagem no cadastro
+- nao salva veterinario
 
 
 

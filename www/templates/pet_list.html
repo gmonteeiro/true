@@ -3,7 +3,7 @@
 		<ion-list>
 			<ion-item ng-repeat="pet in pets" href="#/app/meuspets/{{pet.id}}">
 				<div class="pet-area">
-					<div class="img-rounded bordered"><img ng-src="{{pet.img}}" alt=""></div>
+					<div class="img-rounded bordered"><img ng-src="{{(pet.img) ? pet.img : 'img/no-image-pet.png'}}" alt=""></div>
 					<div class="pet-infos middle">
 						<span class="titulo">{{pet.nome}}</span>
 						<span class="subtitulo">{{pet.dataNascimento | date: 'dd/MM/yyyy'}} | {{pet.peso}}kg </span>

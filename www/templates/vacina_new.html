@@ -26,7 +26,12 @@
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="veterinario" ng-model="vacina.idVeterinario" placeholder="Veterinario responsável">
+	    	<label class="tag field-description" ng-click="removeItem()" ng-if="vacina.nomeVet"><span class="close">-</span>{{vacina.nomeVet}}</label>
+	    	<input type="text" id="inpt" name="veterinario" ng-focus="focus()" placeholder="Veterinario responsável" ng-keyup="keypressed($event)" ng-blur="blur()">
+
+	    	<div class="lst" ng-if="options">
+                <span ng-repeat="item in options" ng-click="add(item)">{{item.nomeVet}}</span>
+            </div>
 	    </div>
 
 	    <div class="line noline">

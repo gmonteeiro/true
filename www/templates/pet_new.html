@@ -17,8 +17,10 @@
 	    	<input type="text" name="raca" ng-model="pet.raca" placeholder="Raça">
 	    </div>
 
-	    <div class="line">
-	    	<input type="text" name="dataNascimento" ng-model="pet.dataNascimento" placeholder="Nascimento" mask="99/99/9999">
+	    <div class="line" ng-click="getDate()">
+	    	<div class="likeinput" ng-if="pet.dataNascimento">{{pet.dataNascimento | date: 'dd/MM/yyyy'}}</div>
+	    	<div class="likeinput" ng-if="!pet.dataNascimento">Nascimento</div>
+	    	<!-- <input type="text" name="dataNascimento" ng-model="pet.dataNascimento" placeholder="Nascimento" mask="99/99/9999"> -->
 	    </div>
 
 	    <div class="line">

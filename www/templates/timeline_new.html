@@ -1,8 +1,12 @@
 <ion-view view-title="{{title}}">
   <ion-content class="container btm">
     <div class="bg-grad add-image" ng-click="picture()" ng-if="!timeline.base64">
-    	<img src="img/add.png" alt="">
-    	<span>Adicionar Imagem</span>
+        <img src="img/add.png" alt="">
+        <span>Adicionar Imagem</span>
+    </div>
+    <div class="img-container" ng-if="timeline.base64">
+        <img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
+        <img ng-src="{{timeline.base64}}" alt="">
     </div>
     <div class="img-container" ng-if="timeline.base64">
     	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">

@@ -22,17 +22,17 @@
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="telefone" ng-model="vet.telefone" placeholder="Telefone">
+	    	<input type="text" name="telefone" ng-model="vet.telefone" placeholder="Telefone" mask="(99) 9?9999-9999">
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="celular" ng-model="vet.celular" placeholder="Celular">
+	    	<input type="text" name="celular" ng-model="vet.celular" placeholder="Celular" mask="(99) 9?9999-9999">
 	    </div>
 
     </div>
   </ion-content>
 
     <div class="btm-bar">
-		<div class="btn-icon"><img src="img/checked.png" alt=""></div>
+		<div class="btn-icon" ng-click="send()"><img src="img/checked.png" alt=""></div>
 	</div>
 </ion-view>

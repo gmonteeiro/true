@@ -94,4 +94,5 @@
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Permitir acesso a Camera" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Permitir acesso a Galeria" />
     </plugin>
+    <plugin name="cordova-plugin-datepicker" spec="git+https://github.com/VitaliiBlagodir/cordova-plugin-datepicker.git" />
 </widget>
