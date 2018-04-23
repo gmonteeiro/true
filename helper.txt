@@ -13,6 +13,8 @@ ajustar espaçamento embaixo (novo pet)
 - input date
 - buscar veterinarios ao logar
 - substituir indicadores
+- editar pet
+
  
 
 Gui
@@ -28,13 +30,20 @@ Timeline
 	retorna sucesso mesmo com dados invalidos
 
 - Cadastro de usuário
-	retorno no cadastro está vindo vazio quando nao passa imagem
+	retorno no cadastro está vindo vazio quando nao passa imagem AINDA
 
 - Vacina
-	retorno está vindo vazio no cadastro e na edição
+	retorno está vindo vazio no cadastro e na edição OK
 
 - Usuario nao retorna dados quando nao passa imagem no cadastro
-- nao salva veterinario
+- nao salva veterinario ok
+- Se editar pet e nao passar imagem ele remove a imagem que ja estava cadastrada
+- Ao remover retorna sucesso mas nao exclui o pet
+- cadastro do vet nao retorna imagem
+- crmv esta como crvm no cadastro do veterinario
+- nao esta buscando veterinario por id do usuario
+- toda vez que edita uma vacina adiciona um novo registro
+- get timeline nao receba campo tipo
 
 
 

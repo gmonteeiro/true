@@ -1,24 +1,28 @@
 <ion-view view-title="Editar Vacina">
   <ion-content class="container btm">
-    <div class="bg-grad add-image" ng-click="picture()" ng-if="!vacina.img">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!imagem">
     	<img src="img/add.png" alt="">
     	<span>Adicionar Selo</span>
     </div>
-    <div class="img-container" ng-if="vacina.img">
+    <div class="img-container" ng-if="imagem">
     	<img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
-    	<img ng-src="{{vacina.img}}" alt="">
+    	<img ng-src="{{imagem}}" alt="">
     </div>
 	<div class="form">
 	    <div class="line">
 	    	<input type="text" name="nome" ng-model="vacina.nome" placeholder="Nome da vacina">
 	    </div>
 
-	    <div class="line">
-	    	<input type="text" name="aplicacao" ng-model="vacina.aplicacao | date: 'dd/MM/yyyy'" placeholder="Aplicacao" mask="99/99/9999">
+	    <div class="line" ng-click="getAplicacao()">
+	    	<div class="likeinput" ng-if="!vacina.aplicacao">Aplicacao</div>
+	    	<div class="likeinput" ng-if="vacina.aplicacao">{{vacina.aplicacao | date: 'dd/MM/yyyy'}}</div>
+	    	<!-- <input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="Aplicacao" mask="99/99/9999"> -->
 	    </div>
 
-	    <div class="line">
-	    	<input type="text" name="retorno" ng-model="vacina.retorno | date: 'dd/MM/yyyy'" placeholder="Retorno" mask="99/99/9999">
+	    <div class="line" ng-click="getRetorno()">
+	    	<div class="likeinput" ng-if="!vacina.retorno">Retorno</div>
+	    	<div class="likeinput" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
+	    	<!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
 	    </div>
 		
 		<div class="line">
@@ -31,7 +35,7 @@
 
 	    <div class="line noline">
 	    	<div class="field-name">Anotações</div>
-	    	<textarea name="anotacoes" ng-model="vacina.anotacoes"></textarea>
+	    	<textarea name="notas" ng-model="vacina.notas"></textarea>
 	    </div>
     </div>
   </ion-content>

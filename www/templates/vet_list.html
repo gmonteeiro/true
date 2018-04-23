@@ -6,16 +6,16 @@
 					<div class="img-rounded bordered"><img ng-src="{{vet.img}}" alt=""></div>
 					<div class="pet-infos middle">
 						<span class="titulo">{{vet.nome}}</span>
-						<span class="subtitulo">CRMV: {{vet.crmv}} </span>
+						<span class="subtitulo" ng-if="vet.crmv">CRMV: {{vet.crmv}} </span>
 					</div>
 				</div>
 				<div class="pet-ind">
 					<div class="ind-item col-2">
-						<span class="icon"><img src="img/phone.png" alt=""></span>
-						{{vet.fone}}
+						<span class="icon" ng-if="vet.telefone"><img src="img/phone.png" alt=""></span>
+						{{vet.telefone}}
 					</div>
 					<div class="ind-item col-2">
-						<span class="icon"><img src="img/cellphone.png" alt=""></span>
+						<span class="icon" ng-if="vet.celular"><img src="img/cellphone.png" alt=""></span>
 						{{vet.celular}}
 					</div>
 				</div>

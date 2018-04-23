@@ -3,7 +3,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
@@ -137,6 +137,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.meusvets', {
       url: '/meusvets',
+      cache:false,
       views: {
         'menuContent': {
           templateUrl: 'templates/vet_list.html',
@@ -157,6 +158,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.meuspetshops', {
       url: '/meuspetshops',
+      cache:false,
       views: {
         'menuContent': {
           templateUrl: 'templates/petshop_list.html',

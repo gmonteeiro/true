@@ -32,7 +32,7 @@
 .platform-ios .bar-header .button.back-button.buttons.button-clear.header-item{
     margin-top: 16px;
 }
-.platform-ios.platform-cordova:not(.fullscreen) .has-header, .platform-ios.platform-cordova:not(.fullscreen) .bar-subheader{
+.platform-ios.platform-cordova:not(.fullscreen) .has-header, .platform-ios.platform-cordova:not(.fullscreen) .bar-subheader, .has-header{
     top:60px;
 }
 .config{
@@ -51,6 +51,7 @@
     width: 100%;
     margin-bottom: 3px;
     background-color: transparent;
+    border:none;
 }
 /* ----------------------- */
 
@@ -212,7 +213,7 @@
 }
 .keyboard-open .btm-bar .btn-icon{
     position: fixed;
-    bottom: 265px;
+    bottom: 310px;
     right: 10px;
     border: solid 1px #ff5f6d;
 }

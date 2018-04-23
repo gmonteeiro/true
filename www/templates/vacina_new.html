@@ -13,16 +13,24 @@
 	    	<input type="text" name="nome" ng-model="vacina.nome" placeholder="Nome da vacina">
 	    </div>
 
-	    <div class="line">
-	    	<input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="Aplicacao" mask="99/99/9999">
+	    <div class="line" ng-click="getAplicacao()">
+	    	<div class="likeinput" ng-if="!vacina.aplicacao">Aplicacao</div>
+	    	<div class="likeinput" ng-if="vacina.aplicacao">{{vacina.aplicacao | date: 'dd/MM/yyyy'}}</div>
+	    	<!-- <input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="Aplicacao" mask="99/99/9999"> -->
 	    </div>
 
-	    <div class="line">
-	    	<input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999">
+	    <div class="line" ng-click="getRetorno()">
+	    	<div class="likeinput" ng-if="!vacina.retorno">Retorno</div>
+	    	<div class="likeinput" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
+	    	<!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
 	    </div>
 		
 		<div class="line">
-	    	<input type="text" name="lembrete" ng-model="vacina.lembrete" placeholder="Lembrete">
+	    	<!-- <input type="text" name="lembrete" ng-model="vacina.lembrete" placeholder="Lembrete"> -->
+	    	<select ng-model="vacina.lembrete" class="likeinput">
+			    <option ng-repeat="item in diasLembrete"  value="{{item.qtd}}">{{item.desc}}</option>
+			</select>
+
 	    </div>
 
 	    <div class="line">
@@ -30,13 +38,13 @@
 	    	<input type="text" id="inpt" name="veterinario" ng-focus="focus()" placeholder="Veterinario responsável" ng-keyup="keypressed($event)" ng-blur="blur()">
 
 	    	<div class="lst" ng-if="options">
-                <span ng-repeat="item in options" ng-click="add(item)">{{item.nomeVet}}</span>
+                <span ng-repeat="item in options" ng-click="add(item)">{{item.nome}}</span>
             </div>
 	    </div>
 
 	    <div class="line noline">
 	    	<div class="field-name">Anotações</div>
-	    	<textarea name="anotacoes" ng-model="vacina.anotacoes"></textarea>
+	    	<textarea name="notas" ng-model="vacina.notas"></textarea>
 	    </div>
     </div>
   </ion-content>
