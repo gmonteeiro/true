@@ -10,17 +10,27 @@ incluir vacina no local ao salvar
 input date
 no-image para pets
 - no-image para usuarios
-- fazer fluxo de veterinário
+fazer fluxo de veterinário
 - terminar de implementar Vacinas
 - buscar veterinarios ao logar
 - substituir indicadores
 - editar pet
 
- 
 
 Gui
 Timeline
+- RETORNO DO POST = IDTIMELINE, IMGPET (no get vem "id" e "img") Padronizar
+- RETORNO de sucesso com status de erro
+- Item adicionado não vem no get (apenas os disparados por gatilho)
 - inserir campo "tipo" onde cada gatilho receba um numero diferente nesse campo pra eu conseguir exibir para o usuário.
+
+Banho
+- não esta salvando
+idPet:1067
+idUsuario:5
+notas:"sadasda asdadasd asd sad asd"
+petshop:"1"
+valor:111
 
 - Cadastro de usuário (solicitado na semana passada e ainda está com erro)
 	retorno no cadastro está vindo vazio quando nao passa imagem 

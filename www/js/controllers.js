@@ -165,6 +165,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MeusPetsCtrl', function($scope, $state, apiService, localService, $ionicHistory, $ionicPopup) {
+  localService.setCurrent({});
   var usr = localService.getUsuario();
   (!usr) ? usr = {} : null;
   console.log(usr);
@@ -233,6 +234,8 @@ angular.module('starter.controllers', [])
 .controller('PetCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
+
+  localService.setCurrent($scope.pet);
 
   $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
 
@@ -398,7 +401,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService) {
-  $scope.itens = localService.getTimeline().list;
+  $scope.timeline = localService.getTimeline().list || {};
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
@@ -406,6 +409,7 @@ angular.module('starter.controllers', [])
   function getItens(){
     $ionicLoading.show();
     apiService.get("timeline/GetBuscarTimelinePorPet/?idPet=", $scope.pet.id, function(res){
+      $scope.timeline = res.data;
       $ionicLoading.hide();
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
@@ -414,26 +418,27 @@ angular.module('starter.controllers', [])
   $scope.new = function(){
     $state.go("app.newtimeline");
   }
-
 })
 
-.controller('NewTimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicPopup) {
-  
-  if($stateParams.id){
-    var itens = localService.getTimeline().list;
-    $scope.timeline = itens.filter(function(item) { return item.id == $stateParams.id; })[0];
-    $scope.titulo = "Editar Item";
-  }else{
-    $scope.timeline = {};
-    $scope.titulo = "Adicionar Item";
-  }
+.controller('NewTimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicPopup, $ionicHistory) {
+  var id = ($stateParams.id) ? $stateParams.id : null;
+  $scope.titulo = (id) ? "Editar postagem" : "Nova postagem";
+  var pet = localService.getCurrent();
+
+  var itens = localService.getTimeline().list || [];
+  $scope.timeline = itens.filter(function(item) { return item.id == pet.id; })[0] || {};
 
   $scope.send = function(){
+    console.log($scope.timeline);
+
+    $scope.timeline.idUsuario = pet.idUsuario;
+    $scope.timeline.idPet = pet.id;
+
     $ionicLoading.show();
     apiService.post('timeline/PostTimeline/', $scope.timeline, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      //confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': $scope.vacina.idPet }); });
-    }, function(err){ $ionicLoading.hide(); console.log(err); });
+      confirmPopup.then(function(){  $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.timeline", {petId:$scope.timeline.idPet}); });
+    }, function(err){ $ionicLoading.hide(); console.log(err); $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){})});
   }
 
 })
@@ -600,15 +605,27 @@ angular.module('starter.controllers', [])
 .controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-
-  console.log($scope.pet);
-
   getBanhos();
+
+  $scope.prox = function(data){
+    var ultimo = new Date(data);
+    var p = Number(ultimo.getDate()+7)+'/'+Number(ultimo.getMonth()+1)+"/"+ultimo.getFullYear();
+
+    h = new Date();
+    proximo = new Date(p);
+
+    var atrasado = (h > proximo);
+
+    return {  data:p, alert:atrasado};
+  }
+
 
   function getBanhos(){
     $ionicLoading.show();
     apiService.get("Banho/BuscarTodosBanhosPorPet/?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
+      $scope.banhos = res.data;
+      //(res.data.length > 0) ? $scope.prox(res.data[res.data.length-1].data) : null;
       //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
@@ -619,8 +636,36 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('NovoBanhoCtrl', function($scope, $stateParams, $state) {
-  
+.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading) {
+  var pet = localService.getCurrent();
+  var banhos = localService.getBanhos().list;
+
+  if($stateParams.id){
+    $scope.titulo = "Editar banho";
+    $scope.banho = banhos.filter(function(item) { return item.id == $stateParams.id; })[0];
+    $scope.imagem = $scope.banho.img;
+  }else{
+    $scope.titulo = "Adicionar banho";
+    $scope.imagem = null;
+    $scope.banho = {};
+    $scope.banho.idPet = pet.id;
+    $scope.banho.idUsuario = pet.idUsuario;
+  }
+
+  $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.banho.base64 = res; $scope.imagem = res }, function(err){ console.log(err); });}
+  $scope.delete = function(){ $scope.banho.base64 = null; $scope.imagem = null }
+
+  $scope.send = function(){
+    ($scope.banho.base64) ? $scope.banho.img = null : null;
+    $ionicLoading.show();
+    apiService.post("banho/PostBanho/", $scope.banho, function(res){
+      $ionicLoading.hide();
+      console.log(res);
+    }, function(err){
+      $ionicLoading.hide();
+      console.log(err);
+    });
+  }
 })
 
 .controller('MinhaContaCtrl', function($scope, $stateParams, $state, localService) {
@@ -740,6 +785,9 @@ angular.module('starter.controllers', [])
   var setPetshops = function(dt){ window.localStorage.petshops = JSON.stringify(dt);}
   var getPetshops = function(){return JSON.parse(window.localStorage.petshops || '{}');}
 
+  var setCurrent = function(dt){ window.localStorage.current = JSON.stringify(dt);}
+  var getCurrent = function(){return JSON.parse(window.localStorage.current || '{}');}
+
   return{
     setUsuario : setUsuario,
     getUsuario : getUsuario,
@@ -756,7 +804,9 @@ angular.module('starter.controllers', [])
     setVeterinarios : setVeterinarios,
     getVeterinarios : getVeterinarios,
     setPetshops : setPetshops,
-    getPetshops : getPetshops
+    getPetshops : getPetshops,
+    setCurrent : setCurrent,
+    getCurrent : getCurrent
   }
 })
 

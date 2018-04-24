@@ -10,38 +10,30 @@
 	<div class="alert">
 		<div class="field">
 			<div class="field-content">Próximo Banho</div>
-			<div class="field-name">17/01/2018</div>
-			<div class="alert-sign">!</div>
+			<div class="field-name">{{prox.data | date: 'dd/MM/yyyy'}}</div>
+			<div class="alert-sign" ng-if="prox.atrasado">!</div>
 		</div>
 	</div>
 	<div class="container">
-		<div class="card">
-			<div class="data bg-grad">07/01/2018</div>
+		<div class="card" ng-repeat="">
+			<div class="data bg-grad">{{banho.data | date: 'dd/MM/yyyy'}}</div>
 			<div class="icon-field halph">
 				<img src="img/location.png" alt="">
-				<span>Pet Life</span>
+				<span>{{banho.petshop}}</span>
 			</div>
+			<div class="line" ng-click="getRetorno()">
+		    	<div class="likeinput" ng-if="!vacina.retorno">Retorno</div>
+		    	<div class="likeinput" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
+		    	<!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
+		    </div>
 			<div class="icon-field halph">
 				<img src="img/price.png" alt="">
-				<span>R$40,00</span>
+				<span>R${{banho.valor}}</span>
+			</div>
+			<div class="img-area" ng-if="banho.img">
+				<img ng-src="{{banho.img}}" alt="">
 			</div>
 		</div>
-
-		<div class="card">
-			<div class="data bg-grad">07/01/2018</div>
-			<div class="icon-field halph">
-				<img src="img/location.png" alt="">
-				<span>Pet Life</span>
-			</div>
-			<div class="icon-field halph">
-				<img src="img/price.png" alt="">
-				<span>R$40,00</span>
-			</div>
-			<div class="img-area">
-				<img src="img/banhando.png" alt="">
-			</div>
-		</div>
-
 	</div>
   </ion-content>
 </ion-view>

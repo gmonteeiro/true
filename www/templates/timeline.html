@@ -8,16 +8,15 @@
 		<h2>{{pet.nome}}</h2>
 	</div>
 	<div class="container">
-		<div class="card">
-			<div class="data bg-grad">07/01/2018</div>
-			<div class="titulo">Costelinha está pesando 18kg</div>
+		<div class="card" ng-repeat="item in timeline">
+			<div class="data bg-grad">{{item.Data | date: 'dd/MM/yyyy'}}</div>
+			<div class="titulo">{{item.titulo}}</div>
 			<div class="img-area">
-				<img src="img/pipoca.jpeg" alt="">
+				<img ng-src="{{item.img}}" alt="">
 			</div>
 			<div class="share">
 				<img src="img/share.png" alt="">
 			</div>
-			
 		</div>
 	</div>
   </ion-content>
