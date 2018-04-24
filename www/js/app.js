@@ -25,10 +25,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.login', {
     url: '/login',
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'templates/login.html',
         controller: 'loginCtrl'
+      }
+    }
+  })
+
+  .state('app.novasenha', {
+    url: '/novasenha/:mail',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/novasenha.html',
+        controller: 'NovaSenhaCtrl'
       }
     }
   })

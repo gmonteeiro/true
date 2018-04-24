@@ -1,0 +1,32 @@
+<ion-view hide-nav-bar="true" >
+  <ion-content class="login novasenha"> <!-- scroled -->
+	<div class="bg-textured">
+		<div class="container">
+			<img src="img/close.png" alt="" class="btn-close" ng-click="close()">
+			<div class="form">
+				<h1>Alterar Senha</h1>
+				<span class="desc-senha">Digite o código que você recebeu por e-mail e em seguida a nova senha.</span>
+			    <div class="box">
+			    	<input type="text" name="cod" ng-model="senha.codigo" placeholder="Código">
+			    </div>
+
+			    <div class="box">
+			    	<input type="password" name="cod" ng-model="senha.pass" placeholder="Nova senha">
+			    </div>
+
+			    <div class="box">
+			    	<input class="" type="password" name="senha" ng-model="senha.conf" placeholder="Repita a senha">
+			    </div>
+
+			   
+			</div>
+		</div>
+		<div class="fb-area">
+			<div class="fb-button">
+				<div class="btn-send" ng-click="send()">Enviar</div>
+			</div>
+		</div>
+	</div>
+	
+  </ion-content>
+</ion-view>

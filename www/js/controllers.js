@@ -1,25 +1,6 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $ionicActionSheet, $q, localService, $state, $window) {
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
 
   $scope.closemenu = function(){
     $ionicSideMenuDelegate.toggleLeft();
@@ -47,6 +28,8 @@ angular.module('starter.controllers', [])
     });
   }
 
+  
+
   $scope.dateSelect = function(dt, future){
     var age = (dt) ? new Date(dt) : new Date((new Date()).valueOf() - (2*365.25*24*60*60*1000));
     var options = {date: age, mode: 'date', allowOldDates: true, allowFutureDates: future, doneButtonLabel: 'Ok', doneButtonColor: '#888888', cancelButtonLabel: 'Cancela', cancelButtonColor: '#cccccc',locale: 'pt-BR'};
@@ -65,7 +48,39 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $ionicHistory, $q, $ionicHistory, $ionicPopup) {
+.controller('NovaSenhaCtrl', function($scope, $state, apiService, $ionicLoading, localService, $q, $ionicHistory, $ionicPopup, $stateParams) {
+  $scope.senha = {};
+  $scope.close = function(){
+    $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.login");
+  }
+
+  $scope.send = function(){
+    if($scope.senha.codigo && $scope.senha.pass){
+      if($scope.senha.pass == $scope.senha.conf){
+        var credentials = "?login="+$stateParams.mail+"&senhaAtual="+$scope.senha.codigo+"&NovaSenha="+$scope.senha.pass;
+        $ionicLoading.show();
+        apiService.get("Usuario/RecuperarSenhaUsuario/", credentials, function(res){
+          console.log(res);
+          $ionicLoading.hide();
+          $ionicPopup.alert({ title: "Senha alterada!!", okText: 'ok' }).then(function(){
+            $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.login");
+          });
+        }, function(err){
+          console.log(err);
+          $ionicLoading.hide();
+          $ionicPopup.alert({ title: "Erro ao alterar senha!", okText: 'ok' }).then(function(){});
+        });
+      }else{
+        console.log($scope.senha.pass,$scope.senha.conf);
+        $ionicPopup.alert({ title: "Senhas não conferem!", okText: 'ok' }).then(function(){});
+      }
+    }else{
+      $ionicPopup.alert({ title: "Preencha todos os campos!", okText: 'ok' }).then(function(){});
+    }
+  }
+})
+
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $q, $ionicHistory, $ionicPopup) {
   $ionicSideMenuDelegate.canDragContent(false);
   $scope.user = {}
   $scope.cadastro = function(){  $state.go("app.novaconta"); }
@@ -87,6 +102,25 @@ angular.module('starter.controllers', [])
         }, function(err){ console.log(err); $ionicLoading.hide(); });
       }
     })
+  }
+
+  $scope.novasenha = function(){
+    
+    if($scope.user.login){
+      $ionicLoading.show();
+      apiService.get("Usuario/ResetarSenha/?login=", $scope.user.login, function(res){
+        $ionicLoading.hide();
+        console.log(res);
+        $state.go("app.novasenha", {mail:$scope.user.login});
+      }, function(err){
+        console.log(err);
+        $ionicLoading.hide();
+         $state.go("app.novasenha", {mail:$scope.user.login});
+      });
+    }else{
+      $ionicPopup.alert({ title: "Digite seu e-mail!", okText: 'ok' }).then(function(){});
+    }
+    
   }
 
   function getInfos(res){

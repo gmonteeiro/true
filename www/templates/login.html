@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true">
+<ion-view hide-nav-bar="true" can-swipe-back="false">
   <ion-content class="login"> <!-- scroled -->
 	<div class="bg-textured">
 		<div class="container">
@@ -16,7 +16,7 @@
 			    </div>
 
 			    <div class="linkbox">
-			    	<span class="left">Esqueci a senha</span>
+			    	<span class="left" ng-click="novasenha()">Esqueci a senha</span>
 			    	<span class="right" ng-click="cadastro()">Cadastre-se</span>
 			    </div>
 			</div>

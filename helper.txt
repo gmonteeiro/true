@@ -3,14 +3,15 @@ confirmacao de senha
 mascara de data
 mascara de telefone
 campos tipo email
-- no-image para pets e usuarios
-- fazer fluxo de veterinário
-- terminar de implementar Vacinas
-- esqueci a senha
+esqueci a senha
 apagar foto (novo pet)
 ajustar espaçamento embaixo (novo pet)
-- incluir vacina no local ao salvar
-- input date
+incluir vacina no local ao salvar
+input date
+no-image para pets
+- no-image para usuarios
+- fazer fluxo de veterinário
+- terminar de implementar Vacinas
 - buscar veterinarios ao logar
 - substituir indicadores
 - editar pet
@@ -19,31 +20,20 @@ ajustar espaçamento embaixo (novo pet)
 
 Gui
 Timeline
-- inserir tipo de item
-	- banho
-	- nascimento
-	- manual
-	- vacina
-	- aniversario
+- inserir campo "tipo" onde cada gatilho receba um numero diferente nesse campo pra eu conseguir exibir para o usuário.
 
-- login OK
-	retorna sucesso mesmo com dados invalidos
-
-- Cadastro de usuário
-	retorno no cadastro está vindo vazio quando nao passa imagem AINDA
-
-- Vacina
-	retorno está vindo vazio no cadastro e na edição OK
+- Cadastro de usuário (solicitado na semana passada e ainda está com erro)
+	retorno no cadastro está vindo vazio quando nao passa imagem 
 
 - Usuario nao retorna dados quando nao passa imagem no cadastro
-- nao salva veterinario ok
 - Se editar pet e nao passar imagem ele remove a imagem que ja estava cadastrada
-- Ao remover retorna sucesso mas nao exclui o pet
+- Ao remover o pet retorna sucesso mas nao exclui o pet
 - cadastro do vet nao retorna imagem
 - crmv esta como crvm no cadastro do veterinario
 - nao esta buscando veterinario por id do usuario
-- toda vez que edita uma vacina adiciona um novo registro
-- get timeline nao receba campo tipo
+- toda vez que edita uma vacina adiciona um novo registro e não edita a original
+- get timeline nao recebe campo tipo
+- A senha do usuario só pode ser alterada depois que ele enviar o código. Quando gera o código, não pode alterar a senha dele com esse código, apenas com a nova senha que ele escolher.
 
 
 

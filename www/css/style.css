@@ -547,6 +547,36 @@
     width: 100%;
 }
 
+.container h1{
+    color: #fff;
+    text-align: center;
+    padding-top:90px;
+    font-size: 40px;
+    font-weight:lighter;
+}
+.container h1{
+    color: #fff;
+    text-align: center;
+    padding-top:80px;
+    font-size: 40px;
+    font-weight:lighter;
+}
+.novasenha .desc-senha{
+    display:block;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 50px;
+}
+.novasenha .btn-close{
+    width: 30px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.novasenha .fb-area .fb-button{
+    margin-top: 50px;
+}
+
 /* TIMELINE */
 .timeline{
 	background-color: #f4f4f4;
