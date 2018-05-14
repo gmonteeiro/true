@@ -24,7 +24,8 @@
         "CAMERA_USAGE_DESCRIPTION": "Permitir acesso a Camera",
         "PHOTOLIBRARY_USAGE_DESCRIPTION": "Permitir acesso a Galeria"
       },
-      "cordova-plugin-datepicker": {}
+      "cordova-plugin-datepicker": {},
+      "cordova-plugin-x-socialsharing": {}
     },
     "platforms": [
       "android",
@@ -34,6 +35,7 @@
   "dependencies": {
     "angular-input-masks": "^4.1.0",
     "cordova-android": "~6.3.0",
+    "cordova-ios": "~4.5.4",
     "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-datepicker": "git+https://github.com/VitaliiBlagodir/cordova-plugin-datepicker.git",
     "cordova-plugin-device": "^1.1.4",
@@ -41,7 +43,8 @@
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-whitelist": "^1.3.1",
-    "ionic-plugin-keyboard": "^2.2.1",
-    "cordova-ios": "~4.5.4"
+    "cordova-plugin-x-socialsharing": "^5.4.0",
+    "es6-promise-plugin": "^4.2.2",
+    "ionic-plugin-keyboard": "^2.2.1"
   }
 }

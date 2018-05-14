@@ -24,6 +24,14 @@
 					</div>
 				</div>
 			</ion-item>
+			<div class="vazio" ng-if="!pets[0]">
+				<img ng-src="img/vazio.png" alt="">
+				<span class="title">Nenhum Pet Cadastrado!</span>
+				<div class="speech-bubble" ng-style="myStyle">
+					<img src="img/close.png" alt="" ng-click="myStyle={opacity:0}">
+					Cadastre seu Pet!
+				</div>
+			</div>
 		</ion-list>
 	</ion-content>
 	<div class="btm-bar">

@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
   })
 
   .state('app.login', {
-    url: '/login',
+    url: '/login/:mail',
     cache:false,
     views: {
       'menuContent': {

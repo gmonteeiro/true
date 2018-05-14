@@ -57,13 +57,13 @@ angular.module('starter.controllers', [])
   $scope.send = function(){
     if($scope.senha.codigo && $scope.senha.pass){
       if($scope.senha.pass == $scope.senha.conf){
-        var credentials = "?login="+$stateParams.mail+"&senhaAtual="+$scope.senha.codigo+"&NovaSenha="+$scope.senha.pass;
+        var credentials = "?login="+$stateParams.mail+"&codigoSenhaReset="+$scope.senha.codigo+"&novaSenha="+$scope.senha.pass;
         $ionicLoading.show();
-        apiService.get("Usuario/RecuperarSenhaUsuario/", credentials, function(res){
+        apiService.get("Usuario/RecuperarSenhaUsuario", credentials, function(res){
           console.log(res);
           $ionicLoading.hide();
           $ionicPopup.alert({ title: "Senha alterada!!", okText: 'ok' }).then(function(){
-            $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.login");
+            $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.login", {'mail':$stateParams.mail});
           });
         }, function(err){
           console.log(err);
@@ -80,9 +80,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, apiService, $ionicLoading, localService, $q, $ionicHistory, $ionicPopup) {
+.controller('loginCtrl', function($scope, $state, $ionicSideMenuDelegate, $stateParams, apiService, $ionicLoading, localService, $q, $ionicHistory, $ionicPopup) {
   $ionicSideMenuDelegate.canDragContent(false);
-  $scope.user = {}
+  $scope.user = {};
+  $scope.user.login = ($stateParams.mail) ? $stateParams.mail : null;
   $scope.cadastro = function(){  $state.go("app.novaconta"); }
   $scope.facebookSignIn = function() {
     $ionicLoading.show();
@@ -179,7 +180,7 @@ angular.module('starter.controllers', [])
   //getPets();
   function getPets(){
     apiService.get("Pet/GetBuscarPetPorUsuario/?idUsuario=", usr.id, function(res){
-      if(res.data.length > 0){ localService.setPets({list:res.data}); $scope.pets = res.data; }else{ alertCad(); }
+      if(res.data.length > 0){ localService.setPets({list:res.data}); $scope.pets = res.data; }
       console.log(res);
     }, function(err){ console.log(err); });
   }
@@ -206,7 +207,7 @@ angular.module('starter.controllers', [])
   
   console.log($scope.pet);
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.imagem = res; $scope.pet.base64 = res; }, function(err){ console.log(err); });}
-  $scope.delete = function(){ $scope.imagem = null; $scope.pet.base64 = null;}
+  $scope.delete = function(){ $scope.imagem = null; $scope.pet.base64 = null; $scope.pet.img = null;}
 
   $scope.getDate = function(){ $scope.dateSelect($scope.pet.dataNascimento, false).then(function(res){ if(res){$scope.pet.dataNascimento = res; }}, function(err){ console.log(err); });}
 
@@ -222,8 +223,14 @@ angular.module('starter.controllers', [])
     function success(res){
       $ionicHistory.clearCache();
       $ionicLoading.hide();console.log(res);
-      delete res.data[0].status;
-      pets.push(res.data[0]);
+      if($stateParams.petId){
+        index = pets.findIndex(x => x.id==$stateParams.petId);
+        delete res.data[0].status;
+        delete res.data[0].base64;
+        pets[index] = res.data[0];
+      }else{
+        pets.push(res.data[0]);
+      }
       localService.setPets({list:pets});
       $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' }).then(function(){ $state.go("app.meuspets"); });
     }
@@ -240,7 +247,7 @@ angular.module('starter.controllers', [])
   $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
 
   $scope.config = function(){
-    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "Remover" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "<span class='destructive'>Remover</span>" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
         switch (index) {
           case 0: $state.go("app.novopet", { 'petId': $scope.pet.id }); break;
           case 1: remove($scope.pet.id); break;
@@ -251,19 +258,24 @@ angular.module('starter.controllers', [])
   }
 
   var remove = function(id){
-    $ionicLoading.show();
-    apiService.deleta('pet/DeletePet/?idPet=', id, function(res){ $ionicLoading.hide();
-      console.log(res);
-      index = pets.findIndex(x => x.id==id);
-      console.log("remover");
-      console.log(pets[index]);
-      pets.splice(index, 1);
-      localService.setPets(pets);
-      var confirmPopup = $ionicPopup.alert({ title: "Pet deletado!", okText: 'ok' });
-      confirmPopup.then(function(){ $ionicLoading.hide(); $ionicHistory.clearCache(); $state.go("app.meuspets"); });
-    }, function(err){ $ionicLoading.hide();
-      $ionicPopup.alert({ title: "Erro ao deletar", okText: 'ok' }).then(function(){ });
-      console.log(err); });
+    var confirmPopup = $ionicPopup.confirm({ title:  'seu Pet será excluído!', cancelText: 'Cancelar', okText: 'Ok' });
+    confirmPopup.then(function (res) { if (res) { 
+      $ionicLoading.show();
+      apiService.deleta('pet/DeletePet/?idPet=', id, function(res){ $ionicLoading.hide();
+        console.log(res);
+        index = pets.findIndex(x => x.id==id);
+        console.log("remover");
+        console.log(pets[index]);
+        pets.splice(index, 1);
+        localService.setPets(pets);
+        var confirmPopup = $ionicPopup.alert({ title: "Pet excluído!", okText: 'ok' });
+        confirmPopup.then(function(){ $ionicLoading.hide(); $ionicHistory.clearCache(); $state.go("app.meuspets"); });
+      }, function(err){ $ionicLoading.hide();
+        $ionicPopup.alert({ title: "Erro ao deletar", okText: 'ok' }).then(function(){ });
+        console.log(err); });
+    }});
+
+    
   }
 })
 
@@ -418,6 +430,30 @@ angular.module('starter.controllers', [])
   $scope.new = function(){
     $state.go("app.newtimeline");
   }
+
+  $scope.shareFacebook = function(item) {
+    $ionicLoading.show();
+
+     var opt = {
+      method: "feed",
+      name : "name",
+      caption: "Caption "+" http://qualitydigital.com.br/",
+      description: "Descrição",
+      title: "Titulo",
+        hashtag: '#truepet'
+    }
+            
+    if(!item.img) { opt.href = "http://qualitydigital.com.br/"};
+    if(item.img) {opt.picture = item.img}
+
+    facebookConnectPlugin.showDialog(opt, function (result) {
+      $ionicLoading.hide();
+      console.log(result);
+    }, function (err) {
+      console.log(err);
+      $ionicLoading.hide();
+    });
+  };
 })
 
 .controller('NewTimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicPopup, $ionicHistory) {
@@ -427,6 +463,9 @@ angular.module('starter.controllers', [])
 
   var itens = localService.getTimeline().list || [];
   $scope.timeline = itens.filter(function(item) { return item.id == pet.id; })[0] || {};
+
+  $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.imagem = res; $scope.timeline.base64 = res; }, function(err){ console.log(err); });}
+  $scope.delete = function(){ $scope.imagem = null; $scope.timeline.base64 = null; $scope.timeline.img = null;}
 
   $scope.send = function(){
     console.log($scope.timeline);
@@ -489,7 +528,7 @@ angular.module('starter.controllers', [])
       //(!$scope.vacina.imgVacina) ? $scope.vacina.imgVacina = $scope.vacina.base64 : null;
     }, function(err){ console.log(err); });
   }
-  $scope.delete = function(){ $scope.vacina.base64 = null; $scope.imgagem = null; }
+  $scope.delete = function(){ $scope.vacina.base64 = null; $scope.imgagem = null; $scope.vacina.img = null;}
 
   $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.vacina.aplicacao = res; }}, function(err){ console.log(err); });}
   $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res; }}, function(err){ console.log(err); });}
@@ -498,7 +537,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.show();
     ($scope.vacina.base64) ? $scope.vacina.imgVacina = null : $scope.vacina.imgVacina = $scope.vacina.img;
     $scope.vacina.idVacina = $scope.vacina.id;
-    apiService.post('vacina/PostVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
+    apiService.put('vacina/PutVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Atualizado com Sucesso!", okText: 'ok' });
       index = vacinas.findIndex(x => x.id==$scope.vacina.id);
       delete res.data[0].status;
@@ -548,7 +587,8 @@ angular.module('starter.controllers', [])
       delete res.data[0].status;
       vacinas.push(res.data[0]);
       localService.setVacinas({list:vacinas});
-      confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': $scope.vacina.idPet }); });
+      console.log("pet");
+      confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': res.data[0].idPet }); });
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
@@ -603,6 +643,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
+  console.log("teste");
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   getBanhos();
