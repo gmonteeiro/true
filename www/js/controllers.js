@@ -28,7 +28,7 @@ angular.module('starter.controllers', [])
     });
   }
 
-  
+
 
   $scope.dateSelect = function(dt, future){
     var age = (dt) ? new Date(dt) : new Date((new Date()).valueOf() - (2*365.25*24*60*60*1000));
@@ -91,10 +91,10 @@ angular.module('starter.controllers', [])
       console.log(suc);
       if(suc.status === 'connected'){ logout(); } else {
         facebookConnectPlugin.login(['email', 'public_profile', 'user_likes'], function(res){
-          apiService.get('Usuario/GetBuscarUsuarioPorIdRedeSocial/?idRedeSocial=', res.authResponse.userID, 
+          apiService.get('Usuario/GetBuscarUsuarioPorIdRedeSocial/?idRedeSocial=', res.authResponse.userID,
           function(success){
             console.log(success);
-            if(!success.data[0]){ getInfos(res); }else{ 
+            if(!success.data[0]){ getInfos(res); }else{
               $ionicLoading.hide(); $ionicHistory.nextViewOptions({ historyRoot: true });
               localService.setUsuario({ nome: success.data[0].nome, email: success.data[0].email, telefone: success.data[0].telefone, id: success.data[0].id, img: success.data[0].img});
               $state.go('app.meuspets');
@@ -106,7 +106,7 @@ angular.module('starter.controllers', [])
   }
 
   $scope.novasenha = function(){
-    
+
     if($scope.user.login){
       $ionicLoading.show();
       apiService.get("Usuario/ResetarSenha/?login=", $scope.user.login, function(res){
@@ -121,7 +121,7 @@ angular.module('starter.controllers', [])
     }else{
       $ionicPopup.alert({ title: "Digite seu e-mail!", okText: 'ok' }).then(function(){});
     }
-    
+
   }
 
   function getInfos(res){
@@ -203,15 +203,16 @@ angular.module('starter.controllers', [])
   }else{
     $scope.pet = {};
     $scope.title = "Novo Pet";
-  } 
-  
+  }
+
   console.log($scope.pet);
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.imagem = res; $scope.pet.base64 = res; }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.imagem = null; $scope.pet.base64 = null; $scope.pet.img = null;}
 
   $scope.getDate = function(){ $scope.dateSelect($scope.pet.dataNascimento, false).then(function(res){ if(res){$scope.pet.dataNascimento = res; }}, function(err){ console.log(err); });}
+  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.pet.vermifugo = res; }}, function(err){ console.log(err); });}
+  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.pet.retorno = res; }}, function(err){ console.log(err); });}
 
-  
   $scope.send = function(){
     //$scope.pet.img = null;
     $scope.pet.idUsuario = usr.id;
@@ -259,7 +260,7 @@ angular.module('starter.controllers', [])
 
   var remove = function(id){
     var confirmPopup = $ionicPopup.confirm({ title:  'seu Pet será excluído!', cancelText: 'Cancelar', okText: 'Ok' });
-    confirmPopup.then(function (res) { if (res) { 
+    confirmPopup.then(function (res) { if (res) {
       $ionicLoading.show();
       apiService.deleta('pet/DeletePet/?idPet=', id, function(res){ $ionicLoading.hide();
         console.log(res);
@@ -275,7 +276,7 @@ angular.module('starter.controllers', [])
         console.log(err); });
     }});
 
-    
+
   }
 })
 
@@ -301,7 +302,7 @@ angular.module('starter.controllers', [])
   var vets = localService.getVeterinarios().list;
   (!vets) ? vets = [] : null;
   var usr = localService.getUsuario();
-  
+
 
   $scope.vet = {};
   $scope.vet.idUsuario = usr.id;
@@ -326,7 +327,7 @@ angular.module('starter.controllers', [])
       console.log(err);
     });
   }
-  
+
 })
 
 .controller('MeusPetshopsCtrl', function($scope, $state, localService, apiService, $ionicLoading) {
@@ -391,7 +392,7 @@ angular.module('starter.controllers', [])
     var anos  = Math.ceil(Math.abs(new Date(nascimento) - new Date(hoje)) / (1000 * 3600 * 24)) / 365.25;
     var meses = Math.floor((12*(anos % 1)).toFixed(1));
     var umeses = (meses == 1) ? 'mês' : 'meses';
-    var uanos = (Math.floor(anos) == 1) ? 'Ano' : 'Anos'; 
+    var uanos = (Math.floor(anos) == 1) ? 'Ano' : 'Anos';
     return Math.floor(anos)+' '+uanos+' e '+meses+' '+umeses;
   }
 
@@ -404,7 +405,7 @@ angular.module('starter.controllers', [])
       big:  [1, 15, 24, 28, 32, 36, 45, 50, 55, 61, 66, 72, 77, 82, 88, 93, 120]
     }
 
-    switch(true){ 
+    switch(true){
       case $scope.pet.peso < 10: return age.small[anos]+' Anos'; break;
       case $scope.pet.peso > 9 && $scope.pet.peso < 24: return age.med[anos]+' Anos'; break;
       case $scope.pet.peso > 23: return age.big[anos]+' Anos'; break;
@@ -442,7 +443,7 @@ angular.module('starter.controllers', [])
       title: "Titulo",
         hashtag: '#truepet'
     }
-            
+
     if(!item.img) { opt.href = "http://qualitydigital.com.br/"};
     if(item.img) {opt.picture = item.img}
 
@@ -521,9 +522,9 @@ angular.module('starter.controllers', [])
   $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
   $scope.imagem = $scope.vacina.img;
 
-  $scope.picture = function(){ 
-    $scope.getPhoto().then(function(res){ 
-      $scope.vacina.base64 = res; 
+  $scope.picture = function(){
+    $scope.getPhoto().then(function(res){
+      $scope.vacina.base64 = res;
       $scope.imagem = res;
       //(!$scope.vacina.imgVacina) ? $scope.vacina.imgVacina = $scope.vacina.base64 : null;
     }, function(err){ console.log(err); });
@@ -608,13 +609,13 @@ angular.module('starter.controllers', [])
     });
   }
 
-  
+
 
   var inpt = document.getElementById('inpt');
   $scope.busca = '';
 
   $scope.focus = function(){
-    $ionicScrollDelegate.scrollTo(0, 350, true); 
+    $ionicScrollDelegate.scrollTo(0, 350, true);
     $scope.options = vets.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });;
   }
 
@@ -696,6 +697,8 @@ angular.module('starter.controllers', [])
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.banho.base64 = res; $scope.imagem = res }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.banho.base64 = null; $scope.imagem = null }
 
+
+
   $scope.send = function(){
     ($scope.banho.base64) ? $scope.banho.img = null : null;
     $ionicLoading.show();
@@ -755,7 +758,7 @@ angular.module('starter.controllers', [])
           $ionicLoading.hide();
           console.log(err);
         });
-      }, 
+      },
       function(err){
         $ionicPopup.alert({ title: err, okText: 'ok' }).then(function(){});
       });
@@ -789,7 +792,7 @@ angular.module('starter.controllers', [])
 
           case 'fone': if(fields[i].value.length < 10){ ret = "Telefone inválido"; i = fields.length+1;}; break;
           case 'senha': if(fields[i].value.length < 6){ console.log(fields[i].value.length); ret = "A senha deve conter pelo menos 6 dígitos"; i = fields.length+1;}; break;
-        }  
+        }
       }
     }
 

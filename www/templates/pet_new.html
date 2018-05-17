@@ -45,11 +45,25 @@
 			<ion-radio ng-value="0" ng-model="pet.castrado" class="text-hl" name="castrado">Não</ion-radio>
 	    </div>
 
-	    <div class="line opt">
+	    <div class="line opt" ng-if="pet.castrado == 0">
 	    	<span class="leg text-hl">Tem interesse em cruzar futuramente?</span>
 	    	<ion-radio ng-value="1" ng-model="pet.cruzar" class="text-hl" name="cruzar">Sim</ion-radio>
 			<ion-radio ng-value="0" ng-model="pet.cruzar" class="text-hl" name="cruzar">Não</ion-radio>
 	    </div>
+
+      <div class="line opt"></div>
+
+      <div class="line opt dt" ng-click="getAplicacao()">
+        <div class="likeinput" ng-if="!pet.vermifugo">Último vermífugo</div>
+        <div class="likeinput" ng-if="pet.vermifugo">{{pet.vermifugo | date: 'dd/MM/yyyy'}}</div>
+        <!-- <input type="text" name="aplicacao" ng-model="vacina.aplicacao" placeholder="Aplicacao" mask="99/99/9999"> -->
+      </div>
+
+      <div class="line opt dt" ng-click="getRetorno()">
+        <div class="likeinput" ng-if="!pet.vermifugo">Próxima dose</div>
+        <div class="likeinput" ng-if="pet.vermifugo">{{pet.retorno | date: 'dd/MM/yyyy'}}</div>
+        <!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
+      </div>
     </div>
   </ion-content>
 
