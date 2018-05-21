@@ -16,16 +16,11 @@
 	</div>
 	<div class="container">
 		<div class="card" ng-repeat="banho in banhos">
-			<div class="data bg-grad">{{banho.data | date: 'dd/MM/yyyy'}}</div>
+			<div class="data bg-grad">{{banho.dataBanho | date: 'dd/MM/yyyy'}}</div>
 			<div class="icon-field halph">
 				<img src="img/location.png" alt="">
-				<span>{{banho.petshop}}</span>
+				<span>{{banho.NomePetShop}}</span>
 			</div>
-			<div class="line" ng-click="getRetorno()">
-		    	<div class="likeinput" ng-if="!vacina.retorno">Retorno</div>
-		    	<div class="likeinput" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
-		    	<!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
-		    </div>
 			<div class="icon-field halph">
 				<img src="img/price.png" alt="">
 				<span>R${{banho.valor}}</span>

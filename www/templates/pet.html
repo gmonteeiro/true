@@ -1,4 +1,4 @@
-<ion-view view-title="{{pet.nome}}">
+<ion-view view-title="{{pet.nome}}" can-swipe-back="false">
     <ion-nav-buttons side="right" >
       <img src="img/config.png" alt="" ng-click="config()">
     </ion-nav-buttons>
@@ -26,7 +26,7 @@
     		<div class="pet-menu-item bg-grad" ng-click="menu('app.vacina')"><img src="img/seringa.png" alt="" class="icone">carteira de vacina</div>
     		<div class="pet-menu-item bg-grad" ng-click="menu('app.timeline')"><img src="img/timeline.png" alt="" class="icone">timeline</div>
     		<div class="pet-menu-item bg-grad" ng-click="menu('app.banhos')"><img src="img/banhos.png" alt="" class="icone">banhos</div>
-    		<!--div class="pet-menu-item bg-grad" ng-click="menu('app.ficha')"><img src="img/medicamentos.png" alt="" class="icone">medicamentos</div-->
+    		<div class="pet-menu-item bg-grad" ng-click="menu('app.medicamentos')"><img src="img/medicamentos.png" alt="" class="icone">medicamentos</div>
     	</div>
   	</ion-content>
 </ion-view>

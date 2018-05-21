@@ -9,6 +9,11 @@
     	<img ng-src="{{imagem}}" alt="">
     </div>
 	<div class="form">
+		<div class="line" ng-click="getData()">
+	    	<div class="likeinput" ng-if="!banho.dataBanho">Data</div>
+	    	<div class="likeinput" ng-if="banho.dataBanho">{{banho.dataBanho | date: 'dd/MM/yyyy'}}</div>
+	    </div>
+
 	    <div class="line">
 	    	<input type="number" name="petshop" ng-model="banho.idPetshop" placeholder="Petshop">
 	    </div>
