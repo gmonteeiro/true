@@ -758,6 +758,8 @@ angular.module('starter.controllers', [])
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   getMedicamentos();
 
+  $scope.vazio = false;
+
   $scope.prox = function(data){
     var ultimo = new Date(data);
     var p = Number(ultimo.getDate()+7)+'/'+Number(ultimo.getMonth()+1)+"/"+ultimo.getFullYear();
@@ -773,6 +775,7 @@ angular.module('starter.controllers', [])
     apiService.get("Vermifugo/GetBuscarVermifugoPorPetId?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.medicamentos = res.data;
+      (!res.data[0]) ?  $scope.vazio = true : null;
       //(res.data.length > 0) ? $scope.prox(res.data[res.data.length-1].data) : null;
       //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
       console.log(res);
@@ -788,7 +791,7 @@ angular.module('starter.controllers', [])
   var pet = localService.getCurrent();
   var medicamentos = localService.getMedicamentos().list;
 
-  $scope.vazio = false;
+ 
 
   if($stateParams.id){
     $scope.titulo = "Editar medicamento";
@@ -806,9 +809,8 @@ angular.module('starter.controllers', [])
 
   $scope.send = function(){
     $ionicLoading.show();
-    apiService.post("Vermifugo/PostVermifugo/", $scope.medicamento, function(res){
+    apiService.post("vermifugo/postVermifugo/", $scope.medicamento, function(res){
       $ionicLoading.hide();
-      (!res.data[0]) ? $scope.vazio = true : null;
       console.log(res);
     }, function(err){
       $ionicLoading.hide();
