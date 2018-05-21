@@ -16,6 +16,7 @@ fazer fluxo de veterinário
 - substituir indicadores
 - editar pet
 
+SKU - 20180516TRUEPETS
 
 Gui
 Timeline
@@ -26,14 +27,13 @@ Timeline
 
 Banho
 - não esta salvando
-idPet:1067
-idUsuario:5
-notas:"sadasda asdadasd asd sad asd"
-petshop:"1"
-valor:111
-
-- Cadastro de usuário (solicitado na semana passada e ainda está com erro)
-	retorno no cadastro está vindo vazio quando nao passa imagem 
+{
+	idPet:1067
+	idUsuario:5
+	notas:"sadasda asdadasd asd sad asd"
+	petshop:"1"
+	valor:111
+}
 
 https://qualitydigitalserver2.com.br/TruePetAPI/api/timeline/PostTimeline/
 esta retornando 500 no campo status dentro do retorno do sucesso (200)
