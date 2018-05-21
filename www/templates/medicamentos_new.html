@@ -1,0 +1,24 @@
+<ion-view view-title="Novo medicamento">
+  <ion-content class="container btm">
+	<div class="form">
+	    <div class="line">
+	    	<input type="text" name="nome" ng-model="medicamento.nome" placeholder="Nome">
+	    </div>
+
+	    <div class="line" ng-click="getAplicacao()">
+	    	<div class="likeinput" ng-if="!medicamento.dataAplicacao">Aplicacao</div>
+	    	<div class="likeinput" ng-if="medicamento.dataAplicacao">{{medicamento.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
+	    </div>
+
+	    <div class="line" ng-click="getRetorno()">
+	    	<div class="likeinput" ng-if="!medicamento.dataRetorno">Retorno</div>
+	    	<div class="likeinput" ng-if="medicamento.dataRetorno">{{medicamento.dataRetorno | date: 'dd/MM/yyyy'}}</div>
+	    </div>
+
+    </div>
+  </ion-content>
+
+    <div class="btm-bar">
+		<div class="btn-icon" ng-click="send()"><img src="img/checked.png" alt=""></div>
+	</div>
+</ion-view>

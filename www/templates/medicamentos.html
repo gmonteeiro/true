@@ -1,0 +1,39 @@
+<ion-view view-title="Medicamentos">
+  <ion-content class="timeline"> <!-- scroled -->
+    <div class="img-area small">
+		<img ng-src="{{pet.img}}" alt="">
+	</div>
+	<div class="bg-title" ng-click="novo()">
+		<img src="img/add-white.png" alt="">
+		<h2>{{pet.nome}}</h2>
+	</div>
+	<div class="alert" ng-if="medicamentos.length > 0">
+		<div class="field">
+			<div class="field-content">Próxima aplicação:</div>
+			<div class="field-name">{{prox.data | date: 'dd/MM/yyyy'}}</div>
+			<div class="alert-sign" ng-if="prox.atrasado">!</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="card" ng-repeat="medicamento in medicamentos">
+			<div class="data bg-grad">{{medicamento.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
+			<div class="icon-field halph">
+				<img src="img/medicamentos.png" alt="">
+				<span>{{medicamento.nome}}</span>
+			</div>
+			<div class="field">
+				<div class="field-name">Próxima dose</div>
+				<div class="field-content">{{medicamento.dataRetorno | date: 'dd/MM/yyyy'}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="vazio" ng-if="!pets[0]">
+		<img ng-src="img/vazio.png" alt="">
+		<span class="title">Nenhum medicamento cadastrado!</span>
+		<div class="speech-bubble" ng-style="myStyle">
+			<img src="img/close.png" alt="" ng-click="myStyle={opacity:0}">
+			Cadastre aqui!
+		</div>
+	</div>
+  </ion-content>
+</ion-view>

@@ -209,6 +209,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       }
   })
 
+  .state('app.medicamentos', {
+      url: '/medicamentos/:petId',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/medicamentos.html',
+          controller: 'MedicamentosCtrl'
+        }
+      }
+  })
+
+  .state('app.novomedicamento', {
+      url: '/novomedicamento/:petId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/medicamentos_new.html',
+          controller: 'NovoMedicamentoCtrl'
+        }
+      }
+  })
+
   .state('app.minhaconta', {
       url: '/minhaconta',
       views: {

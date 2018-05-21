@@ -18,6 +18,10 @@ fazer fluxo de veterinário
 
 SKU - 20180516TRUEPETS
 
+
+apptpets12
+
+
 Gui
 Timeline
 - RETORNO DO POST = IDTIMELINE, IMGPET (no get vem "id" e "img") Padronizar
@@ -43,6 +47,8 @@ os dados enviados sao:
 	'idUsuario': 5
 	'titulo': "teste"
 }
+
+cadastro da vacina nao insere imagem
 
 
 

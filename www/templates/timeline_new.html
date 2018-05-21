@@ -1,12 +1,12 @@
 <ion-view view-title="{{titulo}}">
   <ion-content class="container btm">
-    <div class="bg-grad add-image" ng-click="picture()" ng-if="!timeline.imagem">
+    <div class="bg-grad add-image" ng-click="picture()" ng-if="!imagem">
         <img src="img/add.png" alt="">
         <span>Adicionar Imagem</span>
     </div>
-    <div class="img-container" ng-if="timeline.imagem">
+    <div class="img-container" ng-if="imagem">
         <img src="img/close.png" alt="" class="btn-close" ng-click="delete()">
-        <img ng-src="{{timeline.imagem}}" alt="">
+        <img ng-src="{{imagem}}" alt="">
     </div> 
 	<div class="form">
 	    <div class="line">

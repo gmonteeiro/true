@@ -852,10 +852,28 @@
 .action-sheet .destructive{
     color:red;
 }
-
-
 .opt.dt{
 	width: 49%;
 	margin-right: 1%;
 	float: left;
 }
+
+.timeline .vazio{
+    margin:20px 0;
+}
+.timeline .speech-bubble{
+    top: 105px;
+    bottom: auto;
+    right: -3px;
+}
+.timeline .speech-bubble:after{
+    margin-left: 66.5px;
+}
+.timeline .vazio img{
+    margin:10px auto;
+}
+.timeline .speech-bubble img{
+    margin: 0px;
+}
+
+
