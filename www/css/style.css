@@ -875,5 +875,10 @@
 .timeline .speech-bubble img{
     margin: 0px;
 }
-
-
+.med .field.prox{
+	margin-bottom:20px;
+}
+.med .field{
+	margin: 5px 0;
+	padding-left: 15px;
+}

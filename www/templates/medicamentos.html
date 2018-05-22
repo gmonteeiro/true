@@ -1,5 +1,5 @@
 <ion-view view-title="Medicamentos">
-  <ion-content class="timeline"> <!-- scroled -->
+  <ion-content class="timeline med"> <!-- scroled -->
     <div class="img-area small">
 		<img ng-src="{{pet.img}}" alt="">
 	</div>
@@ -8,7 +8,7 @@
 		<h2>{{pet.nome}}</h2>
 	</div>
 	<div class="alert" ng-if="medicamentos.length > 0">
-		<div class="field">
+		<div class="field prox">
 			<div class="field-content">Próxima aplicação:</div>
 			<div class="field-name">{{prox.data | date: 'dd/MM/yyyy'}}</div>
 			<div class="alert-sign" ng-if="prox.atrasado">!</div>
@@ -18,10 +18,10 @@
 		<div class="card" ng-repeat="medicamento in medicamentos">
 			<div class="data bg-grad">{{medicamento.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
 			<div class="icon-field halph">
-				<img src="img/medicamentos.png" alt="">
+				<!--img src="img/medicamentos.png" alt=""-->
 				<span>{{medicamento.nome}}</span>
 			</div>
-			<div class="field">
+			<div class="field halph">
 				<div class="field-name">Próxima dose</div>
 				<div class="field-content">{{medicamento.dataRetorno | date: 'dd/MM/yyyy'}}</div>
 			</div>

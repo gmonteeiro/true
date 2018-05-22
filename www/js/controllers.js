@@ -37,7 +37,7 @@ angular.module('starter.controllers', [])
     });
   }
 
-  
+
 
   $scope.glGetVet = function(id){
     return $q(function(resolve, reject){
@@ -698,7 +698,9 @@ angular.module('starter.controllers', [])
     h = new Date();
     proximo = new Date(p);
     var atrasado = (h > proximo);
-    return {  data:p, alert:atrasado};
+    console.log("prox");
+    console.log({data:p, alert:atrasado});
+    return { data:p, alert:atrasado};
   }
 
 
@@ -707,8 +709,7 @@ angular.module('starter.controllers', [])
     apiService.get("Banho/BuscarTodosBanhosPet/?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.banhos = res.data;
-      (res.data.length > 0) ? $scope.prox(res.data[res.data.length-1].dataBanho) : null;
-      //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
+      if(res.data.length > 0){ localService.setBanhos{list:res.data}); $scope.prox(res.data[res.data.length-1].dataBanho) }else{  }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
@@ -718,7 +719,7 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading) {
+.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup) {
   var pet = localService.getCurrent();
   var banhos = localService.getBanhos().list;
 
@@ -745,6 +746,12 @@ angular.module('starter.controllers', [])
     apiService.post("banho/PostBanho/", $scope.banho, function(res){
       $ionicLoading.hide();
       console.log(res);
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      confirmPopup.then(function(){
+        banhos.push(res.data);
+        localService.setMedicamentos({list:banhos});
+        $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
+      });
     }, function(err){
       $ionicLoading.hide();
       console.log(err);
@@ -775,9 +782,7 @@ angular.module('starter.controllers', [])
     apiService.get("Vermifugo/GetBuscarVermifugoPorPetId?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.medicamentos = res.data;
-      (!res.data[0]) ?  $scope.vazio = true : null;
-      //(res.data.length > 0) ? $scope.prox(res.data[res.data.length-1].data) : null;
-      //if(res.data.length > 0){  localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
+      if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); $scope.prox(res.data[res.data.length-1].data); }else{ $scope.vazio = true; }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
@@ -787,11 +792,11 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('NovoMedicamentoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading) {
+.controller('NovoMedicamentoCtrl', function($scope, $stateParams, $state, localService, $ionicHistory, apiService, $ionicLoading, $ionicPopup) {
   var pet = localService.getCurrent();
   var medicamentos = localService.getMedicamentos().list;
 
- 
+
 
   if($stateParams.id){
     $scope.titulo = "Editar medicamento";
@@ -804,14 +809,20 @@ angular.module('starter.controllers', [])
     $scope.medicamento.idPet = pet.id;
   }
 
-  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.medicamento.dataAplicacao = res; }}, function(err){ console.log(err); });}
-  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.medicamento.dataRetorno = res; }}, function(err){ console.log(err); });}
+  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.medicamento.dataAplicacao = res.toISOString(); }}, function(err){ console.log(err); });}
+  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.medicamento.dataRetorno = res.toISOString(); }}, function(err){ console.log(err); });}
 
   $scope.send = function(){
     $ionicLoading.show();
     apiService.post("vermifugo/postVermifugo/", $scope.medicamento, function(res){
       $ionicLoading.hide();
       console.log(res);
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      confirmPopup.then(function(){
+        medicamentos.push(res.data);
+        localService.setMedicamentos({list:medicamentos});
+        $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
+      });
     }, function(err){
       $ionicLoading.hide();
       console.log(err);
