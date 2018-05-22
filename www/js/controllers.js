@@ -379,7 +379,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.show();
     apiService.get("petshop/GetBuscarPetShopPorUsuario/?idUsuario=", usr.id, function(res){
       $ionicLoading.hide();
-      //if(res.data.length > 0){ localService.setPets({list:res.data}); $scope.pets = res.data; }else{ alertCad(); }
+      if(res.data.length > 0){ localService.setPetshops({list:res.data}); $scope.petshops = res.data; }else{ alertCad(); }
       console.log(res);
     }, function(err){ console.log(err); $ionicLoading.hide();});
   }
@@ -652,8 +652,6 @@ angular.module('starter.controllers', [])
     });
   }
 
-
-
   var inpt = document.getElementById('inpt');
   $scope.busca = '';
 
@@ -709,7 +707,7 @@ angular.module('starter.controllers', [])
     apiService.get("Banho/BuscarTodosBanhosPet/?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.banhos = res.data;
-      if(res.data.length > 0){ localService.setBanhos{list:res.data}); $scope.prox(res.data[res.data.length-1].dataBanho) }else{  }
+      if(res.data.length > 0){ localService.setBanhos({list:res.data}); $scope.prox(res.data[res.data.length-1].dataBanho) }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
@@ -719,9 +717,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup) {
+.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup, $ionicScrollDelegate) {
   var pet = localService.getCurrent();
   var banhos = localService.getBanhos().list;
+  var petshops = localService.getPetshops().list;
 
   if($stateParams.id){
     $scope.titulo = "Editar banho";
@@ -740,8 +739,7 @@ angular.module('starter.controllers', [])
 
   $scope.getData = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.banho.dataBanho = res; }}, function(err){ console.log(err); });}
 
-  $scope.send = function(){
-    ($scope.banho.base64) ? $scope.banho.img = null : null;
+  function addBanho(){
     $ionicLoading.show();
     apiService.post("banho/PostBanho/", $scope.banho, function(res){
       $ionicLoading.hide();
@@ -757,6 +755,72 @@ angular.module('starter.controllers', [])
       console.log(err);
     });
   }
+
+   $scope.send = function(){
+    ($scope.banho.base64) ? $scope.banho.img = null : null;
+    if(!$scope.banho.idPetshop){
+      if(inpt.value.length > 2){
+        $ionicLoading.show();
+        addPetshop(inpt.value);
+      }else{
+        $ionicPopup.alert({ title: "Informe o Petshop", okText: 'ok' }).then(function(){});
+      }
+    }else{
+      $ionicLoading.show();
+      addPetshop();
+    }
+  }
+
+  function addPetshop(nome){
+    data = { nome:nome, idUsuario: pet.idUsuario, isAtivo:true }
+    apiService.post('petshop/PostPetshop/', data, function(res){
+      petshops.push(res.data[0]);
+      localService.setPetshops({list:petshops});
+      $scope.banho.idPetshop = res.data[0].id;
+      console.log(res);
+      addBanho();
+    }, function(err){
+      console.log(err);
+      console.log("erro petshop");
+      $ionicLoading.hide();
+    });
+  }
+
+  var inpt = document.getElementById('inpt');
+  $scope.busca = '';
+
+  $scope.focus = function(){
+    $ionicScrollDelegate.scrollTo(0, 350, true);
+    $scope.options = petshops.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });;
+  }
+
+  $scope.blur = function(){
+    if(!$scope.banho.idPetshop && $scope.options.length == 1){
+      $scope.add($scope.options[0]);
+    }
+    $scope.options = null;
+  }
+
+  $scope.add = function(item){
+    console.log(item);
+    $scope.banho.idPetshop = item.id;
+    $scope.banho.NomePetShop = item.nome;
+    inpt.value = '';
+  }
+
+  $scope.removeItem = function(){
+    $scope.banho.idPetshop = null;
+     $scope.banho.NomePetshop = null;
+    setTimeout(function() { inpt.focus(); }, 100);
+  }
+
+  $scope.keypressed = function ($event) {
+    $scope.options = petshops.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });
+  };
+
+
+
+
 })
 
 .controller('MedicamentosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {

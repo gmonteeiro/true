@@ -14,8 +14,17 @@
 	    	<div class="likeinput" ng-if="banho.dataBanho">{{banho.dataBanho | date: 'dd/MM/yyyy'}}</div>
 	    </div>
 
-	    <div class="line">
+	    <!-- <div class="line">
 	    	<input type="number" name="petshop" ng-model="banho.idPetshop" placeholder="Petshop">
+	    </div> -->
+
+	    <div class="line">
+	    	<label class="tag field-description" ng-click="removeItem()" ng-if="banho.NomePetShop"><span class="close">-</span>{{banho.NomePetShop}}</label>
+	    	<input type="text" id="inpt" name="petshop" ng-focus="focus()" placeholder="Pet Shop" ng-keyup="keypressed($event)" ng-blur="blur()">
+
+	    	<div class="lst" ng-if="options">
+                <span ng-repeat="item in options" ng-click="add(item)">{{item.nome}}</span>
+            </div>
 	    </div>
 
 	    <div class="line">
