@@ -551,14 +551,14 @@ angular.module('starter.controllers', [])
 .controller('VacinaDetalheCtrl', function($scope, $state, $stateParams, localService) {
   var vacinas = localService.getVacinas().list;
   $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
-  console.log($scope.vacina);
 
   $scope.editVacina = function(){  $state.go("app.vacinaEdit", { 'vacId': $scope.vacina.id }); }
 })
 
-.controller('VacinaEditCtrl', function($scope, $state, $stateParams, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
+.controller('VacinaEditCtrl', function($scope, $state, $stateParams, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory, $ionicScrollDelegate) {
   console.log($stateParams.vacId);
-
+  var usr = localService.getUsuario();
+  var vets = localService.getVeterinarios().list;
   var vacinas = localService.getVacinas().list;
   $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
   $scope.imagem = $scope.vacina.img;
@@ -576,20 +576,79 @@ angular.module('starter.controllers', [])
   $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res; }}, function(err){ console.log(err); });}
 
   $scope.send = function(){
-    $ionicLoading.show();
-    ($scope.vacina.base64) ? $scope.vacina.imgVacina = null : $scope.vacina.imgVacina = $scope.vacina.img;
-    $scope.vacina.idVacina = $scope.vacina.id;
+    $scope.vacina.isAtivo = true;
+    $scope.vacina.idUsuario = usr.id;
+
+    if(!$scope.vacina.idVeterinario){
+      if(inpt.value.length > 2){
+        $ionicLoading.show();
+        addVet(inpt.value);
+      }else{
+        $ionicPopup.alert({ title: "Informe o Veterinário", okText: 'ok' }).then(function(){});
+      }
+    }else{
+      $ionicLoading.show();
+      addVacina();
+    }
+  }
+
+  function addVacina(){
+    $scope.vacina.idVeterinario = 1;
     apiService.put('vacina/PutVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Atualizado com Sucesso!", okText: 'ok' });
-      index = vacinas.findIndex(x => x.id==$scope.vacina.id);
-      //delete res.data[0].status;
-      delete $scope.vacina.base64;
-      (res.data[0].imgVacina) ? $scope.vacina.img = res.data[0].imgVacina : null;
-      vacinas[index] = $scope.vacina;
+      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+      index = vacinas.findIndex(x => x.id==res.data.id);
+      vacinas[index] = res.data;
       localService.setVacinas({list:vacinas});
-      confirmPopup.then(function(){ $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.vacina", { 'petId': $scope.vacina.idPet });}); //
+      confirmPopup.then(function(){ $ionicHistory.goBack(); }); //$state.go("app.vacina", { 'petId': res.data[0].idPet });
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
+
+  function addVet(nome){
+    data = { nome:nome, idUsuario: usr.id, isAtivo:true }
+    apiService.post('veterinario/PostVeterinario/', data, function(res){
+      res.data[0].localizacao = "";
+      delete res.data[0].status;
+      vets.push(res.data[0]);
+      localService.setVeterinarios({list:vets});
+      $scope.vacina.idVeterinario = res.data[0].id;
+      console.log(res);
+      addVacina();
+    }, function(err){
+      console.log(err);
+      console.log("erro vet");
+    });
+  }
+
+  var inpt = document.getElementById('inpt');
+  $scope.busca = '';
+
+  $scope.focus = function(){
+    $ionicScrollDelegate.scrollTo(0, 350, true);
+    $scope.options = vets.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });;
+  }
+
+  $scope.blur = function(){
+    if(!$scope.vacina.idVeterinario && $scope.options.length == 1){
+      $scope.add($scope.options[0]);
+    }
+    $scope.options = null;
+  }
+
+  $scope.add = function(item){
+    $scope.vacina.idVeterinario = item.id;
+    $scope.vacina.nomeVeterinario = item.nome;
+    inpt.value = '';
+  }
+
+  $scope.removeItem = function(){
+    $scope.vacina.idVeterinario = null;
+    $scope.vacina.nomeVeterinario = null;
+    setTimeout(function() { inpt.focus(); }, 100);
+  }
+
+  $scope.keypressed = function ($event) {
+    $scope.options = vets.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });
+  };
 })
 
 .controller('NovaVacinaCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory, $ionicScrollDelegate) {
@@ -669,13 +728,13 @@ angular.module('starter.controllers', [])
 
   $scope.add = function(item){
     $scope.vacina.idVeterinario = item.id;
-    $scope.vacina.nomeVet = item.nome;
+    $scope.vacina.nomeVeterinario = item.nome;
     inpt.value = '';
   }
 
   $scope.removeItem = function(){
     $scope.vacina.idVeterinario = null;
-    $scope.vacina.nomeVet = null;
+    $scope.vacina.nomeVeterinario = null;
     setTimeout(function() { inpt.focus(); }, 100);
   }
 
@@ -809,9 +868,10 @@ angular.module('starter.controllers', [])
   }
 
   $scope.removeItem = function(){
+    console.log("kkk");
     $scope.banho.idPetshop = null;
-     $scope.banho.NomePetshop = null;
-    setTimeout(function() { inpt.focus(); }, 100);
+    $scope.banho.NomePetShop = null;
+    setTimeout(function() { inpt.focus(); }, 200);
   }
 
   $scope.keypressed = function ($event) {

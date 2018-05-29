@@ -34,7 +34,7 @@
 	    </div>
 
 	    <div class="line">
-	    	<label class="tag field-description" ng-click="removeItem()" ng-if="vacina.nomeVet"><span class="close">-</span>{{vacina.nomeVet}}</label>
+	    	<label class="tag field-description" ng-click="removeItem()" ng-if="vacina.nomeVeterinario"><span class="close">x</span>{{vacina.nomeVeterinario}}</label>
 	    	<input type="text" id="inpt" name="veterinario" ng-focus="focus()" placeholder="Veterinario responsável" ng-keyup="keypressed($event)" ng-blur="blur()">
 
 	    	<div class="lst" ng-if="options">
