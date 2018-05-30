@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="card" ng-repeat="banho in banhos">
+		<div class="card" ng-repeat="banho in banhos | orderBy:'-dataBanho'">
 			<div class="data bg-grad">{{banho.dataBanho | date: 'dd/MM/yyyy'}}</div>
 			<div class="icon-field halph">
 				<img src="img/location.png" alt="">

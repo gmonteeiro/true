@@ -37,7 +37,15 @@ angular.module('starter.controllers', [])
     });
   }
 
+  $scope.diffDates = function(d1, d2){
+    var ret = {};
+    var ms = new Date(d1) - new Date(d2);
+    (ms < 0) ? ms = ms*(-1) : null;
 
+    if(parseInt(ms/31536000000) > 0) { ret.valor = (ms < 0) ? parseInt(ms/31536000000)*(-1) : parseInt(ms/31536000000); ret.unidade = " Anos"; return ret};
+    if(parseInt(ms/2628000000) > 0) { ret.valor = (ms < 0) ? parseInt(ms/2628000000)*(-1) : parseInt(ms/2628000000); ret.unidade = " Meses"; return ret};
+    if(parseInt(ms/86400000) > 0) { ret.valor = (ms < 0) ? parseInt(ms/86400000)*(-1) : parseInt(ms/86400000); ret.unidade = " Dias"; return ret};
+  }
 
   $scope.glGetVet = function(id){
     return $q(function(resolve, reject){
@@ -229,6 +237,29 @@ angular.module('starter.controllers', [])
     confirmPopup.then(function (res) { if (res) { $state.go('app.novopet');}});
   }
   $scope.newpet = function(){  $state.go("app.novopet"); }
+
+  $scope.tempo = function(data, tipo){
+    var ret = null;
+    switch(tipo){
+      case 'vacina':
+        var df = $scope.diffDates(data, new Date());
+        ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;
+      break;
+
+      case 'banho':
+        var df = $scope.diffDates(new Date(), data);
+        ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;
+      break;
+
+      case 'vermifugo':
+        var df = $scope.diffDates(new Date(), data);
+        ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;
+      break;
+    }
+
+    return ret;
+  }
+
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
@@ -281,7 +312,6 @@ angular.module('starter.controllers', [])
 .controller('PetCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-
   localService.setCurrent($scope.pet);
 
   $scope.menu = function(dest){  $state.go(dest, { 'petId': $scope.pet.id }); }
@@ -384,7 +414,6 @@ angular.module('starter.controllers', [])
     }, function(err){ console.log(err); $ionicLoading.hide();});
   }
 
-
   $scope.newpetshop = function(){  $state.go("app.novopetshop"); }
 })
 
@@ -453,7 +482,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService) {
-  $scope.timeline = localService.getTimeline().list || {};
+  $scope.timeline = localService.getTimeline().list || [];
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
@@ -747,7 +776,8 @@ angular.module('starter.controllers', [])
   console.log("teste");
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  getBanhos();
+  $scope.banhos = localService.getBanhos().list;
+  (!$scope.banhos) ? getBanhos() : null;
 
   $scope.prox = function(data){
     var ultimo = new Date(data);
@@ -759,7 +789,6 @@ angular.module('starter.controllers', [])
     console.log({data:p, alert:atrasado});
     return { data:p, alert:atrasado};
   }
-
 
   function getBanhos(){
     $ionicLoading.show();
@@ -877,17 +906,15 @@ angular.module('starter.controllers', [])
   $scope.keypressed = function ($event) {
     $scope.options = petshops.filter(function(item) { return item.nome.substring(0,inpt.value.length) == inpt.value; });
   };
-
-
-
-
 })
 
 .controller('MedicamentosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
   console.log("teste");
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  getMedicamentos();
+  $scope.medicamentos = localService.getMedicamentos().list;
+  
+  (!$scope.medicamentos) ? getMedicamentos() : null;
 
   $scope.vazio = false;
 
@@ -899,7 +926,6 @@ angular.module('starter.controllers', [])
     var atrasado = (h > proximo);
     return {  data:p, alert:atrasado};
   }
-
 
   function getMedicamentos(){
     $ionicLoading.show();
@@ -919,8 +945,6 @@ angular.module('starter.controllers', [])
 .controller('NovoMedicamentoCtrl', function($scope, $stateParams, $state, localService, $ionicHistory, apiService, $ionicLoading, $ionicPopup) {
   var pet = localService.getCurrent();
   var medicamentos = localService.getMedicamentos().list;
-
-
 
   if($stateParams.id){
     $scope.titulo = "Editar medicamento";

@@ -8,7 +8,7 @@
 		<h2>Carteira de Vacinas</h2>
 	</div>
 	<div class="">
-		<div class="f-card" ng-click="viewVacina(vacina.id)" ng-repeat="vacina in vacinas"> <!-- done -->
+		<div class="f-card" ng-click="viewVacina(vacina.id)" ng-repeat="vacina in vacinas | orderBy:'-aplicacao'"> <!-- done -->
 			<div class="field">
 				<div class="field-name">Vacina</div>
 				<div class="field-content">{{vacina.nome}}</div>

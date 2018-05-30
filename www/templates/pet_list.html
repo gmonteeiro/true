@@ -12,15 +12,15 @@
 				<div class="pet-ind">
 					<div class="ind-item">
 						<span class="icon"><img src="img/bug.png" alt=""></span>
-						2 semanas
+						{{tempo(pet.dataUltimoVermifugo,'vermifugo')}}
 					</div>
 					<div class="ind-item">
 						<span class="icon"><img src="img/vacina.png" alt=""></span>
-						3 meses
+						{{tempo(pet.dataUltimaVacina,'vacina')}}
 					</div>
 					<div class="ind-item">
 						<span class="icon"><img src="img/banho.png" alt=""></span>
-						2 dias
+						{{tempo(pet.dataUltimoBanho, 'banho')}}
 					</div>
 				</div>
 			</ion-item>
