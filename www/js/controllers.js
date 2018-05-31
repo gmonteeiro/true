@@ -244,22 +244,24 @@ angular.module('starter.controllers', [])
       case 'vacina':
         var df = $scope.diffDates(data, new Date());
         ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;
+        (!data) ? ret = "Aplicar vacinas" : null;
       break;
 
       case 'banho':
         var df = $scope.diffDates(new Date(), data);
         ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;
+        (!data) ? ret = "Hora do banho" : null;
       break;
 
       case 'vermifugo':
         var df = $scope.diffDates(new Date(), data);
         ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;
+        (!data) ? ret = "Aplicar vermífugo" : null;
       break;
     }
 
     return ret;
   }
-
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
@@ -344,8 +346,31 @@ angular.module('starter.controllers', [])
         $ionicPopup.alert({ title: "Erro ao deletar", okText: 'ok' }).then(function(){ });
         console.log(err); });
     }});
+  }
 
+  $scope.tempo = function(data, tipo){
+    var ret = null;
+    switch(tipo){
+      case 'vacina':
+        var df = $scope.diffDates(data, new Date());
+        ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;
+        (!data) ? ret = "Aplicar vacinas" : null;
+      break;
 
+      case 'banho':
+        var df = $scope.diffDates(new Date(), data);
+        ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;
+        (!data) ? ret = "Hora do banho" : null;
+      break;
+
+      case 'vermifugo':
+        var df = $scope.diffDates(new Date(), data);
+        ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;
+        (!data) ? ret = "Aplicar vermífugo" : null;
+      break;
+    }
+
+    return ret;
   }
 })
 
@@ -601,8 +626,8 @@ angular.module('starter.controllers', [])
   }
   $scope.delete = function(){ $scope.vacina.base64 = null; $scope.imgagem = null; $scope.vacina.img = null;}
 
-  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.vacina.aplicacao = res; }}, function(err){ console.log(err); });}
-  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res; }}, function(err){ console.log(err); });}
+  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.vacina.aplicacao = res.toISOString(); }}, function(err){ console.log(err); });}
+  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res.toISOString(); }}, function(err){ console.log(err); });}
 
   $scope.send = function(){
     $scope.vacina.isAtivo = true;
@@ -690,8 +715,8 @@ angular.module('starter.controllers', [])
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.vacina.base64 = res; }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.vacina.base64 = null; }
 
-  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.vacina.aplicacao = res; }}, function(err){ console.log(err); });}
-  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res; }}, function(err){ console.log(err); });}
+  $scope.getAplicacao = function(){ $scope.dateSelect(null, false).then(function(res){ if(res){$scope.vacina.aplicacao = res.toISOString(); }}, function(err){ console.log(err); });}
+  $scope.getRetorno = function(){ $scope.dateSelect(null, true).then(function(res){ if(res){$scope.vacina.retorno = res.toISOString(); }}, function(err){ console.log(err); });}
 
   $scope.send = function(){
     $scope.vacina.isAtivo = true;
@@ -782,7 +807,7 @@ angular.module('starter.controllers', [])
 
   function getBanhos(){
     $ionicLoading.show();
-    apiService.get("Banho/BanhoBuscarTodosBanhosPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
+    apiService.get("Banho/BanhoBuscarTodosBanhosPorPet?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.banhos = res.data;
       if(res.data.length > 0){ localService.setBanhos({list:res.data}); }

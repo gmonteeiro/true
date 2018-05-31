@@ -7,17 +7,17 @@
     		<img ng-src="{{(pet.img) ? pet.img : 'img/no-image-pet.png'}}" alt="">
     		<div class="pet-ind">
   				<div class="ind-item">
-  					<span class="icon"><img src="img/bug.png" alt=""></span>
-  					2 semanas
-  				</div>
-  				<div class="ind-item">
-  					<span class="icon"><img src="img/vacina.png" alt=""></span>
-  					3 meses
-  				</div>
-  				<div class="ind-item">
-  					<span class="icon"><img src="img/banho.png" alt=""></span>
-  					2 dias
-  				</div>
+            <span class="icon"><img src="img/bug.png" alt=""></span>
+            {{tempo(pet.dataUltimoVermifugo,'vermifugo')}}
+          </div>
+          <div class="ind-item">
+            <span class="icon"><img src="img/vacina.png" alt=""></span>
+            {{tempo(pet.dataUltimaVacina,'vacina')}}
+          </div>
+          <div class="ind-item">
+            <span class="icon"><img src="img/banho.png" alt=""></span>
+            {{tempo(pet.dataUltimoBanho, 'banho')}}
+          </div>
 			  </div>
     	</div>
 
