@@ -877,6 +877,15 @@
 }
 .med .field.prox{
 	margin-bottom:20px;
+    display: inline-block;
+    width:100%;
+}
+.med .field.prox div{
+    width:50%;
+    float: left;
+}
+.med .field.prox .field-name{
+    text-align:right;
 }
 .med .field{
 	margin: 5px 0;

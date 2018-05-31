@@ -626,6 +626,7 @@ angular.module('starter.controllers', [])
     apiService.put('vacina/PutVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       index = vacinas.findIndex(x => x.id==res.data.id);
+      (res.data.Veterinario.nome) ? res.data.nomeVeterinario = res.data.Veterinario.nome : null; 
       vacinas[index] = res.data;
       localService.setVacinas({list:vacinas});
       confirmPopup.then(function(){ $ionicHistory.goBack(); }); //$state.go("app.vacina", { 'petId': res.data[0].idPet });
@@ -773,29 +774,18 @@ angular.module('starter.controllers', [])
 })
 
 .controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
-  console.log("teste");
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  $scope.banhos = localService.getBanhos().list;
-  (!$scope.banhos) ? getBanhos() : null;
-
-  $scope.prox = function(data){
-    var ultimo = new Date(data);
-    var p = Number(ultimo.getDate()+7)+'/'+Number(ultimo.getMonth()+1)+"/"+ultimo.getFullYear();
-    h = new Date();
-    proximo = new Date(p);
-    var atrasado = (h > proximo);
-    console.log("prox");
-    console.log({data:p, alert:atrasado});
-    return { data:p, alert:atrasado};
-  }
+  var banhos = localService.getBanhos().list;
+  
+  (!banhos) ? getBanhos() : null;
 
   function getBanhos(){
     $ionicLoading.show();
-    apiService.get("Banho/BuscarTodosBanhosPet/?idPet=", $scope.pet.id, function(res){
+    apiService.get("Banho/BanhoBuscarTodosBanhosPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
       $scope.banhos = res.data;
-      if(res.data.length > 0){ localService.setBanhos({list:res.data}); $scope.prox(res.data[res.data.length-1].dataBanho) }
+      if(res.data.length > 0){ localService.setBanhos({list:res.data}); }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
@@ -909,36 +899,38 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MedicamentosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
-  console.log("teste");
+  $scope.vazio = false;
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  $scope.medicamentos = localService.getMedicamentos().list;
+  var meds = localService.getMedicamentos().list;
+  (!meds) ? getMedicamentos() : $scope.medicamentos = meds.filter(function(item) { return item.idPet == $scope.pet.id; });;
   
-  (!$scope.medicamentos) ? getMedicamentos() : null;
-
-  $scope.vazio = false;
-
-  $scope.prox = function(data){
-    var ultimo = new Date(data);
-    var p = Number(ultimo.getDate()+7)+'/'+Number(ultimo.getMonth()+1)+"/"+ultimo.getFullYear();
-    h = new Date();
-    proximo = new Date(p);
-    var atrasado = (h > proximo);
-    return {  data:p, alert:atrasado};
-  }
-
+  console.log($scope.medicamentos);
+  
   function getMedicamentos(){
     $ionicLoading.show();
     apiService.get("Vermifugo/GetBuscarVermifugoPorPetId?idPet=", $scope.pet.id, function(res){
       $ionicLoading.hide();
       $scope.medicamentos = res.data;
-      if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); $scope.prox(res.data[res.data.length-1].data); }else{ $scope.vazio = true; }
+      if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); getProx(); }else{ $scope.vazio = true; }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
   $scope.novo = function(){
     $state.go("app.novomedicamento");
+  }
+
+  function getProx(){
+    // var min = new Date($scope.medicamentos[0].dataRetorno), max = new Date($scope.medicamentos[0].dataRetorno);
+    // for (var i = 1, len=$scope.medicamentos.length; i < len; i++) {
+    //   var v = new Date($scope.medicamentos[i].dataRetorno);
+    //   min = (v < min) ? v : min;
+    //   max = (v > max) ? v : max;
+    // }
+    // h = new Date();
+    // var atrasado = (h > min);
+    // $scope.prox = {data:min, alert:atrasado};
   }
 })
 

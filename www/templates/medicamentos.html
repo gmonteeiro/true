@@ -7,13 +7,13 @@
 		<img src="img/add-white.png" alt="">
 		<h2>{{pet.nome}}</h2>
 	</div>
-	<div class="alert" ng-if="medicamentos.length > 0">
+	<!-- <div class="alert" ng-if="medicamentos.length > 0">
 		<div class="field prox">
-			<div class="field-content">Próxima aplicação:</div>
+			<div class="field-content">Próxima aplicação</div>
 			<div class="field-name">{{prox.data | date: 'dd/MM/yyyy'}}</div>
 			<div class="alert-sign" ng-if="prox.atrasado">!</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="container">
 		<div class="card" ng-repeat="medicamento in medicamentos | orderBy:'-dataAplicacao'">
 			<div class="data bg-grad">{{medicamento.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
