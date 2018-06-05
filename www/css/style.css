@@ -416,6 +416,9 @@
     text-align: left;
     color: #fff;
     font-size:13px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 }
 .pet-ind .ind-item .icon {
     display: block;

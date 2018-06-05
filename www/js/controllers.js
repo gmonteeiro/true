@@ -242,21 +242,30 @@ angular.module('starter.controllers', [])
     var ret = null;
     switch(tipo){
       case 'vacina':
+      if(data){
         var df = $scope.diffDates(data, new Date());
-        ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;
-        (!data) ? ret = "Aplicar vacinas" : null;
+        if(df){ ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;}else{ ret = "Vacinas em dia";}
+      }else{
+        ret = "Aplicar vacinas"
+      }
       break;
 
       case 'banho':
-        var df = $scope.diffDates(new Date(), data);
-        ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;
-        (!data) ? ret = "Hora do banho" : null;
+        if(data){
+          var df = $scope.diffDates(new Date(), data);
+          if(df){ ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;}else{ ret = "Hora do banho";}
+        }else{
+          ret = "Hora do banho";
+        }
       break;
 
       case 'vermifugo':
-        var df = $scope.diffDates(new Date(), data);
-        ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;
-        (!data) ? ret = "Aplicar vermífugo" : null;
+        if(data){
+          var df = $scope.diffDates(new Date(), data);
+          if(df){ ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;}else{ ret = "Aplicar vermífugo";}
+        }else{
+          ret = "Aplicar vermífugo";
+        }
       break;
     }
 
@@ -352,21 +361,30 @@ angular.module('starter.controllers', [])
     var ret = null;
     switch(tipo){
       case 'vacina':
+      if(data){
         var df = $scope.diffDates(data, new Date());
-        ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;
-        (!data) ? ret = "Aplicar vacinas" : null;
+        if(df){ ret = (df.valor < 0) ? "Vacinas em dia" : df.valor+df.unidade;}else{ ret = "Vacinas em dia";}
+      }else{
+        ret = "Aplicar vacinas"
+      }
       break;
 
       case 'banho':
-        var df = $scope.diffDates(new Date(), data);
-        ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;
-        (!data) ? ret = "Hora do banho" : null;
+        if(data){
+          var df = $scope.diffDates(new Date(), data);
+          if(df){ ret = (df.valor < 0) ? "Hora do banho" : df.valor+df.unidade;}else{ ret = "Hora do banho";}
+        }else{
+          ret = "Hora do banho";
+        }
       break;
 
       case 'vermifugo':
-        var df = $scope.diffDates(new Date(), data);
-        ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;
-        (!data) ? ret = "Aplicar vermífugo" : null;
+        if(data){
+          var df = $scope.diffDates(new Date(), data);
+          if(df){ ret = (df.valor < 0) ? "Aplicar vermífugo" : df.valor+df.unidade;}else{ ret = "Aplicar vermífugo";}
+        }else{
+          ret = "Aplicar vermífugo";
+        }
       break;
     }
 
@@ -514,7 +532,7 @@ angular.module('starter.controllers', [])
   getItens();
   function getItens(){
     $ionicLoading.show();
-    apiService.get("timeline/GetBuscarTimelinePorPet/?idPet=", $scope.pet.id, function(res){
+    apiService.get("Timeline/GetBuscarTimelinePorPet?idPet=", $scope.pet.id, function(res){
       $scope.timeline = res.data;
       $ionicLoading.hide();
       console.log(res);
@@ -581,25 +599,29 @@ angular.module('starter.controllers', [])
 .controller('VacinaCtrl', function($scope, $state, $stateParams, localService, apiService, $ionicLoading) {
   var pets = localService.getPets().list;
   var vac = localService.getVacinas().list;
-  (!vac) ? vac = [] : null;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  $scope.vacinas = vac.filter(function(item) { return item.idPet == $stateParams.petId; });
-  if($scope.vacinas.length < 1){ getVacinas(); }
+  (!vac) ? getVacinas() : findVacinas(false);
 
   console.log($scope.vacinas);
   console.log($scope.pet);
 
   function getVacinas(){
     $ionicLoading.show();
-    apiService.get("Vacina/GetBuscarTodasVacinasPorPet/?idPet=", $scope.pet.id, function(res){
+    apiService.get("Vacina/GetBuscarTodasVacinasPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
-      if(res.data.length > 0){ localService.setVacinas({list:res.data}); $scope.vacinas = res.data; }else{  }
+      if(res.data.length > 0){ localService.setVacinas({list:res.data}); vac = res.data;}
       console.log(res);
+      findVacinas(true);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
   $scope.viewVacina = function(id){  $state.go("app.vacinaDetalhe", { 'vacId': id }); }
   $scope.addVacina = function(id){  $state.go("app.novavacina", { 'petId': $scope.pet.id }); }
+
+  function findVacinas(ws){
+    $scope.vacinas = vac.filter(function(item) { return item.idPet == $stateParams.petId; });
+    if(!ws){ ($scope.vacinas.length < 0) ? getVacinas() : null; }
+  }
 })
 
 .controller('VacinaDetalheCtrl', function($scope, $state, $stateParams, localService) {
@@ -647,11 +669,9 @@ angular.module('starter.controllers', [])
   }
 
   function addVacina(){
-    $scope.vacina.idVeterinario = 1;
     apiService.put('vacina/PutVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       index = vacinas.findIndex(x => x.id==res.data.id);
-      (res.data.Veterinario.nome) ? res.data.nomeVeterinario = res.data.Veterinario.nome : null; 
       vacinas[index] = res.data;
       localService.setVacinas({list:vacinas});
       confirmPopup.then(function(){ $ionicHistory.goBack(); }); //$state.go("app.vacina", { 'petId': res.data[0].idPet });
@@ -737,8 +757,9 @@ angular.module('starter.controllers', [])
   }
 
   function addVacina(){
-    $scope.vacina.idVeterinario = 1;
-    apiService.post('vacina/PostVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
+    console.log("enviando");
+    console.log($scope.vacina);
+    apiService.post('Vacina/PostVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       delete res.data[0].status;
       res.data[0].id = res.data[0].idVacina;
@@ -802,21 +823,25 @@ angular.module('starter.controllers', [])
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   var banhos = localService.getBanhos().list;
-  
-  (!banhos) ? getBanhos() : null;
+
+  (!banhos) ? getBanhos() : findBanhos();
 
   function getBanhos(){
     $ionicLoading.show();
-    apiService.get("Banho/BanhoBuscarTodosBanhosPorPet?idPet=", $scope.pet.id, function(res){
+    apiService.get("Banho/BuscarTodosBanhosPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
-      $scope.banhos = res.data;
-      if(res.data.length > 0){ localService.setBanhos({list:res.data}); }
+      if(res.data.length > 0){ localService.setBanhos({list:res.data}); banhos = res.data}
       console.log(res);
+      findBanhos();
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
   $scope.novo = function(){
     $state.go("app.novobanho");
+  }
+
+  function findBanhos(){
+    $scope.banhos = banhos.filter(function(item) { return item.idPet == $stateParams.petId; })
   }
 })
 
@@ -855,13 +880,14 @@ angular.module('starter.controllers', [])
       });
     }, function(err){
       $ionicLoading.hide();
+      $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){});
       console.log(err);
     });
   }
 
    $scope.send = function(){
     ($scope.banho.base64) ? $scope.banho.img = null : null;
-    if(!$scope.banho.idPetshop){
+    if(!$scope.banho.idPetShop){
       if(inpt.value.length > 2){
         $ionicLoading.show();
         addPetshop(inpt.value);
@@ -870,7 +896,7 @@ angular.module('starter.controllers', [])
       }
     }else{
       $ionicLoading.show();
-      addPetshop();
+      addPetshop($scope.banho.NomePetShop);
     }
   }
 
@@ -879,7 +905,7 @@ angular.module('starter.controllers', [])
     apiService.post('petshop/PostPetshop/', data, function(res){
       petshops.push(res.data[0]);
       localService.setPetshops({list:petshops});
-      $scope.banho.idPetshop = res.data[0].id;
+      $scope.banho.idPetShop = res.data[0].id;
       console.log(res);
       addBanho();
     }, function(err){
@@ -898,7 +924,7 @@ angular.module('starter.controllers', [])
   }
 
   $scope.blur = function(){
-    if(!$scope.banho.idPetshop && $scope.options.length == 1){
+    if(!$scope.banho.idPetShop && $scope.options.length == 1){
       $scope.add($scope.options[0]);
     }
     $scope.options = null;
@@ -906,14 +932,14 @@ angular.module('starter.controllers', [])
 
   $scope.add = function(item){
     console.log(item);
-    $scope.banho.idPetshop = item.id;
+    $scope.banho.idPetShop = item.id;
     $scope.banho.NomePetShop = item.nome;
     inpt.value = '';
   }
 
   $scope.removeItem = function(){
     console.log("kkk");
-    $scope.banho.idPetshop = null;
+    $scope.banho.idPetShop = null;
     $scope.banho.NomePetShop = null;
     setTimeout(function() { inpt.focus(); }, 200);
   }
@@ -929,12 +955,12 @@ angular.module('starter.controllers', [])
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   var meds = localService.getMedicamentos().list;
   (!meds) ? getMedicamentos() : $scope.medicamentos = meds.filter(function(item) { return item.idPet == $scope.pet.id; });;
-  
+
   console.log($scope.medicamentos);
-  
+
   function getMedicamentos(){
     $ionicLoading.show();
-    apiService.get("Vermifugo/GetBuscarVermifugoPorPetId?idPet=", $scope.pet.id, function(res){
+    apiService.get("Vermifugo/GetBuscarVermifugoPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
       $scope.medicamentos = res.data;
       if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); getProx(); }else{ $scope.vazio = true; }
@@ -1172,6 +1198,7 @@ angular.module('starter.controllers', [])
   }
 
   function put(url, data, success, failure) {
+    //var num = (img[11] == "p") ? 22 : 23;
     (data.base64) ? data.base64 = data.base64.substring(23, data.base64.length) : null;
     return $http.put(ApiURL + url, data)
     .then(function (result) {
