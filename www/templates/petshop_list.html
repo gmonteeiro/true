@@ -10,12 +10,16 @@
 				</div>
 				<div class="pet-ind">
 					<div class="ind-item col-2">
-						<span class="icon" ng-if="petshop.telefone"><img src="img/phone.png" alt=""></span>
-						{{petshop.telefone}}
+						<a href="tel:{{petshop.telefone}}" ng-if="petshop.telefone">
+							<span class="icon"><img src="img/phone.png" alt=""></span>
+							{{petshop.telefone}}
+						</a>
 					</div>
 					<div class="ind-item col-2">
-						<span class="icon" ng-if="petshop.celular"><img src="img/cellphone.png" alt=""></span>
-						{{petshop.celular}}
+						<a href="tel:{{petshop.celular}}" ng-if="petshop.celular">
+							<span class="icon" ng-if="petshop.celular"><img src="img/cellphone.png" alt=""></span>
+							{{petshop.celular}}
+						</a>
 					</div>
 				</div>
 			</ion-item>

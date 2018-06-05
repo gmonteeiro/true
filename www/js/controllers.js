@@ -65,6 +65,15 @@ angular.module('starter.controllers', [])
     });
   }
 
+  $scope.glGetVacinas = function(id){
+    return $q(function(resolve, reject){
+      apiService.get("Vacina/GetBuscarTodasVacinasPorUsuario?idUsuario=", id, function(res){
+        if(res.data.length > 0){ localService.setVacinas({list:res.data});}
+        resolve(res);
+      }, function(err){ $ionicLoading.hide(); console.log(err); });
+    });
+  }
+
   $scope.diasLembrete = [
     {qtd: null, desc: "Lembrete"},
     {qtd: 1, desc: "1 dia antes"},
@@ -590,7 +599,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.show();
     apiService.post('timeline/PostTimeline/', $scope.timeline, function(res){ $ionicLoading.hide();console.log(res);
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      confirmPopup.then(function(){  $ionicHistory.nextViewOptions({disableBack: true}); $state.go("app.timeline", {petId:$scope.timeline.idPet}); });
+      confirmPopup.then(function(){ $ionicHistory.clearCache(); $ionicHistory.goBack(); });
     }, function(err){ $ionicLoading.hide(); console.log(err); $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){})});
   }
 
@@ -685,7 +694,7 @@ angular.module('starter.controllers', [])
       delete res.data[0].status;
       vets.push(res.data[0]);
       localService.setVeterinarios({list:vets});
-      $scope.vacina.idVeterinario = res.data[0].id;
+      $scope.vacina.idVeterinario = res.data[0].idVeterinario;
       console.log(res);
       addVacina();
     }, function(err){
@@ -759,15 +768,18 @@ angular.module('starter.controllers', [])
   function addVacina(){
     console.log("enviando");
     console.log($scope.vacina);
-    apiService.post('Vacina/PostVacina/', $scope.vacina, function(res){ $ionicLoading.hide();console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      delete res.data[0].status;
-      res.data[0].id = res.data[0].idVacina;
-      res.data[0].img = res.data[0].imgVacina;
-      vacinas.push(res.data[0]);
-      localService.setVacinas({list:vacinas});
-      console.log("pet");
-      confirmPopup.then(function(){ $ionicHistory.goBack(); $state.go("app.vacina", { 'petId': res.data[0].idPet }); });
+    apiService.post('Vacina/PostVacina/', $scope.vacina, function(res){ console.log(res);
+      $scope.glGetVacinas(usr.id).then(function(res){ 
+        console.log(res); 
+        $ionicLoading.hide(); 
+        var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+        confirmPopup.then(function(){ $ionicHistory.goBack(); });
+      }, function(err){ 
+        console.log(err); $ionicLoading.hide();
+        var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+        confirmPopup.then(function(){ $ionicHistory.goBack(); }); 
+      });
+      
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
@@ -778,7 +790,7 @@ angular.module('starter.controllers', [])
       delete res.data[0].status;
       vets.push(res.data[0]);
       localService.setVeterinarios({list:vets});
-      $scope.vacina.idVeterinario = res.data[0].id;
+      $scope.vacina.idVeterinario = res.data[0].idVeterinario;
       console.log(res);
       addVacina();
     }, function(err){
@@ -841,11 +853,11 @@ angular.module('starter.controllers', [])
   }
 
   function findBanhos(){
-    $scope.banhos = banhos.filter(function(item) { return item.idPet == $stateParams.petId; })
+    $scope.banhos = banhos.filter(function(item) { return item.idPet == $scope.pet.id; })
   }
 })
 
-.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup, $ionicScrollDelegate) {
+.controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $ionicHistory) {
   var pet = localService.getCurrent();
   var banhos = localService.getBanhos().list;
   var petshops = localService.getPetshops().list;
@@ -872,10 +884,10 @@ angular.module('starter.controllers', [])
     apiService.post("banho/PostBanho/", $scope.banho, function(res){
       $ionicLoading.hide();
       console.log(res);
+      banhos.push(res.data[0]);
+      localService.setBanhos({list:banhos});
       var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
       confirmPopup.then(function(){
-        banhos.push(res.data);
-        localService.setMedicamentos({list:banhos});
         $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
       });
     }, function(err){
@@ -887,7 +899,7 @@ angular.module('starter.controllers', [])
 
    $scope.send = function(){
     ($scope.banho.base64) ? $scope.banho.img = null : null;
-    if(!$scope.banho.idPetShop){
+    if(!$scope.banho.idPetshop){
       if(inpt.value.length > 2){
         $ionicLoading.show();
         addPetshop(inpt.value);
@@ -896,7 +908,7 @@ angular.module('starter.controllers', [])
       }
     }else{
       $ionicLoading.show();
-      addPetshop($scope.banho.NomePetShop);
+      addBanho();
     }
   }
 
@@ -905,7 +917,7 @@ angular.module('starter.controllers', [])
     apiService.post('petshop/PostPetshop/', data, function(res){
       petshops.push(res.data[0]);
       localService.setPetshops({list:petshops});
-      $scope.banho.idPetShop = res.data[0].id;
+      $scope.banho.idPetshop = res.data[0].id;
       console.log(res);
       addBanho();
     }, function(err){
@@ -924,7 +936,7 @@ angular.module('starter.controllers', [])
   }
 
   $scope.blur = function(){
-    if(!$scope.banho.idPetShop && $scope.options.length == 1){
+    if(!$scope.banho.idPetshop && $scope.options.length == 1){
       $scope.add($scope.options[0]);
     }
     $scope.options = null;
@@ -932,14 +944,14 @@ angular.module('starter.controllers', [])
 
   $scope.add = function(item){
     console.log(item);
-    $scope.banho.idPetShop = item.id;
+    $scope.banho.idPetshop = item.id;
     $scope.banho.NomePetShop = item.nome;
     inpt.value = '';
   }
 
   $scope.removeItem = function(){
     console.log("kkk");
-    $scope.banho.idPetShop = null;
+    $scope.banho.idPetshop = null;
     $scope.banho.NomePetShop = null;
     setTimeout(function() { inpt.focus(); }, 200);
   }
@@ -963,7 +975,7 @@ angular.module('starter.controllers', [])
     apiService.get("Vermifugo/GetBuscarVermifugoPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
       $scope.medicamentos = res.data;
-      if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); getProx(); }else{ $scope.vazio = true; }
+      if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); }else{ $scope.vazio = true; }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }

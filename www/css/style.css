@@ -715,6 +715,10 @@
 .vets .pet-ind .ind-item{
     line-height: 34px;
 }
+.vets .pet-ind .ind-item a{
+    color: #fff;
+    text-decoration: none;
+}
 .vets .ind-item .icon img {
     height: 24px;
     margin-top: 4px;
