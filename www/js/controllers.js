@@ -311,6 +311,7 @@ angular.module('starter.controllers', [])
     function success(res){
       $ionicHistory.clearCache();
       $ionicLoading.hide();console.log(res);
+      (res.data[0].idPet) ? res.data[0].id = res.data[0].idPet : null;
       if($stateParams.petId){
         index = pets.findIndex(x => x.id==$stateParams.petId);
         delete res.data[0].status;
