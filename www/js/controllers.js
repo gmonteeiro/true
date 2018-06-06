@@ -283,7 +283,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
-  var pets = localService.getPets().list;
+  var pets = localService.getPets().list || [];
   var usr = localService.getUsuario();
   $scope.imagem = null;
   if($stateParams.petId){
@@ -461,7 +461,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.show();
     apiService.get("petshop/GetBuscarPetShopPorUsuario/?idUsuario=", usr.id, function(res){
       $ionicLoading.hide();
-      if(res.data.length > 0){ localService.setPetshops({list:res.data}); $scope.petshops = res.data; }else{ alertCad(); }
+      if(res.data.length > 0){ localService.setPetshops({list:res.data}); $scope.petshops = res.data; }else{  }
       console.log(res);
     }, function(err){ console.log(err); $ionicLoading.hide();});
   }
@@ -1077,6 +1077,7 @@ angular.module('starter.controllers', [])
           });
         }, function(err){
           $ionicLoading.hide();
+          $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' });
           console.log(err);
         });
       },
