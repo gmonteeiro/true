@@ -2,7 +2,7 @@
 	<ion-content class="bg-gray meuspets petshop vets">
 		<ion-list>
 			<ion-item ng-repeat="petshop in petshops">
-				<div class="pet-area">
+				<div class="pet-area" ng-click="config(petshop.id)">
 					<div class="pet-infos middle">
 						<span class="titulo">{{petshop.nome}}</span>
 						<span class="subtitulo">{{petshop.endereco}} </span>

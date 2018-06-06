@@ -159,7 +159,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
   })
 
   .state('app.novovet', {
-      url: '/novovet',
+      url: '/novovet/:vetId',
       views: {
         'menuContent': {
           templateUrl: 'templates/vet_new.html',
@@ -180,7 +180,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
   })
 
   .state('app.novopetshop', {
-      url: '/novopetshop',
+      url: '/novopetshop/:psId',
       views: {
         'menuContent': {
           templateUrl: 'templates/petshop_new.html',

@@ -2,7 +2,7 @@
 	<ion-content class="bg-gray meuspets vets">
 		<ion-list>
 			<ion-item ng-repeat="vet in vets">
-				<div class="pet-area">
+				<div class="pet-area" ng-click="config(vet.id)">
 					<div class="img-rounded bordered"><img ng-src="{{(vet.img) ? vet.img : 'img/no-image-pet.png'}}" alt=""></div>
 					<div class="pet-infos middle">
 						<span class="titulo">{{vet.nome}}</span>

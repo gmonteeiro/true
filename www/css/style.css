@@ -403,6 +403,7 @@
 
 .pet-area{
 	display: table;
+    width: 100%;
 }
 .pet-ind {
     margin: 10px -10px -10px;
