@@ -439,8 +439,8 @@ angular.module('starter.controllers', [])
         console.log($scope.vets[index]);
         $scope.vets.splice(index, 1);
         localService.setVeterinarios($scope.vets);
-        $ionicLoading.hide(); 
-        $ionicHistory.clearCache(); 
+        $ionicLoading.hide();
+        $ionicHistory.clearCache();
         $ionicHistory.nextViewOptions({disableBack: true});
         $state.go("app.meusvets");
       }, function(err){ $ionicLoading.hide();
@@ -464,7 +464,7 @@ angular.module('starter.controllers', [])
     $scope.vet = {};
     $scope.title = "Novo Vet";
   }
-  
+
   $scope.vet.idUsuario = usr.id;
   $scope.vet.isAtivo = true;
 
@@ -487,8 +487,8 @@ angular.module('starter.controllers', [])
     delete res.data[0].status;
     vets.push(res.data[0]);
     localService.setVeterinarios({list:vets});
-    $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){ 
-      $ionicHistory.clearCache(); 
+    $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){
+      $ionicHistory.clearCache();
       $ionicHistory.nextViewOptions({historyRoot: true});
       $state.go("app.meusvets"); });
     console.log(res);
@@ -503,8 +503,8 @@ angular.module('starter.controllers', [])
     delete res.data[0].base64;
     vets[index] = res.data[0];
     localService.setVeterinarios({list:vets});
-    $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){ 
-      $ionicHistory.clearCache(); 
+    $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){
+      $ionicHistory.clearCache();
       $ionicHistory.nextViewOptions({historyRoot: true});
       $state.go("app.meusvets");});
   }
@@ -557,8 +557,8 @@ angular.module('starter.controllers', [])
         console.log($scope.petshops[index]);
         $scope.petshops.splice(index, 1);
         localService.setPetshops($scope.petshops);
-        $ionicLoading.hide(); 
-        $ionicHistory.clearCache(); 
+        $ionicLoading.hide();
+        $ionicHistory.clearCache();
         $ionicHistory.nextViewOptions({disableBack: true});
         $state.go("app.meuspetshops");
       }, function(err){ $ionicLoading.hide();
@@ -733,9 +733,9 @@ angular.module('starter.controllers', [])
 
 .controller('VacinaCtrl', function($scope, $state, $stateParams, localService, apiService, $ionicLoading) {
   var pets = localService.getPets().list;
-  var vac = localService.getVacinas().list;
+  var vac = localService.getVacinas().list || [];
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  (!vac) ? getVacinas() : findVacinas(false);
+  (!vac.length > 0) ? getVacinas() : findVacinas(false);
 
   console.log($scope.vacinas);
   console.log($scope.pet);
@@ -864,8 +864,8 @@ angular.module('starter.controllers', [])
 .controller('NovaVacinaCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory, $ionicScrollDelegate) {
   $scope.vacina = {};
   var usr = localService.getUsuario();
-  var vacinas = localService.getVacinas().list;
-  var vets = localService.getVeterinarios().list;
+  var vacinas = localService.getVacinas().list || [];
+  var vets = localService.getVeterinarios().list || [];
 
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.vacina.base64 = res; }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.vacina.base64 = null; }
@@ -895,17 +895,17 @@ angular.module('starter.controllers', [])
     console.log("enviando");
     console.log($scope.vacina);
     apiService.post('Vacina/PostVacina/', $scope.vacina, function(res){ console.log(res);
-      $scope.glGetVacinas(usr.id).then(function(res){ 
-        console.log(res); 
-        $ionicLoading.hide(); 
+      $scope.glGetVacinas(usr.id).then(function(res){
+        console.log(res);
+        $ionicLoading.hide();
         var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
         confirmPopup.then(function(){ $ionicHistory.goBack(); });
-      }, function(err){ 
+      }, function(err){
         console.log(err); $ionicLoading.hide();
         var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-        confirmPopup.then(function(){ $ionicHistory.goBack(); }); 
+        confirmPopup.then(function(){ $ionicHistory.goBack(); });
       });
-      
+
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
@@ -960,15 +960,15 @@ angular.module('starter.controllers', [])
 .controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
-  var banhos = localService.getBanhos().list;
+  var banhos = localService.getBanhos().list || [];
 
-  (!banhos) ? getBanhos() : findBanhos();
+  (banhos.length < 0) ? getBanhos() : findBanhos();
 
   function getBanhos(){
     $ionicLoading.show();
     apiService.get("Banho/BuscarTodosBanhosPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
-      if(res.data.length > 0){ localService.setBanhos({list:res.data}); banhos = res.data}
+      if(res.data.length > 0){ localService.setBanhos({list:res.data}); banhos = res.data}else{banhos = []}
       console.log(res);
       findBanhos();
     }, function(err){ $ionicLoading.hide(); console.log(err); });
@@ -985,8 +985,8 @@ angular.module('starter.controllers', [])
 
 .controller('NovoBanhoCtrl', function($scope, $stateParams, $state, localService, apiService, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $ionicHistory) {
   var pet = localService.getCurrent();
-  var banhos = localService.getBanhos().list;
-  var petshops = localService.getPetshops().list;
+  var banhos = localService.getBanhos().list || [];
+  var petshops = localService.getPetshops().list || [];
 
   if($stateParams.id){
     $scope.titulo = "Editar banho";
@@ -1041,6 +1041,7 @@ angular.module('starter.controllers', [])
   function addPetshop(nome){
     data = { nome:nome, idUsuario: pet.idUsuario, isAtivo:true }
     apiService.post('petshop/PostPetshop/', data, function(res){
+      (res.data[0].idPetshop) ? res.data[0].id = res.data[0].idPetshop : null;
       petshops.push(res.data[0]);
       localService.setPetshops({list:petshops});
       $scope.banho.idPetshop = res.data[0].id;
@@ -1125,7 +1126,7 @@ angular.module('starter.controllers', [])
 
 .controller('NovoMedicamentoCtrl', function($scope, $stateParams, $state, localService, $ionicHistory, apiService, $ionicLoading, $ionicPopup) {
   var pet = localService.getCurrent();
-  var medicamentos = localService.getMedicamentos().list;
+  var medicamentos = localService.getMedicamentos().list || [];
 
   if($stateParams.id){
     $scope.titulo = "Editar medicamento";
