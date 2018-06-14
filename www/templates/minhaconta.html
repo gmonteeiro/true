@@ -1,21 +1,24 @@
 <ion-view view-title="Minha Conta">
-  <ion-content class="minhaconta"> <!-- scroled -->
-	<div class="bg-textured">
-		<div class="img-rounded">
-			<img ng-src="{{user.img}}" alt="">
+	<ion-nav-buttons side="right" >
+      <img src="img/config.png" alt="" ng-click="config()">
+    </ion-nav-buttons>
+	<ion-content class="minhaconta"> <!-- scroled -->
+		<div class="bg-textured">
+			<div class="img-rounded">
+				<img ng-src="{{user.img}}" alt="">
+			</div>
+			<span>{{user.nome}}</span>
 		</div>
-		<span>{{user.nome}}</span>
-	</div>
-	<div class="container">
-		<div class="field">
-			<div class="field-name">E-mail</div>
-			<div class="field-content">{{user.email}}</div>
-		</div>
+		<div class="container">
+			<div class="field">
+				<div class="field-name">E-mail</div>
+				<div class="field-content">{{user.email}}</div>
+			</div>
 
-		<div class="field">
-			<div class="field-name">Telefone</div>
-			<div class="field-content">{{user.telefone}}</div>
+			<div class="field">
+				<div class="field-name">Telefone</div>
+				<div class="field-content">{{user.telefone}}</div>
+			</div>
 		</div>
-	</div>
-  </ion-content>
+	</ion-content>
 </ion-view>

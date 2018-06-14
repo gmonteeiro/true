@@ -31,7 +31,7 @@ angular.module('starter.controllers', [])
   $scope.dateSelect = function(dt, future){
      // - (2*365.25*24*60*60*1000) //menos 2 anos
     var age = (dt) ? new Date(dt) : new Date((new Date()).valueOf());
-    var options = {date: age, mode: 'date', allowOldDates: true, allowFutureDates: future, doneButtonLabel: 'Ok', doneButtonColor: '#888888', cancelButtonLabel: 'Cancela', cancelButtonColor: '#cccccc',locale: 'pt-BR'};
+    var options = {date: age, mode: 'date', allowOldDates: true, allowFutureDates: true, doneButtonLabel: 'Ok', doneButtonColor: '#888888', cancelButtonLabel: 'Cancela', cancelButtonColor: '#cccccc',locale: 'pt-BR'};
     return $q(function(resolve, reject){
       $window.datePicker.show(options, function(date){ console.log(date); resolve(date);}, function(){reject('erro')});
     });
@@ -80,7 +80,34 @@ angular.module('starter.controllers', [])
     {qtd: 7, desc: "1 semana antes"},
     {qtd: 14, desc: "2 semanas antes"},
     {qtd: 30, desc: "1 mes antes"}
-  ]
+  ];
+
+  $scope.validationService = function(fields){
+    var ret = false;
+    console.log(fields);
+    var i=0;
+    for (i;i<fields.length;i++){
+      (!fields[i].value) ? fields[i].value = "" : null;
+      if(fields[i].value.length < 1){
+        console.log(fields[i]);
+        ret = "Campos obrigatórios"; i = fields.length+1;
+      }else{
+        switch(fields[i].type){
+          case 'email':
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if(!regex.test(fields[i].value)){ ret = "E-mail Inválido"; i = fields.length+1; }
+          break;
+
+          case 'fone': if(fields[i].value.length < 10){ ret = "Telefone inválido"; i = fields.length+1;}; break;
+          case 'senha': if(fields[i].value.length < 6){ console.log(fields[i].value.length); ret = "A senha deve conter pelo menos 6 dígitos"; i = fields.length+1;}; break;
+        }
+      }
+    }
+
+    return $q(function(resolve, reject){
+      if(ret){reject(ret); }else{resolve("validado")}
+    })
+  }
 
 })
 
@@ -133,7 +160,6 @@ angular.module('starter.controllers', [])
             if(!success.data[0]){ getInfos(res); }else{
               $ionicLoading.hide(); $ionicHistory.nextViewOptions({ historyRoot: true });
               localService.setUsuario({ nome: success.data[0].nome, email: success.data[0].email, telefone: success.data[0].telefone, id: success.data[0].id, img: success.data[0].img});
-              //$state.go('app.meuspets');
               entrar(success.data[0].id);
             }
           }, function(err){ console.log(err); getInfos(res); });
@@ -845,7 +871,7 @@ angular.module('starter.controllers', [])
   }
 
   $scope.add = function(item){
-    $scope.vacina.idVeterinario = item.id;
+    $scope.vacina.idVeterinario = item.idVeterinario;
     $scope.vacina.nomeVeterinario = item.nome;
     inpt.value = '';
   }
@@ -941,7 +967,7 @@ angular.module('starter.controllers', [])
   }
 
   $scope.add = function(item){
-    $scope.vacina.idVeterinario = item.id;
+    $scope.vacina.idVeterinario = item.idVeterinario;
     $scope.vacina.nomeVeterinario = item.nome;
     inpt.value = '';
   }
@@ -1160,11 +1186,41 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('MinhaContaCtrl', function($scope, $stateParams, $state, localService) {
+.controller('MinhaContaCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, apiService, $ionicLoading, $ionicPopup) {
   $scope.user = localService.getUsuario();
+
+  $scope.config = function(){
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "<span class='destructive'>Excluir minha conta</span>" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.editarconta"); break;
+          case 1: 
+            var confirmPopup = $ionicPopup.confirm({ title:  'Tem certeza que deseja <br> excluir sua conta?', cancelText: 'Cancelar', okText: 'Sim, Excluir' });
+            confirmPopup.then(function (res) { if (res) { remove($scope.user.id);}});
+          break;
+        }
+        return true;
+      }
+    });
+  }
+
+  function remove(id){
+    $ionicLoading.show();
+    apiService.deleta('usuario/DeleteUsuario?idUsuario=', id, function(res){ 
+      $ionicLoading.hide();
+      console.log(res);
+      var confirmPopup = $ionicPopup.alert({ title: "Excluído com sucesso!", okText: 'ok' });
+      confirmPopup.then(function(){  
+        $ionicHistory.nextViewOptions({ historyRoot: true }); 
+        $scope.sair(); 
+      });
+    }, function(err){ $ionicLoading.hide();
+      $ionicPopup.alert({ title: "Erro ao deletar", okText: 'ok' }).then(function(){ });
+      console.log(err); 
+    });
+  }
 })
 
-.controller('NovaContaCtrl', function($scope, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, validationService, $ionicHistory) {
+.controller('NovaContaCtrl', function($scope, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory) {
   $scope.user = localService.getCadastro();
   console.log($scope.user);
   $scope.signup = function(){
@@ -1183,7 +1239,7 @@ angular.module('starter.controllers', [])
     }
 
     if($scope.user.senha == $scope.user.confsenha){
-      var val = validationService.erro([
+      var val = $scope.validationService([
         {type:'string',value:data.nome},
         {type:'email',value:data.email},
         {type:'senha',value:data.senha}
@@ -1195,16 +1251,20 @@ angular.module('starter.controllers', [])
           var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
           confirmPopup.then(function(){
             data.id = res.data[0].idUsuario;
+            (data.base64) ? data.base64 = null : null;
             (res.data[0].imagemUsuario.length > 0) ? data.img = res.data[0].imagemUsuario : null;
             localService.setUsuario(data);
             $ionicHistory.nextViewOptions({
               historyRoot: true
             });
+            localService.setCadastro(null);
             $state.go("app.meuspets");
           });
         }, function(err){
           $ionicLoading.hide();
-          $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' });
+          var msg = "";
+          (err.data.Message) ? msg = err.data.Message : msg = "Erro ao salvar!";
+          $ionicPopup.alert({ title: msg, okText: 'ok' });
           console.log(err);
         });
       },
@@ -1222,35 +1282,33 @@ angular.module('starter.controllers', [])
   $scope.delete = function(){ $scope.user.img = null; }
 })
 
-.service('validationService', function($q){
-  var ret = false;
-  var erro = function(fields){
-    console.log(fields);
-    var i=0;
-    for (i;i<fields.length;i++){
-      (!fields[i].value) ? fields[i].value = "" : null;
-      if(fields[i].value.length < 1){
-        console.log(fields[i]);
-        ret = "Campos obrigatórios"; i = fields.length+1;
-      }else{
-        switch(fields[i].type){
-          case 'email':
-            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if(!regex.test(fields[i].value)){ ret = "E-mail Inválido"; i = fields.length+1; }
-          break;
+.controller('EditarContaCtrl', function($scope, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory) {
+  $scope.user = localService.getUsuario();
+  $scope.imagem = $scope.user.img;
 
-          case 'fone': if(fields[i].value.length < 10){ ret = "Telefone inválido"; i = fields.length+1;}; break;
-          case 'senha': if(fields[i].value.length < 6){ console.log(fields[i].value.length); ret = "A senha deve conter pelo menos 6 dígitos"; i = fields.length+1;}; break;
-        }
-      }
-    }
+  console.log($scope.user);
+  
 
-    return $q(function(resolve, reject){
-      if(ret){reject(ret); }else{resolve("validado")}
-    })
+  $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.img = null; $scope.imagem = res; $scope.user.base64 = res; }, function(err){ console.log(err); });}
+  $scope.delete = function(){ $scope.imagem = null; $scope.user.base64 = null;}
+
+  $scope.save = function(){
+    $ionicLoading.show();
+    apiService.put('usuario/PutUsuario/', $scope.user, function(res){
+      console.log(res);
+      $ionicLoading.hide();
+      $ionicPopup.alert({ title: "Salvo com Sucesso!", okText: 'ok' }).then(function(){
+        //(res.data[0].imagemUsuario.length > 0) ? data.img = res.data[0].imagemUsuario : null;
+        //localService.setUsuario(data);
+        $ionicHistory.nextViewOptions({ historyRoot: true });
+        $state.go("app.minhaconta");
+      });
+    }, function(err){
+      $ionicLoading.hide();
+      $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' });
+      console.log(err);
+    });
   }
-
-  return {"erro":erro}
 })
 
 .service('localService', function(){

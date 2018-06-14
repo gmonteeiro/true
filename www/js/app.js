@@ -232,23 +232,34 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
   })
 
   .state('app.minhaconta', {
-      url: '/minhaconta',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/minhaconta.html',
-          controller: 'MinhaContaCtrl'
-        }
+    url: '/minhaconta',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/minhaconta.html',
+        controller: 'MinhaContaCtrl'
       }
+    }
   })
 
   .state('app.novaconta', {
-      url: '/novaconta',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/minhaconta_new.html',
-          controller: 'NovaContaCtrl'
-        }
+    url: '/novaconta',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/minhaconta_new.html',
+        controller: 'NovaContaCtrl'
       }
+    }
+  })
+
+  .state('app.editarconta', {
+    url: '/editarconta',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/minhaconta_edit.html',
+        controller: 'EditarContaCtrl'
+      }
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/meuspets');
