@@ -8,10 +8,11 @@
 		<h2>{{pet.nome}}</h2>
 	</div>
 	<div class="container">
+		<ion-spinner icon="dots" class="spinner-dark" ng-if="spinner"></ion-spinner>
 		<div class="card" ng-repeat="item in timeline | orderBy:'-Data'">
 			<div class="data bg-grad">{{item.Data | date: 'dd/MM/yyyy'}}</div>
 			<div class="titulo">{{item.titulo}}</div>
-			<div class="img-area">
+			<div class="img-area" ng-if="item.img">
 				<img ng-src="{{item.img}}" alt="">
 			</div>
 			<div class="share" ng-click="shareFacebook(item)">

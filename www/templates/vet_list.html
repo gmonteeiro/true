@@ -7,11 +7,12 @@
 					<div class="pet-infos middle">
 						<span class="titulo">{{vet.nome}}</span>
 						<span class="subtitulo" ng-if="vet.crmv">CRMV: {{vet.crmv}} </span>
+						<span class="subtitulo">{{vet.localizacao}} </span>
 					</div>
 				</div>
 				<div class="pet-ind">
 					<div class="ind-item col-2">
-						<a href="tel:{{vet.telefone}}" ng-if="vet.telefone">
+						<a href="tel:{{'+55 '+vet.telefone}}" ng-if="vet.telefone">
                             <span class="icon"><img src="img/phone.png" alt=""></span>
                             {{vet.telefone}}
                         </a>

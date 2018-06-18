@@ -594,6 +594,7 @@
     display: inline-block;
     width: 100%;
     margin: 10px 0;
+    min-height: 50px;
 }
 
 .card .data {
@@ -621,6 +622,10 @@
 }
 .card .share img{
 	width: 100%;
+}
+
+.timeline .card .img-area{
+    min-height: 50px;
 }
 
 /* VACINA */
@@ -899,4 +904,10 @@
 .med .field{
 	margin: 5px 0;
 	padding-left: 15px;
+}
+
+.spinner-dark{
+    margin:0 auto;
+    opacity:0.5;
+    text-align: center;
 }

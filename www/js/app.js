@@ -87,6 +87,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.timeline', {
     url: '/timeline/:petId',
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'templates/timeline.html',
