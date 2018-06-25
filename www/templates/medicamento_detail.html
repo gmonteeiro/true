@@ -1,0 +1,26 @@
+<ion-view view-title="Detalhes do Medicamento">
+	<!-- <ion-nav-buttons side="right" >
+        <img src="img/edit-color.png" alt="" ng-click="editMed()">
+    </ion-nav-buttons> -->
+	<ion-content class="vacina-detalhe container"> <!-- scroled -->
+	    <div class="field">
+			<div class="field-name">Nome</div>
+			<div class="field-content">{{med.nome}}</div>
+		</div>
+
+		<div class="field">
+			<div class="field-name">Aplicação</div>
+			<div class="field-content">{{med.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
+		</div>
+
+		<div class="field">
+			<div class="field-name">Retorno</div>
+			<div class="field-content">{{med.dataRetorno | date: 'dd/MM/yyyy'}}</div>
+		</div>
+
+		<div class="field" ng-if="med.img">
+			<div class="field-name">Selo</div>
+			<img ng-src="{{med.img}}" alt="">
+		</div>
+	</ion-content>
+</ion-view>

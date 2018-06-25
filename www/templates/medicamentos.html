@@ -15,7 +15,7 @@
 		</div>
 	</div> -->
 	<div class="container">
-		<div class="card" ng-repeat="medicamento in medicamentos | orderBy:'-dataAplicacao'">
+		<div class="card" ng-repeat="medicamento in medicamentos | orderBy:'-dataAplicacao'" ng-click="goDetalhe(medicamento.id)">
 			<div class="data bg-grad">{{medicamento.dataAplicacao | date: 'dd/MM/yyyy'}}</div>
 			<div class="icon-field halph">
 				<!--img src="img/medicamentos.png" alt=""-->

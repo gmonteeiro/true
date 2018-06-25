@@ -129,6 +129,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.vacinaEdit', {
       url: '/vacinaEdit/:vacId',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/vacina_edit.html',
@@ -161,6 +162,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.novovet', {
       url: '/novovet/:vetId',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/vet_new.html',
@@ -182,6 +184,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.novopetshop', {
       url: '/novopetshop/:psId',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/petshop_new.html',
@@ -203,6 +206,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.novobanho', {
       url: '/novobanho/:petId',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/banhos_new.html',
@@ -222,8 +226,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       }
   })
 
+  .state('app.detalhesMedicamento', {
+      url: '/detalhesMedicamento/:medId',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/medicamento_detail.html',
+          controller: 'DetalhesMedicamentoCtrl'
+        }
+      }
+  })
+
   .state('app.novomedicamento', {
-      url: '/novomedicamento/:petId',
+      url: '/novomedicamento/:id',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/medicamentos_new.html',
@@ -234,6 +250,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.minhaconta', {
     url: '/minhaconta',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/minhaconta.html',
@@ -255,6 +272,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
 
   .state('app.editarconta', {
     url: '/editarconta',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/minhaconta_edit.html',

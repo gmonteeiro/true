@@ -6,15 +6,15 @@
     	<div class="img-area">
     		<img ng-src="{{(pet.img) ? pet.img : 'img/no-image-pet.png'}}" alt="">
     		<div class="pet-ind">
-  				<div class="ind-item">
+  				<div class="ind-item" ng-click="menu('app.medicamentos')">
             <span class="icon"><img src="img/bug.png" alt=""></span>
             {{tempo(pet.dataUltimoVermifugo,'vermifugo')}}
           </div>
-          <div class="ind-item">
+          <div class="ind-item" ng-click="menu('app.vacina')">
             <span class="icon"><img src="img/vacina.png" alt=""></span>
             {{tempo(pet.dataUltimaVacina,'vacina')}}
           </div>
-          <div class="ind-item">
+          <div class="ind-item" ng-click="menu('app.banhos')">
             <span class="icon"><img src="img/banho.png" alt=""></span>
             {{tempo(pet.dataUltimoBanho, 'banho')}}
           </div>

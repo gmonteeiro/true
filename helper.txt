@@ -20,6 +20,8 @@ Peso
 	Servirá para informar o peso do animal na linha do tempo.
 
 O PUT do veterinario nao esta salvando o campo "localizacao"
+O retorno do PUT do vetrinario na traz o campo img
+Adicionar campo 'retorno' no medicamento
 
 
 
@@ -47,8 +49,12 @@ O PUT do veterinario nao esta salvando o campo "localizacao"
 	//2.6.1) Não consegui add mais de 01 medicamento; O sistema trava esta tela, só consigo sair ao fechar app e abrí-lo novamente. (Este comportamento ocorreu no cadastro TROVI, no do Chuvisco consegui cadastrar mais de 01); 
 	// 2.7) Banhos: não consegui acessar a tela; Nem através do atalho ou pelo link;
 	// 2.8) Ficha Técnica: não consegui clicar no botão editar. O sistema trava e não consigo sair da tela. Somente fechando o app e abrindo novamente. 
+
 2.9) Ícones de atalho: os ícones “Aplicar vermífugo”; “Aplicar vacinas” e “Hora do banho”;Não está funcionando.Se eles não forem redirecionar o usuário para as telas em questão eles deverão sair.  
-	COlocar links
+	Colocar links
+
+enviar device ID
+colocar img no medicamento
 
 	3) Cadastro do Veterinário
 	// 3.1) Apresentar o endereço; 
