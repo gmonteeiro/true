@@ -5,14 +5,6 @@ atualizar indicadores
 apptpets12
 
 IGOR
-
-- PUT Usuário da mensagem de erro dentro do retorno de sucesso
-colocar no retorno os mesmos campos que tem no GET e no POST de usuário
-- DELETE Usuário não está funcionando, confirme se é esta url mesmo:
-	https://qualitydigitalserver2.com.br/TruePetAPI/api/usuario/DeleteUsuario?idUsuario=5
-- POST Usuário não retorna imagem quando o cadastro é por facebook, nesse caso será enviado o campo base64 como null e o campo img com a url, essa url deve ser salva no cadastro do usuário. Enviando a imagem em base64 salva certinho.
-Deve ser retornada a url da imagem no campo 'imagemUsuario'
-
 manter apenas os gatilhos:
 Idade
 	Para filhote (animais menores que 01 ano) o disparo será mensal e para animais adultos (maiores de 01 ano) será anual.
@@ -20,7 +12,7 @@ Peso
 	Servirá para informar o peso do animal na linha do tempo.
 
 O PUT do veterinario nao esta salvando o campo "localizacao"
-O retorno do PUT do vetrinario na traz o campo img
+O retorno do PUT do vetrinario nao traz o campo img
 Adicionar campo 'retorno' no medicamento
 
 

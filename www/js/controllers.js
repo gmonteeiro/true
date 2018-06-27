@@ -996,7 +996,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('BanhosCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
-  var pets = localService.getPets().list;
+  var pets = localService.getPets().list || [];
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   var banhos = localService.getBanhos().list || [];
 
