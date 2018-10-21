@@ -7,9 +7,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    navigator.geolocation.getCurrentPosition(function (res) {
+      console.log(res);
+    }, function (err) {
+      console.log(err);
+    });
   });
 })
 

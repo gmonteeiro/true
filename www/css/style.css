@@ -239,7 +239,7 @@
 
 /* BG TITLE */
 .bg-title{
-    height: 100px;
+    height: 40px;
     background: url('../img/textura.jpg') no-repeat;
     background-position: 100% 40%;
     background-size: 100%;
@@ -256,7 +256,7 @@
     text-align: center;
     margin:0;
     text-transform:uppercase;
-    line-height: 100px;
+    line-height: 40px;
     font-size: 20px;
 }
 

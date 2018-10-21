@@ -76,6 +76,7 @@ angular.module('starter.controllers', [])
 
   $scope.diasLembrete = [
     {qtd: null, desc: "Retorno"},
+    {qtd: null, desc: "Não se aplica"},
     {qtd: 1, desc: "Quinzenal"},
     {qtd: 2, desc: "Mensal"},
     {qtd: 3, desc: "Trimestral"},
@@ -694,7 +695,7 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService) {
+.controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicActionSheet, $ionicPopup, $ionicHistory) {
   $scope.timeline = localService.getTimeline().list || [];
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -706,6 +707,7 @@ angular.module('starter.controllers', [])
       $scope.spinner = false; 
       $scope.timeline = res.data;
       $ionicLoading.hide();
+      localService.setTimeline({list:res.data});
       console.log(res);
     }, function(err){ $scope.spinner = false; $ionicLoading.hide(); console.log(err); });
   }
@@ -737,34 +739,89 @@ angular.module('starter.controllers', [])
       $ionicLoading.hide();
     });
   };
+
+  $scope.config = function(idTimeline){
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "<span class='destructive'>Remover</span>" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.newtimeline", { 'id': idTimeline }); break;
+          case 1: remove(idTimeline); break;
+        }
+        return true;
+      }
+    });
+  }
+
+  var remove = function(id){
+    var confirmPopup = $ionicPopup.confirm({ title:  'Excluir esse registro?', cancelText: 'Cancelar', okText: 'Excluir' });
+    confirmPopup.then(function (res) { if (res) {
+      $ionicLoading.show();
+      apiService.deleta('Timeline/DeleteTimeline?idTimeline=', id, function(res){ $ionicLoading.hide();
+        console.log(res);
+        index = $scope.timeline.findIndex(x => x.id==id);
+        console.log("remover");
+        console.log($scope.timeline[index]);
+        $scope.timeline.splice(index, 1);
+        localService.setMedicamentos({list:$scope.timeline});
+        var confirmPopup = $ionicPopup.alert({ title: "Excluído com sucesso!", okText: 'ok' });
+        confirmPopup.then(function(){ $ionicLoading.hide(); });
+      }, function(err){ $ionicLoading.hide();
+        $ionicPopup.alert({ title: "Erro ao excluir!", okText: 'ok' }).then(function(){ });
+        console.log(err); });
+    }});
+  }
+
 })
 
 .controller('NewTimelineCtrl', function($scope, $rootScope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicPopup, $ionicHistory) {
-  var id = ($stateParams.id) ? $stateParams.id : null;
-  $scope.titulo = (id) ? "Editar postagem" : "Nova postagem";
+  
+  if($stateParams.id){
+    $scope.titulo = "Editar postagem";
+    var id = $stateParams.id;
+    var itens = localService.getTimeline().list || [];
+    $scope.timeline = itens.filter(function(item) { return item.id == id; })[0] || {};
+  }else{
+    $scope.titulo = "Nova postagem";
+    $scope.timeline = {};
+    $scope.timeline.Data = new Date();
+  } 
+  
   var pet = localService.getCurrent();
-
-  var itens = localService.getTimeline().list || [];
-  $scope.timeline = itens.filter(function(item) { return item.id == pet.id; })[0] || {};
-
   $scope.imagem = $scope.timeline.img;
 
   $scope.picture = function(){ $scope.getPhoto().then(function(res){ $scope.imagem = res; $scope.timeline.base64 = res; }, function(err){ console.log(err); });}
   $scope.delete = function(){ $scope.imagem = null; $scope.timeline.base64 = null; $scope.timeline.img = null;}
 
   $scope.send = function(){
-    console.log($scope.timeline);
-
     $scope.timeline.idUsuario = pet.idUsuario;
     $scope.timeline.idPet = pet.id;
-
     $ionicLoading.show();
-    apiService.post('timeline/PostTimeline/', $scope.timeline, function(res){ $ionicLoading.hide();console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      $rootScope.refreshPet = true;
-      confirmPopup.then(function(){ $ionicHistory.clearCache(); $ionicHistory.goBack(); });
-    }, function(err){ $ionicLoading.hide(); console.log(err); $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){})});
+    $scope.timeline.ativo = true;
+    
+    if($stateParams.id){
+      apiService.put('Timeline/PutTimeline/', $scope.timeline, sucesso, erro);
+    }else{
+      apiService.post('timeline/PostTimeline/', $scope.timeline, sucesso, erro);
+    }
   }
+
+  function sucesso(res){ 
+    $ionicLoading.hide();
+    console.log(res);
+    var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+    $rootScope.refreshPet = true;
+    confirmPopup.then(function(){ $ionicHistory.clearCache(); $ionicHistory.goBack(); });
+  }
+
+  function erro(err){ 
+    $ionicLoading.hide(); 
+    console.log(err); 
+    $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' }).then(function(){})
+  }
+
+  $scope.getData = function(){ 
+    $scope.dateSelect(null, false).then(function(res){ 
+      if(res){$scope.timeline.Data = res; }
+    }, function(err){ console.log(err); });}
 })
 
 .controller('VacinaCtrl', function($scope, $state, $stateParams, localService, apiService, $ionicLoading) {
@@ -772,6 +829,8 @@ angular.module('starter.controllers', [])
   var vac = localService.getVacinas().list || [];
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   (!vac.length > 0) ? getVacinas() : findVacinas(false);
+
+  $scope.retvacina = [" ", "Quinzenal","Mensal", "Trimestral", "Semestral", "Anual"];
 
   console.log($scope.vacinas);
   console.log($scope.pet);
@@ -795,11 +854,46 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('VacinaDetalheCtrl', function($scope, $state, $stateParams, localService) {
+.controller('VacinaDetalheCtrl', function($scope, $state, $stateParams, localService, $ionicActionSheet, $ionicPopup, apiService, $ionicLoading, $ionicHistory, $rootScope) {
   var vacinas = localService.getVacinas().list;
   $scope.vacina = vacinas.filter(function(item) { return item.id == $stateParams.vacId; })[0];
 
-  $scope.editVacina = function(){  $state.go("app.vacinaEdit", { 'vacId': $scope.vacina.id }); }
+  $scope.config = function(){
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "<span class='destructive'>Remover</span>" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.vacinaEdit", { 'vacId': $scope.vacina.id }); break;
+          case 1: remove($scope.vacina.id); break;
+        }
+        return true;
+      }
+    });
+  }
+
+  var remove = function(id){
+    var confirmPopup = $ionicPopup.confirm({ title:  'Excluir essa vacina?', cancelText: 'Cancelar', okText: 'Excluir' });
+    confirmPopup.then(function (res) { if (res) {
+      $ionicLoading.show();
+      apiService.deleta('Vacina/DeleteVacina?idVacina=', id, function(res){ $ionicLoading.hide();
+        console.log(res);
+        index = vacinas.findIndex(x => x.id==id);
+        console.log("remover");
+        console.log(vacinas[index]);
+        vacinas.splice(index, 1);
+        localService.setVacinas({list:vacinas});
+        var confirmPopup = $ionicPopup.alert({ title: "Excluído com sucesso!", okText: 'ok' });
+        confirmPopup.then(function(){ 
+          $ionicLoading.hide(); 
+          $ionicHistory.clearCache(); 
+          $rootScope.refreshPet = true;
+          // campo: idPet se precisar chamar a pg medicamentos:idPet
+          $ionicHistory.goBack();  
+        });
+      }, function(err){ $ionicLoading.hide();
+        $ionicPopup.alert({ title: "Erro ao excluir!", okText: 'ok' }).then(function(){ });
+        console.log(err); });
+    }});
+  }
+
 })
 
 .controller('VacinaEditCtrl', function($scope, $rootScope, $state, $stateParams, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory, $ionicScrollDelegate) {
@@ -931,6 +1025,7 @@ angular.module('starter.controllers', [])
   function addVacina(){
     console.log("enviando");
     console.log($scope.vacina);
+    // $scope.vacina.retorno = $scope.vacina.aplicacao;
     apiService.post('Vacina/PostVacina/', $scope.vacina, function(res){ console.log(res);
       $scope.glGetVacinas(usr.id).then(function(res){
         console.log(res);
@@ -943,7 +1038,6 @@ angular.module('starter.controllers', [])
         var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
         confirmPopup.then(function(){ $ionicHistory.goBack(); });
       });
-
     }, function(err){ $ionicLoading.hide(); console.log(err); });
   }
 
@@ -1132,15 +1226,18 @@ angular.module('starter.controllers', [])
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
   var meds = localService.getMedicamentos().list;
-  (!meds) ? getMedicamentos() : $scope.medicamentos = meds.filter(function(item) { return item.idPet == $scope.pet.id; });;
-
-  console.log($scope.medicamentos);
+  if(!meds){
+    getMedicamentos()
+  } else{
+    $scope.medicamentos = meds.filter(function(item) { return item.idPet == $scope.pet.id; });
+    ($scope.medicamentos.length > 0) ? $scope.vazio = false : $scope.vazio = true;
+  }
 
   function getMedicamentos(){
     $ionicLoading.show();
     apiService.get("Vermifugo/GetBuscarVermifugoPorUsuario?idUsuario=", $scope.pet.idUsuario, function(res){
       $ionicLoading.hide();
-      $scope.medicamentos = res.data;
+      $scope.medicamentos = res.data.filter(function(item) { return item.idPet == $scope.pet.id; });
       if(res.data.length > 0){ localService.setMedicamentos({list:res.data}); }else{ $scope.vazio = true; }
       console.log(res);
     }, function(err){ $ionicLoading.hide(); console.log(err); });
@@ -1156,11 +1253,45 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('DetalhesMedicamentoCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService) {
+.controller('DetalhesMedicamentoCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicActionSheet, $ionicHistory, $rootScope) {
   var meds = localService.getMedicamentos().list || [];
   $scope.med = meds.filter(function(item) { return item.id == $stateParams.medId; })[0];
 
-  $scope.editMed = function(){  $state.go("app.novomedicamento", { 'id': $scope.med.id }); }
+  $scope.config = function(){
+    $ionicActionSheet.show({buttons: [ { text: "Editar" }, { text: "<span class='destructive'>Remover</span>" }],titleText: "Configurações",cancelText: "Cancelar",cancel: function () {},buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.novomedicamento", { 'id': $scope.med.id }); break;
+          case 1: remove($scope.med.id); break;
+        }
+        return true;
+      }
+    });
+  }
+
+  var remove = function(id){
+    var confirmPopup = $ionicPopup.confirm({ title:  'Excluir esse medicamento?', cancelText: 'Cancelar', okText: 'Excluir' });
+    confirmPopup.then(function (res) { if (res) {
+      $ionicLoading.show();
+      apiService.deleta('Vermifugo/DeleteVermifugo?idVermifugo=', id, function(res){ $ionicLoading.hide();
+        console.log(res);
+        index = meds.findIndex(x => x.id==id);
+        console.log("remover");
+        console.log(meds[index]);
+        meds.splice(index, 1);
+        localService.setMedicamentos({list:meds});
+        var confirmPopup = $ionicPopup.alert({ title: "Excluído com sucesso!", okText: 'ok' });
+        confirmPopup.then(function(){ 
+          $ionicLoading.hide(); 
+          $ionicHistory.clearCache(); 
+          $rootScope.refreshPet = true;
+          // campo: idPet se precisar chamar a pg medicamentos:idPet
+          $ionicHistory.goBack();  
+        });
+      }, function(err){ $ionicLoading.hide();
+        $ionicPopup.alert({ title: "Erro ao excluir!", okText: 'ok' }).then(function(){ });
+        console.log(err); });
+    }});
+  }
 })
 
 .controller('NovoMedicamentoCtrl', function($scope, $rootScope, $stateParams, $state, localService, $ionicHistory, apiService, $ionicLoading, $ionicPopup) {
@@ -1187,21 +1318,40 @@ angular.module('starter.controllers', [])
 
   $scope.send = function(){
     $ionicLoading.show();
-    apiService.post("vermifugo/postVermifugo/", $scope.medicamento, function(res){
-      $ionicLoading.hide();
-      console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      confirmPopup.then(function(){
+
+    delete $scope.medicamento.Pet;
+
+    if($stateParams.id){
+      apiService.put("vermifugo/putVermifugo/", $scope.medicamento, success, error);
+    }else{
+      apiService.post("vermifugo/postVermifugo/", $scope.medicamento, success, error);
+    }
+  }
+
+  function success(res){
+    $ionicLoading.hide();
+    console.log(res);
+    var confirmPopup = $ionicPopup.alert({ title: "Salvo com Sucesso!", okText: 'ok' });
+    confirmPopup.then(function(){
+      if($stateParams.id){
+        index = medicamentos.findIndex(x => x.id==$stateParams.id);
+        delete res.data.Pet;
+        medicamentos[index] = res.data;
+      }else{
         medicamentos.push(res.data);
-        localService.setMedicamentos({list:medicamentos});
-        $rootScope.refreshPet = true;
-        $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
-      });
-    }, function(err){
-      $ionicLoading.hide();
-      console.log(err);
+      }
+      localService.setMedicamentos({list:medicamentos});
+      $rootScope.refreshPet = true;
+      $ionicHistory.goBack(); 
     });
   }
+
+  function error(err){
+    $ionicLoading.hide();
+    $ionicPopup.alert({ title: "Erro ao salvar!", okText: 'ok' });
+    console.log(err);
+  }
+
 })
 
 .controller('MinhaContaCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, apiService, $ionicLoading, $ionicPopup, $ionicHistory) {
