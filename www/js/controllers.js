@@ -6,6 +6,16 @@ angular.module('starter.controllers', [])
     $ionicSideMenuDelegate.toggleLeft();
   }
 
+  $scope.getAge = function (nasc) {
+      var nascimento = new Date(nasc)
+      var hoje = new Date();
+      var diferencaAnos = hoje.getFullYear() - nascimento.getFullYear();
+      if ( new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()) < 
+           new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate()) )
+          diferencaAnos--;
+      return diferencaAnos+' Anos';
+  }
+
   $scope.sair = function(){window.localStorage.clear(); $state.go("app.login"); }
 
   $scope.getPhoto = function(){
@@ -1478,6 +1488,56 @@ angular.module('starter.controllers', [])
     });
   }
 })
+
+.controller('RecomendationListCtrl', function($scope, TDCardDelegate, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory) {
+  $scope.pets = localService.getPets().list;
+  console.log($scope.pets);
+  var currentCard = 1;
+  var previousCard = [];
+
+  $scope.cards = localService.getPets().list;
+
+  // $scope.cards = Array.prototype.slice.call($scope.pets, 0);
+
+  $scope.cardDestroyed = function(index) {
+    previousCard.push($scope.cards[index]);
+    currentCard = index+1;
+    $scope.cards.splice(index, 1);
+  };
+
+  $scope.addCard = function() {
+    var newCard = $scope.pets[Math.floor(Math.random() * $scope.pets.length)];
+    newCard.id = Math.random();
+    $scope.cards.push(angular.extend({}, newCard));
+  }
+  $scope.cardSwipedLeft = function(index) {
+    console.log('LEFT SWIPE');
+    $scope.addCard();
+  };
+  $scope.cardSwipedRight = function(index) {
+    console.log('RIGHT SWIPE');
+    $scope.addCard(index);
+  };
+
+  $scope.crushed = function(){
+    $ionicPopup.confirm({
+      title: '<div class="crushed-popup">'+
+      '<img src="img/likecrush.png">'+
+      '<span class="crushed-title">Você adicionou '+$scope.cards[currentCard].nome+'!</span>'+
+      '<span class="crushed-subtitle">Agora ele está na sua lista de crushes.</span>'+
+      '</div>',
+      cancelText: 'Ver crushes',
+      okText: 'Navegar mais'
+    }).then(function (res) {
+      if (res) {
+        console.log(id);
+      }else{
+
+      }
+    })
+  }
+})
+  
 
 .service('localService', function(){
   var setUsuario = function(dt){window.localStorage.usuario = JSON.stringify(dt);}

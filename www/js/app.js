@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ngMask', 'ionic.contrib.ui.tinderCards'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -11,6 +11,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
     }
 
     navigator.geolocation.getCurrentPosition(function (res) {
+      console.log("chamou location");
       console.log(res);
     }, function (err) {
       console.log(err);
@@ -282,6 +283,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       'menuContent': {
         templateUrl: 'templates/minhaconta_edit.html',
         controller: 'EditarContaCtrl'
+      }
+    }
+  })
+
+  .state('app.recomendationlist', {
+    url: '/recomendationlist',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/recomendation_list.html',
+        controller: 'RecomendationListCtrl'
       }
     }
   });
