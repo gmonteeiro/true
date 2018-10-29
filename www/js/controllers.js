@@ -1492,7 +1492,6 @@ angular.module('starter.controllers', [])
 .controller('RecomendationListCtrl', function($scope, TDCardDelegate, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory) {
   $scope.pets = localService.getPets().list;
   console.log($scope.pets);
-  var currentCard = 1;
   var previousCard = [];
 
   $scope.cards = localService.getPets().list;
@@ -1501,7 +1500,7 @@ angular.module('starter.controllers', [])
 
   $scope.cardDestroyed = function(index) {
     previousCard.push($scope.cards[index]);
-    currentCard = index+1;
+    // currentCard = index+1;
     $scope.cards.splice(index, 1);
   };
 
@@ -1521,16 +1520,18 @@ angular.module('starter.controllers', [])
 
   $scope.crushed = function(){
     $ionicPopup.confirm({
-      title: '<div class="crushed-popup">'+
+      title: '<div class="">'+
       '<img src="img/likecrush.png">'+
-      '<span class="crushed-title">Você adicionou '+$scope.cards[currentCard].nome+'!</span>'+
+      '<span class="crushed-title">Você adicionou '+$scope.cards[0].nome+'!</span>'+
       '<span class="crushed-subtitle">Agora ele está na sua lista de crushes.</span>'+
       '</div>',
+      cssClass: 'crushed-popup',
       cancelText: 'Ver crushes',
       okText: 'Navegar mais'
     }).then(function (res) {
       if (res) {
-        console.log(id);
+        // console.log(id);
+        $scope.cardDestroyed(0);
       }else{
 
       }

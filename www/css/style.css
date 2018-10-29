@@ -69,8 +69,8 @@ margin-right: 5px;
     background-color: #fff;
     border: solid 8px rgba(0,0,0,0.05);
     border-radius: 50%;
-    padding: 13px 16px;
-    display:inline-block;
+    padding: 16px 16px 10px 16px;
+    display: inline-block;
 }
 .crushControls .crush-like, .crushControls .crush-dislike {
     width: 28%;
@@ -101,11 +101,11 @@ margin-right: 5px;
     font-weight: 300;
     color: #656565;
 }
-{
-        background-color: #fff;
+.crushed-popup.popup-container .popup .button{
+    background-color: #fff;
+    background: #FF5F6D;
     border-radius: 5px;
-    border: solid 2px #FF5F6D;
-    color: #FF5F6D;
+    color: #fff;
 }
 
 .bar-stable .button.button-clear{
