@@ -1,0 +1,18 @@
+<ion-view view-title="Hisórico de Conversas">
+	<ion-content class="bg-gray meuspets chatlist">
+		<ion-list>
+			<ion-item ng-repeat="chat in chats">
+				<div class="pet-area" ng-click="goChat(pet.id)">
+					<div class="img-rounded bordered">
+						<img ng-src="{{(chat.img) ? chat.img : 'img/no-image.png'}}" alt="">
+					</div>
+					<div class="pet-infos middle">
+						<span class="titulo">{{chat.nome}}</span>
+						<span class="subtitulo">{{chat.raca}} </span>
+						<span class="time">{{chat.dataNascimento | timeAgo}} </span>
+					</div>
+				</div>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

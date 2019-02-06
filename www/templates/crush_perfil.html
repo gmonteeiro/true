@@ -1,0 +1,51 @@
+<ion-view view-title="{{pet.nome}}">
+  <ion-content class="ficha crushperfil">
+
+	<div class="photo-slider auto-heigth">
+	    <ion-slide-box  heightdinamicaly>
+	        <ion-slide ng-repeat="imagem in imagens">
+	            <img ng-src="{{imagem}}" fallback-src="img/no-image.jpg" centerimg>
+	        </ion-slide>
+	    </ion-slide-box>
+	</div>
+	
+	<div class="container">
+		<div class="field">
+			<div class="field-name">Raça</div>
+			<div class="field-content">{{pet.raca}}</div>
+		</div>
+
+		<div class="field halph">
+			<div class="field-name">Distância</div>
+			<div class="field-content">{{pet.peso}}km</div>
+		</div>
+
+		<div class="field halph">
+			<div class="field-name">Idade</div>
+			<div class="field-content">{{calcAge(pet.dataNascimento)}}</div>
+		</div>
+
+		<div class="field halph">
+			<div class="field-name">Peso</div>
+			<div class="field-content">{{pet.peso}}kg</div>
+		</div>
+
+		<div class="field halph">
+			<div class="field-name">Sexo</div>
+			<div class="field-content">{{(pet.sexo) ? 'Macho' : 'Femea'}}</div>
+		</div>
+	</div>
+
+	<div class="crushControls">
+		<div class="standard" ng-click=cardDestroyed($index)>
+			<img src="img/dislikecrush.png" alt="">
+		</div>
+		<div class="principal" ng-click=cardDestroyed($index)>
+			<img src="img/talkcrush.png" alt="">
+		</div>
+		<div class="standard" ng-click=crushed()>
+			<img src="img/likecrush.png" alt="">
+		</div>
+	</div>
+  </ion-content>
+</ion-view>

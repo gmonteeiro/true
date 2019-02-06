@@ -1,4 +1,10 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'ngMask', 'ionic.contrib.ui.tinderCards'])
+angular.module('starter', [
+  'ionic', 
+  'starter.controllers', 
+  'ngMask', 
+  'ionic.contrib.ui.tinderCards', 
+  'yaru22.angular-timeago',
+  'ngPinchZoom'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -10,12 +16,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask', 'ionic.cont
       StatusBar.styleDefault();
     }
 
-    navigator.geolocation.getCurrentPosition(function (res) {
-      console.log("chamou location");
-      console.log(res);
-    }, function (err) {
-      console.log(err);
-    });
+    // One Signal Push Notification Setup
+    // Enable to debug issues.
+     //window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+    var notificationOpenedCallback = function(jsonData) {
+      console.log('didReceiveRemoteNotificationCallBack:');
+      console.log(jsonData);
+      };
+  
+    window.plugins.OneSignal
+      .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
+      .handleNotificationOpened(notificationOpenedCallback)
+      .endInit();
+
   });
 })
 
@@ -294,6 +307,39 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask', 'ionic.cont
       'menuContent': {
         templateUrl: 'templates/recomendation_list.html',
         controller: 'RecomendationListCtrl'
+      }
+    }
+  })
+
+  .state('app.crushperfil', {
+    url: '/crushperfil/:crushId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/crush_perfil.html',
+        controller: 'CrushPerfilCtrl'
+      }
+    }
+  })
+
+  .state('app.chatlist', {
+    url: '/chatlist',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat_list.html',
+        controller: 'ChatListCtrl'
+      }
+    }
+  })
+
+  .state('app.chat', {
+    url: '/chat/:petId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat.html',
+        controller: 'ChatCtrl'
       }
     }
   });

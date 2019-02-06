@@ -1,6 +1,7 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $ionicModal, $timeout, $ionicSideMenuDelegate, $ionicActionSheet, $q, localService, $state, $window, apiService) {
+.controller('AppCtrl', function($scope, $rootScope, $ionicModal, $timeout, $ionicSideMenuDelegate, $ionicActionSheet, $q, localService, $state, $window, apiService, timeAgoSettings) {
+  timeAgoSettings.overrideLang = 'pt_BR';
 
   $scope.closemenu = function(){
     $ionicSideMenuDelegate.toggleLeft();
@@ -1518,6 +1519,12 @@ angular.module('starter.controllers', [])
     $scope.addCard(index);
   };
 
+  $scope.goCrushPerfil = function(){
+    console.log("chamou");
+    console.log();
+    $state.go("app.crushperfil", { 'crushId': $scope.cards[0].id });
+  }
+
   $scope.crushed = function(){
     $ionicPopup.confirm({
       title: '<div class="">'+
@@ -1538,7 +1545,142 @@ angular.module('starter.controllers', [])
     })
   }
 })
+
+.controller('CrushPerfilCtrl', function($scope, $state, $stateParams, localService) {
+  var pets = localService.getPets().list;
+
+  console.log($stateParams.crushId);
+
+  $scope.pet = pets.filter(function(item) { return item.id == $stateParams.crushId; })[0];
+  $scope.imagens = [pets[0].img, pets[1].img, pets[2].img]
+
+  $scope.edit = function(){
+    $state.go("app.novopet", { 'petId': $scope.pet.id });
+  }
+
+  console.log($scope.pet);
+
+  $scope.calcAge = function(nascimento){
+    var hoje = new Date();
+    var anos  = Math.ceil(Math.abs(new Date(nascimento) - new Date(hoje)) / (1000 * 3600 * 24)) / 365.25;
+    var meses = Math.floor((12*(anos % 1)).toFixed(1));
+    var umeses = (meses == 1) ? 'mês' : 'meses';
+    var uanos = (Math.floor(anos) == 1) ? 'Ano' : 'Anos';
+    return Math.floor(anos)+' '+uanos+' e '+meses+' '+umeses;
+  }
+})
+
+.controller('ChatListCtrl', function($scope, $state, $stateParams, localService, timeAgoSettings) {
+  $scope.chats = localService.getPets().list;
+  console.log($scope.chats);
+
+   $scope.goChat = function(id){
+    $state.go("app.chat", { 'petId': id });
+  }
+
+})
   
+.controller('ChatCtrl', function($scope, $state, $stateParams, localService, timeAgoSettings, $ionicScrollDelegate, $ionicActionSheet) {
+  $scope.user = localService.getUsuario();
+  console.log($scope.user);
+
+  $ionicScrollDelegate.scrollBottom();
+
+  $scope.controlImg = false;
+
+  $scope.openModal = function (img) {
+      console.log(img)
+      $scope.controlImg = true;
+      $scope.selectedImage = img;
+  };
+
+  $scope.closeModal = function (img) {
+      $scope.controlImg = false;
+  };
+
+  $scope.options = function (id) {
+      var hideSheet = $ionicActionSheet.show({
+          buttons: [
+              { text: "Ver Pet" }
+          ],
+          destructiveText: 'Bloquear',
+          titleText: "Opções",
+          cancelText: "Cancel",
+          cancel: function () {
+              // add cancel code..
+          },
+          buttonClicked: function (index) {
+              hideSheet();
+              //blockUser(id);
+          },
+          destructiveButtonClicked: function() {
+            return true;
+          }
+      });
+  }
+
+  $scope.chooseMedia = function(){ 
+    $scope.getPhoto().then(function(res){ 
+      chat.messages.push({
+        Id:7,
+        FromProfileId:$scope.user.id,
+        Type:2,
+        Message:"res",
+        DateTime:new Date()
+      });
+
+    }, function(err){ 
+      console.log(err); 
+    });
+  }
+
+
+  $scope.chat = {
+    ProfileId:18,
+    ProfileName:"Augusto",
+    PetId:20,
+    PetName:"Pipoca",
+    ImageProfileUrl:"img/mock1.jpeg",
+    Messages:[{
+      Id:2,
+      FromProfileId:18,
+      Type:1,
+      Message:"Gostei do seu Pet",
+      DateTime:"2018-11-11T14:25:32"
+    },
+    {
+      Id:3,
+      FromProfileId:$scope.user.id,
+      Type:1,
+      Message:"aah ele é muito charmoso!",
+      DateTime:"2018-11-14T16:15:02"
+    },
+    {
+      Id:4,
+      FromProfileId:$scope.user.id,
+      Type:2,
+      Message:"img/pipoca.jpeg",
+      DateTime:"2018-11-14T16:15:02"
+    },
+    {
+      Id:5,
+      FromProfileId:$scope.user.id,
+      Type:1,
+      Message:"e adora passear",
+      DateTime:"2018-11-14T16:15:02"
+    },
+    {
+      Id:6,
+      FromProfileId:18,
+      Type:1,
+      Message:"então ele vai se dar muito bem com a Belinha!",
+      DateTime:"2018-11-14T16:15:02"
+    }]
+
+  };
+
+
+})
 
 .service('localService', function(){
   var setUsuario = function(dt){window.localStorage.usuario = JSON.stringify(dt);}
@@ -1645,4 +1787,50 @@ angular.module('starter.controllers', [])
   }
 
   return service;
-});
+})
+
+.directive('centerimg', [
+    '$window',
+    function ($window) {
+        return {
+            link: function (scope, element, attrs) { 
+                element[0].onload = function () {
+                    var h = element[0].clientHeight;
+                    var w = element[0].clientWidth;
+                    if(w >= h){
+                        element.css('margin-top', ((w-h)/2) + 'px')
+                    }
+                };                    
+                // (attrs.setheight) ? element.css('height', ((window.innerHeight*0.9)-discard) + 'px') : null;
+            }
+        }
+    }
+])
+
+.directive('heightdinamicaly', [
+    '$window',
+    function ($window) {
+        return {
+            link: function (scope, element, attrs) { 
+                element.css('height', (element[0].clientWidth) + 'px');
+                 // element.css('height', (element[0].clientWidth * 0.625) + 'px');
+            }
+        }
+    }
+])
+
+.directive('trusted', [
+    '$compile',
+    function ($compile) {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, ele, attrs) {
+                scope.$watch(attrs.trusted, function (html) {                      
+                    ele.html(html);
+                    $compile(ele.contents())(scope);
+                });
+            }
+        };
+    }
+]);
