@@ -1490,9 +1490,11 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('RecomendationListCtrl', function($scope, TDCardDelegate, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory) {
+.controller('RecomendationListCtrl', function($scope, TDCardDelegate, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory, $ionicActionSheet) {
   $scope.pets = localService.getPets().list;
-  console.log($scope.pets);
+  $scope.pet = localService.getCurrent();
+  console.log($scope.pet);
+  // console.log($scope.pets);
   var previousCard = [];
 
   $scope.cards = localService.getPets().list;
@@ -1520,8 +1522,6 @@ angular.module('starter.controllers', [])
   };
 
   $scope.goCrushPerfil = function(){
-    console.log("chamou");
-    console.log();
     $state.go("app.crushperfil", { 'crushId': $scope.cards[0].id });
   }
 
@@ -1544,6 +1544,57 @@ angular.module('starter.controllers', [])
       }
     })
   }
+
+  $scope.config = function(){
+    $ionicActionSheet.show({
+      buttons: [ 
+        { text: "Configurações" }, 
+        { text: "<span class='destructive'>Desabilitar TrueCrushes</span>" }
+      ],
+      titleText: "Opções",
+      cancelText: "Cancelar",
+      cancel: function () {},
+      buttonClicked: function (index) {
+        switch (index) {
+          case 0: $state.go("app.novopet", { 'petId': $scope.pet.id });
+          case 1: console.log("Desabilitar TrueCrushes"); 
+          break;
+        }
+        return true;
+      }
+    });
+  }
+
+})
+
+.controller('OwnerPerfilCtrl', function($scope, TDCardDelegate, $stateParams, $state, $ionicLoading, localService, apiService, $ionicPopup, $ionicHistory, $ionicActionSheet) {
+  $scope.pet = localService.getCurrent();
+  console.log($stateParams.ownerId);  
+
+  $scope.owner = {
+    nome: "Larissa",
+    img: "img/avatar.png",
+    descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  }
+
+  $scope.config = function(){
+    $ionicActionSheet.show({
+      buttons: [ 
+        { text: "<span class='destructive'>Bloquear</span>" }
+      ],
+      titleText: "Opções",
+      cancelText: "Cancelar",
+      cancel: function () {},
+      buttonClicked: function (index) {
+        switch (index) {
+          case 1: console.log("Bloquear"); 
+          break;
+        }
+        return true;
+      }
+    });
+  }
+
 })
 
 .controller('CrushPerfilCtrl', function($scope, $state, $stateParams, localService) {
@@ -1552,7 +1603,7 @@ angular.module('starter.controllers', [])
   console.log($stateParams.crushId);
 
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.crushId; })[0];
-  $scope.imagens = [pets[0].img, pets[1].img, pets[2].img]
+  $scope.imagens = [pets[0].img]
 
   $scope.edit = function(){
     $state.go("app.novopet", { 'petId': $scope.pet.id });
@@ -1568,6 +1619,17 @@ angular.module('starter.controllers', [])
     var uanos = (Math.floor(anos) == 1) ? 'Ano' : 'Anos';
     return Math.floor(anos)+' '+uanos+' e '+meses+' '+umeses;
   }
+
+  $scope.goOwnerPerfil = function(){
+    console.log("chamou");
+    $state.go("app.ownerperfil", { 'ownerId': 11 });
+  }
+
+  $scope.goChat = function(){
+    console.log("chamou");
+    $state.go("app.chat", { 'petId': $stateParams.crushId });
+  }
+
 })
 
 .controller('ChatListCtrl', function($scope, $state, $stateParams, localService, timeAgoSettings) {

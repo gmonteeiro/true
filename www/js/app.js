@@ -16,18 +16,19 @@ angular.module('starter', [
       StatusBar.styleDefault();
     }
 
-    // One Signal Push Notification Setup
-    // Enable to debug issues.
-     //window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
-    var notificationOpenedCallback = function(jsonData) {
-      console.log('didReceiveRemoteNotificationCallBack:');
-      console.log(jsonData);
+    
+     window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+    
+
+      var notificationOpenedCallback = function(jsonData) {
+        console.log('didReceiveRemoteNotificationCallBack:');
+        console.log(jsonData);
       };
-  
-    window.plugins.OneSignal
-      .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
-      .handleNotificationOpened(notificationOpenedCallback)
-      .endInit();
+
+      window.plugins.OneSignal
+        .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
+        .handleNotificationOpened(notificationOpenedCallback)
+        .endInit();
 
   });
 })
@@ -340,6 +341,17 @@ angular.module('starter', [
       'menuContent': {
         templateUrl: 'templates/chat.html',
         controller: 'ChatCtrl'
+      }
+    }
+  })
+
+  .state('app.ownerperfil', {
+    url: '/ownerperfil/:ownerId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/owner_perfil.html',
+        controller: 'OwnerPerfilCtrl'
       }
     }
   });

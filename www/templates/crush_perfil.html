@@ -35,12 +35,24 @@
 			<div class="field-content">{{(pet.sexo) ? 'Macho' : 'Femea'}}</div>
 		</div>
 	</div>
+	
+	<div class="owner-area">
+		<div class="data bg-grad">Meu Dono</div>
+		<div class="img-rounded bordered" ng-click="goOwnerPerfil()">
+			<img ng-src="img/avatar.png" alt="">
+		</div>
+		<div class="owner-infos middle" ng-click="goOwnerPerfil()">
+			<span class="titulo">Larissa</span>
+			<span class="subtitulo">Há 6 meses no Truepets</span>
+		</div>	
+	</div>
+	
 
 	<div class="crushControls">
 		<div class="standard" ng-click=cardDestroyed($index)>
 			<img src="img/dislikecrush.png" alt="">
 		</div>
-		<div class="principal" ng-click=cardDestroyed($index)>
+		<div class="principal" ng-click=goChat()>
 			<img src="img/talkcrush.png" alt="">
 		</div>
 		<div class="standard" ng-click=crushed()>
