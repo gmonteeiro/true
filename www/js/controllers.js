@@ -314,6 +314,28 @@ angular.module('starter.controllers', [])
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
   var pets = localService.getPets().list || [];
   var usr = localService.getUsuario();
+  // $scope.racas = getRacas();
+  $scope.showRacas = false;
+
+  $scope.racas = [
+    {nome:"Bulldog Frances", id:1},
+    {nome:"Beaggle", id:2},
+    {nome:"Golden Retriever", id:3},
+    {nome:"Bulldog Frances", id:4},
+    {nome:"Beaggle", id:5},
+    {nome:"Golden Retriever", id:6},
+    {nome:"Bulldog Frances", id:7},
+    {nome:"Beaggle", id:8},
+    {nome:"Golden Retriever", id:9}
+  ];
+
+  $scope.setRaca = function(raca){
+    $scope.pet.raca = raca.nome;
+    setTimeout(function() {
+      $scope.showRacas = false;  
+    }, 500);
+  }
+
   $scope.imagem = null;
   if($stateParams.petId){
     $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
@@ -322,6 +344,14 @@ angular.module('starter.controllers', [])
   }else{
     $scope.pet = {};
     $scope.title = "Novo Pet";
+  }
+
+  getRacas = function(){
+    $ionicLoading.show();
+    apiService.get("raca/getracas", "", function(res){
+      console.log(res);
+      $ionicLoading.hide();
+    }, function(err){ console.log(err); $ionicLoading.hide();});
   }
 
   console.log($scope.pet);
@@ -357,6 +387,16 @@ angular.module('starter.controllers', [])
     }
     function err(err){ $ionicLoading.hide(); console.log(err); $ionicPopup.alert({ title: "Erro ao salvar", okText: 'ok' }).then(function(){});};
   }
+
+  function escRegExp(string){
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  }
+
+  $scope.filterSearch = function(raca) {
+      if (!$scope.pet.raca) return true;
+      var regex = new RegExp('\\b' + escRegExp($scope.pet.raca), 'i');
+      return regex.test(raca.nome.split(' ')[0]);
+  };
 })
 
 .controller('PetCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
@@ -531,16 +571,17 @@ angular.module('starter.controllers', [])
   function successPut(res){
     console.log(res);
     $ionicLoading.hide();
-    res.data[0].localizacao = "";
-    (res.data[0].idVeterinario) ? res.data[0].id = res.data[0].idVeterinario : null;
+    // res.data.localizacao = "";
+    //(res.data.idVeterinario) ? res.data.id = res.data.idVeterinario : null;
     var index = vets.findIndex(x => x.id==$stateParams.vetId);
-    delete res.data[0].base64;
-    vets[index] = res.data[0];
+    delete res.data.base64;
+    vets[index] = res.data;
     localService.setVeterinarios({list:vets});
     $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){
       $ionicHistory.clearCache();
       $ionicHistory.nextViewOptions({historyRoot: true});
-      $state.go("app.meusvets");});
+      $state.go("app.meusvets");
+    });
   }
 
   function error(err){
@@ -1187,21 +1228,30 @@ angular.module('starter.controllers', [])
 
   $scope.send = function(){
     $ionicLoading.show();
-    apiService.post("vermifugo/postVermifugo/", $scope.medicamento, function(res){
-      $ionicLoading.hide();
-      console.log(res);
-      var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
-      confirmPopup.then(function(){
-        medicamentos.push(res.data);
-        localService.setMedicamentos({list:medicamentos});
-        $rootScope.refreshPet = true;
-        $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
-      });
-    }, function(err){
-      $ionicLoading.hide();
-      console.log(err);
+    if($stateParams.id){
+      apiService.put("vermifugo/putVermifugo/", $scope.medicamento, sucessoVermifugo, erroVermifugo);
+    }else{
+      apiService.post("vermifugo/postVermifugo/", $scope.medicamento, sucessoVermifugo, erroVermifugo);
+    }
+  }
+
+  sucessoVermifugo = function(res){
+    $ionicLoading.hide();
+    console.log(res);
+    var confirmPopup = $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' });
+    confirmPopup.then(function(){
+      medicamentos.push(res.data);
+      localService.setMedicamentos({list:medicamentos});
+      $rootScope.refreshPet = true;
+      $ionicHistory.goBack(); //$state.go("app.medicamentos", { 'petId': res.data.idPet });
     });
   }
+
+  erroVermifugo = function(err){
+    $ionicLoading.hide();
+    console.log(err);
+  }
+
 })
 
 .controller('MinhaContaCtrl', function($scope, $stateParams, $state, localService, $ionicActionSheet, apiService, $ionicLoading, $ionicPopup, $ionicHistory) {

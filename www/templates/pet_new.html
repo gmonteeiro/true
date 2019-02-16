@@ -14,7 +14,12 @@
 	    </div>
 
 	    <div class="line">
-	    	<input type="text" name="raca" ng-model="pet.raca" placeholder="Raça">
+	    	<input type="search" name="raca" ng-model="pet.raca" placeholder="Raça" ng-click="showRacas = true">
+	    	<div class="option-list" ng-if="showRacas">
+	            <span class="option-item" ng-repeat="raca in racas | filter:filterSearch" ng-click="setRaca(raca)">
+	                {{ raca.nome }}
+	            </span>
+	        </div>
 	    </div>
 
 	    <div class="line" ng-click="getDate()">
