@@ -1,11 +1,11 @@
-<ion-view view-title="Medicamentos">
+<ion-view view-title="{{pet.nome}}">
   <ion-content class="timeline med"> <!-- scroled -->
     <div class="img-area small">
 		<img ng-src="{{pet.img}}" alt="">
 	</div>
 	<div class="bg-title" ng-click="novo()">
 		<img src="img/add-white.png" alt="">
-		<h2>{{pet.nome}}</h2>
+		<h2>Medicamentos</h2>
 	</div>
 	<!-- <div class="alert" ng-if="medicamentos.length > 0">
 		<div class="field prox">

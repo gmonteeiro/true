@@ -1,0 +1,45 @@
+<ion-view view-title="{{chat.PetName}}">
+	<div class="chat padding chat-header" ng-if="!controlImg"> <!---->
+        <div class="top-list card">
+            <div class="user-info"> <!-- ui-sref="" -->
+                <div class="small-img" ng-click="goToProfile(chat.ProfileId)">
+                    <img ng-src="{{chat.ImageProfileUrl}}" fallback-src="img/no-image-pet.png" centerimg>
+                </div>
+                <p>{{chat.ProfileName}}</p>
+            </div>
+            <div class="btn-options" ng-click="options(chat.ProfileId)">
+                <button><img src="img/btn_more_options.png" alt="More Option"/></button>
+            </div>
+        </div>
+    </div>
+    <ion-content class="chat padding card-page" overflow-scroll="true" id="chatContainer">
+        <div class="chat-area">
+            <div class="" ng-repeat="message in chat.Messages track by $index" ng-class="(message.FromProfileId == user.id) ? 'sent-msg' : 'received-msg'">
+                <div class="small-img" ng-click="goToProfile(message.FromProfileId)">
+                    <img ng-src="{{(message.FromProfileId == user.id) ? (user.img) ? user.img : 'img/avatar.png' : (chat.ImageProfileUrl) ? chat.ImageProfileUrl : 'img/no-image-pet.png' }}" fallback-src="img/no-image-pet.png" centerimg>
+                </div>
+                <div class="content-msg">
+                    <div class="arrow-chat">
+                        <a id="{{'scrollId'+message.Id}}"></a>
+                    </div>
+                    <span ng-if="message.Type == 2" class="img-chat-box" ng-click="openModal(message.Message)"><img ng-src="{{message.Message}}"></span>
+                    <span ng-if="message.Type != 2" class="img-chat-box" trusted="message.Message"></span>
+                    <div class="date">{{message.DateTime | timeAgo}}</div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <div class="chat">
+        <div class="write-area" id="write-area">
+            <div class="add" ng-click="chooseMedia()">+</div>
+            <div class="input-area">
+                <input type="text" ng-model="messageText" ng-keyup="sendMessage(messageText, 0, $event)" placeholder="Escreva sua mensagem.." required>
+            </div>
+            <button class="button button-outline button-stable button-small" ng-click="sendMessage(messageText, 0)">enviar</button>
+        </div>
+    </div>
+
+    <div ng-if="controlImg" class="modalImage">
+        <img ng-src={{selectedImage}} ng-pinch-zoom max-scale="4" on-swipe-up="closeModal()" on-swipe-down="closeModal()" max-scale="1" style="display:block; max-heigth: 700px; width: 90%; margin: 20px 5% 0 auto;" />
+    </div>
+</ion-view>

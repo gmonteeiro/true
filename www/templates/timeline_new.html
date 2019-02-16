@@ -12,6 +12,10 @@
 	    <div class="line">
 	    	<input type="text" name="titulo" ng-model="timeline.titulo" placeholder="Título">
 	    </div>
+        <div class="line" ng-click="getData()">
+            <div class="likeinput" ng-if="!timeline.Data">Data</div>
+            <div class="likeinput" ng-if="timeline.Data">{{timeline.Data | date: 'dd/MM/yyyy'}}</div>
+        </div>
     </div>
   </ion-content>
 

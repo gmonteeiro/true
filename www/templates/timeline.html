@@ -1,15 +1,15 @@
-<ion-view view-title="Timeline">
+<ion-view view-title="{{pet.nome}}">
   <ion-content class="timeline"> <!-- scroled -->
     <div class="img-area small">
 		<img ng-src="{{pet.img}}" alt="">
 	</div>
 	<div class="bg-title">
 		<img src="img/add-white.png" alt="" ng-click="new()">
-		<h2>{{pet.nome}}</h2>
+		<h2>Timeline</h2>
 	</div>
 	<div class="container">
 		<ion-spinner icon="dots" class="spinner-dark" ng-if="spinner"></ion-spinner>
-		<div class="card" ng-repeat="item in timeline | orderBy:'-Data'">
+		<div class="card" ng-repeat="item in timeline | orderBy:'-Data'" ng-click="config(item.id)" ng-if="timeline[1]">
 			<div class="data bg-grad">{{item.Data | date: 'dd/MM/yyyy'}}</div>
 			<div class="titulo">{{item.titulo}}</div>
 			<div class="img-area" ng-if="item.img">

@@ -1,0 +1,36 @@
+<ion-view view-title="True Crushes" hide-back-button="false" can-swipe-back="false" scroll="false">
+	<ion-nav-buttons side="right" >
+      <img src="img/config.png" alt="" ng-click="config()">
+    </ion-nav-buttons>
+	<div class="true-crushes">
+		
+		<td-cards>
+		  <td-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)" class="card-{{$index}}">
+		    <div class="img-container image" ng-click="goCrushPerfil()">
+	            <img ng-src="{{(card.img) ? card.img : 'img/no-image-pet.png'}}" alt="">
+	            <div class="crushDesc">
+	            	<span class="crushName">{{card.nome}}</span>
+	            	<span class="crushAge">{{getAge(card.dataNascimento)}}</span>, 
+	            	<span class="crushWeight">{{card.peso}}kg</span>
+	            	<span class="crushDistance"><img src="img/location.png" alt="">1,4km</span>
+	            </div>
+		    </div>
+		  </td-card>
+		</td-cards>
+
+		<div class="crushControls">
+			<div class="standard" ng-click=cardDestroyed($index)>
+				<img src="img/previouscrush.png" alt="">
+			</div>
+			<div class="principal" ng-click=cardDestroyed($index)>
+				<img src="img/dislikecrush.png" alt="">
+			</div>
+			<div class="principal" ng-click=crushed()>
+				<img src="img/likecrush.png" alt="">
+			</div>
+			<div class="standard" ng-click=cardDestroyed($index)>
+				<img src="img/nextcrush.png" alt="">
+			</div>
+		</div>
+	</div>
+</ion-view>

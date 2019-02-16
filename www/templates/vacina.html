@@ -21,7 +21,8 @@
 
 			<div class="field halph">
 				<div class="field-name">Retorno</div>
-				<div class="field-content">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
+				<div class="field-content" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
+				<div class="field-content" ng-if="!vacina.retorno">{{retvacina[vacina.lembrete]}}</div>
 			</div>
 		</div>
 	</div>

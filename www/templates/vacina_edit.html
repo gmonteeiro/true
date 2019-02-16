@@ -20,13 +20,18 @@
 	    </div>
 
 	    <div class="line" ng-click="getRetorno()">
-	    	<div class="likeinput" ng-if="!vacina.retorno">Retorno</div>
+	    	<div class="likeinput" ng-if="!vacina.retorno">Próxima dose</div>
 	    	<div class="likeinput" ng-if="vacina.retorno">{{vacina.retorno | date: 'dd/MM/yyyy'}}</div>
 	    	<!-- <input type="text" name="retorno" ng-model="vacina.retorno" placeholder="Retorno" mask="99/99/9999"> -->
 	    </div>
 		
-		<div class="line">
+		<!-- <div class="line">
 	    	<input type="text" name="lembrete" ng-model="vacina.lembrete" placeholder="Lembrete">
+	    </div> -->
+	    <div class="line">
+	    	<select ng-model="vacina.lembrete" class="likeinput">
+			    <option ng-repeat="item in diasLembrete"  value="{{item.qtd}}">{{item.desc}}</option>
+			</select>
 	    </div>
 
 	    <div class="line">
