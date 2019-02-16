@@ -1,0 +1,19 @@
+<ion-view view-title="Minha Conta">
+	<ion-nav-buttons side="right" >
+      <img src="img/config.png" alt="" ng-click="config()">
+    </ion-nav-buttons>
+	<ion-content class="minhaconta"> <!-- scroled -->
+		<div class="bg-textured">
+			<div class="img-rounded">
+				<img ng-src="{{owner.img}}" alt="">
+			</div>
+			<span>{{owner.nome}}</span>
+		</div>
+		<div class="container">
+			<div class="field">
+				<div class="field-name">Sobre mim</div>
+				<div class="field-content">{{owner.descricao}}</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

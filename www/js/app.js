@@ -1,4 +1,10 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
+angular.module('starter', [
+  'ionic', 
+  'starter.controllers', 
+  'ngMask', 
+  'ionic.contrib.ui.tinderCards', 
+  'yaru22.angular-timeago',
+  'ngPinchZoom'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -7,9 +13,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    
+     window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+    
+
+      var notificationOpenedCallback = function(jsonData) {
+        console.log('didReceiveRemoteNotificationCallBack:');
+        console.log(jsonData);
+      };
+
+      window.plugins.OneSignal
+        .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
+        .handleNotificationOpened(notificationOpenedCallback)
+        .endInit();
+
   });
 })
 
@@ -277,6 +297,61 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngMask'])
       'menuContent': {
         templateUrl: 'templates/minhaconta_edit.html',
         controller: 'EditarContaCtrl'
+      }
+    }
+  })
+
+  .state('app.recomendationlist', {
+    url: '/recomendationlist',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/recomendation_list.html',
+        controller: 'RecomendationListCtrl'
+      }
+    }
+  })
+
+  .state('app.crushperfil', {
+    url: '/crushperfil/:crushId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/crush_perfil.html',
+        controller: 'CrushPerfilCtrl'
+      }
+    }
+  })
+
+  .state('app.chatlist', {
+    url: '/chatlist',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat_list.html',
+        controller: 'ChatListCtrl'
+      }
+    }
+  })
+
+  .state('app.chat', {
+    url: '/chat/:petId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/chat.html',
+        controller: 'ChatCtrl'
+      }
+    }
+  })
+
+  .state('app.ownerperfil', {
+    url: '/ownerperfil/:ownerId',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/owner_perfil.html',
+        controller: 'OwnerPerfilCtrl'
       }
     }
   });
