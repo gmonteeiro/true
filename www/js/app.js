@@ -17,7 +17,7 @@ angular.module('starter', [
     }
 
     
-     window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+     //window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
     
 
       var notificationOpenedCallback = function(jsonData) {

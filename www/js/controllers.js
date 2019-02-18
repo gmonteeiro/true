@@ -326,20 +326,8 @@ angular.module('starter.controllers', [])
 .controller('NovoPetCtrl', function($scope, $stateParams, $state, localService, $ionicLoading, apiService, $ionicPopup, $ionicHistory) {
   var pets = localService.getPets().list || [];
   var usr = localService.getUsuario();
-  // $scope.racas = getRacas();
+  getRacas();
   $scope.showRacas = false;
-
-  $scope.racas = [
-    {nome:"Bulldog Frances", id:1},
-    {nome:"Beaggle", id:2},
-    {nome:"Golden Retriever", id:3},
-    {nome:"Bulldog Frances", id:4},
-    {nome:"Beaggle", id:5},
-    {nome:"Golden Retriever", id:6},
-    {nome:"Bulldog Frances", id:7},
-    {nome:"Beaggle", id:8},
-    {nome:"Golden Retriever", id:9}
-  ];
 
   $scope.setRaca = function(raca){
     $scope.pet.raca = raca.nome;
@@ -358,12 +346,55 @@ angular.module('starter.controllers', [])
     $scope.title = "Novo Pet";
   }
 
-  getRacas = function(){
+  function getRacas(){
     $ionicLoading.show();
     apiService.get("raca/getracas", "", function(res){
       console.log(res);
+      $scope.racas = res.data;
       $ionicLoading.hide();
-    }, function(err){ console.log(err); $ionicLoading.hide();});
+    }, function(err){ 
+      $scope.racas = [
+        {"id":1, "nome": "Yorkshire", "porte": "Médio", "caracteristica": "Destemido, carinhoso e cheio de energia"},
+        {"id":2, "nome": "Akita", "porte": "Alto", "caracteristica": "Leal, amigo e brincalhão"},
+        {"id":3, "nome": "Basset Hound", "porte": "Alto", "caracteristica": "Paciente, teimoso e charmoso"},
+        {"id":4, "nome": "Beagle", "porte": "Médio", "caracteristica": "Alegre, companheiro e aventureiro"},
+        {"id":5, "nome": "Boiadeiro Australiano", "porte": "Médio", "caracteristica": "Alerta, curioso e leal"},
+        {"id":6, "nome": "Border Collie", "porte": "Alto", "caracteristica": "Inteligente, leal e cheio de energia"},
+        {"id":7, "nome": "Buldogue Francês", "porte": "Alto", "caracteristica": "Carinhoso, leal e brincalhão"},
+        {"id":8, "nome": "Buldogue Inglês", "porte": "Alto", "caracteristica": "Calmo, divertido e dócil"},
+        {"id":9, "nome": "Bull Terrier", "porte": "Médio", "caracteristica": "Travesso, brincalhão e leal"},
+        {"id":10, "nome": "Cane Corso", "porte": "Baixo", "caracteristica": "Protetor, leal e inteligente"},
+        {"id":11, "nome": "Cavalier King Charles Spaniel", "porte": "Alto", "caracteristica": "Companheiro, alegre e afetuoso"},
+        {"id":12, "nome": "Chihuahua", "porte": "Médio", "caracteristica": "Charmoso, animado e atrevido"},
+        {"id":13, "nome": "Chow chow", "porte": "Alto", "caracteristica": "Calmo, leal e orgulhoso"},
+        {"id":14, "nome": "Cocker Spaniel Inglês", "porte": "Alto", "caracteristica": "Alegre, carinhoso e cheio de vida"},
+        {"id":15, "nome": "Dachshund", "porte": "Médio", "caracteristica": "Corajoso, animado e inteligente"},
+        {"id":16, "nome": "Dálmata", "porte": "Médio", "caracteristica": "Atlético, protetor e amável"},
+        {"id":17, "nome": "Doberman", "porte": "Médio", "caracteristica": "Inteligente, leal e protetor"},
+        {"id":18, "nome": "Dogo Argentino", "porte": "Médio", "caracteristica": "Leal, confiável e corajoso"},
+        {"id":19, "nome": "Dogue Alemão", "porte": "Alto", "caracteristica": "Amigável, paciente e dócil"},
+        {"id":20, "nome": "Fila Brasileiro", "porte": "Baixo", "caracteristica": "Companheiro, corajoso e amoroso"},
+        {"id":21, "nome": "Golden Retriever", "porte": "Alto", "caracteristica": "Inteligente, brincalhão e leal"},
+        {"id":22, "nome": "Husky Siberiano", "porte": "Médio", "caracteristica": "Amigável, trabalhador e extrovertido"},
+        {"id":23, "nome": "Labrador Retriever", "porte": "Médio", "caracteristica": "Inteligente, carinhoso e brincalhão"},
+        {"id":24, "nome": "Lhasa Apso", "porte": "Médio", "caracteristica": "Esperto, confiante e independente"},
+        {"id":25, "nome": "Lulu da Pomerânia", "porte": "Médio", "caracteristica": "Animado, inteligente e cheio de personalidade"},
+        {"id":26, "nome": "Maltês", "porte": "Médio", "caracteristica": "Gentil, brincalhão e afetuoso"},
+        {"id":27, "nome": "Mastiff", "porte": "Alto", "caracteristica": "Calmo, amável e leal"},
+        {"id":28, "nome": "Pastor Alemão", "porte": "Alto", "caracteristica": "Confiante, corajoso e inteligente"},
+        {"id":29, "nome": "Pequinês", "porte": "Médio", "caracteristica": "Afetuoso, leal e elegante"},
+        {"id":30, "nome": "Pinscher", "porte": "Médio", "caracteristica": "Brincalhão, carinhoso e protetor"},
+        {"id":31, "nome": "Poodle", "porte": "Médio", "caracteristica": "Orgulhoso, ativo e inteligente"},
+        {"id":32, "nome": "Pug", "porte": "Alto", "caracteristica": "Amoroso, temperamental e companheiro"},
+        {"id":33, "nome": "Rottweiler", "porte": "Alto", "caracteristica": "Protetor, leal e inteligente"},
+        {"id":34, "nome": "Schnauzer", "porte": "Médio", "caracteristica": "Dócil, leal e companheiro"},
+        {"id":35, "nome": "Shar-pei", "porte": "Alto", "caracteristica": "Amoroso, companheiro e brincalhão"},
+        {"id":36, "nome": "Shiba", "porte": "Baixo", "caracteristica": "Independente, leal e alerta"},
+        {"id":37, "nome": "Shih tzu", "porte": "Médio", "caracteristica": "Carinhoso, brincalhão e encantador"},
+        {"id":38, "nome": "Weimaraner", "porte": "Baixo", "caracteristica": "Amigável, corajoso e independente"}
+      ];
+      console.log(err); $ionicLoading.hide();
+    });
   }
 
   console.log($scope.pet);
@@ -385,14 +416,14 @@ angular.module('starter.controllers', [])
     function success(res){
       $ionicHistory.clearCache();
       $ionicLoading.hide();console.log(res);
-      (res.data[0].idPet) ? res.data[0].id = res.data[0].idPet : null;
+      (res.data.idPet) ? res.data.id = res.data.idPet : null;
       if($stateParams.petId){
         index = pets.findIndex(x => x.id==$stateParams.petId);
-        delete res.data[0].status;
-        delete res.data[0].base64;
-        pets[index] = res.data[0];
+        delete res.data.status;
+        delete res.data.base64;
+        pets[index] = res.data;
       }else{
-        pets.push(res.data[0]);
+        pets.push(res.data);
       }
       localService.setPets({list:pets});
       $ionicPopup.alert({ title: "Cadastrado com Sucesso!", okText: 'ok' }).then(function(){ $state.go("app.meuspets"); });
@@ -558,7 +589,7 @@ angular.module('starter.controllers', [])
 
   $scope.send = function(){
     $ionicLoading.show();
-    ($scope.vet.base64) ? $scope.vet.img = null : null;
+    // ($scope.vet.base64) ? $scope.vet.img = null : null;
     if(!$stateParams.vetId){
       apiService.post('veterinario/PostVeterinario/', $scope.vet, successPost, error);
     }else{
@@ -568,10 +599,10 @@ angular.module('starter.controllers', [])
 
   function successPost(res){
     $ionicLoading.hide();
-    res.data[0].localizacao = "";
-    (res.data[0].idVeterinario) ? res.data[0].id = res.data[0].idVeterinario : null;
-    delete res.data[0].status;
-    vets.push(res.data[0]);
+    res.data.localizacao = "";
+    (res.data.idVeterinario) ? res.data.id = res.data.idVeterinario : null;
+    delete res.data.status;
+    vets.push(res.data);
     localService.setVeterinarios({list:vets});
     $ionicPopup.alert({ title: "Sucesso!", okText: 'ok' }).then(function(){
       $ionicHistory.clearCache();
@@ -748,7 +779,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('TimelineCtrl', function($scope, $state, $stateParams, $ionicLoading, apiService, localService, $ionicActionSheet, $ionicPopup, $ionicHistory) {
-  $scope.timeline = localService.getTimeline().list || [];
+  $scope.timeline = [];
   var pets = localService.getPets().list;
   $scope.pet = pets.filter(function(item) { return item.id == $stateParams.petId; })[0];
 
