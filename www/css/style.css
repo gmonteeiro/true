@@ -135,6 +135,9 @@ margin-right: 5px;
     background-color: #ffffff;
     background-image: none;
     color: #FF5F6D;
+    height: 50px;
+}
+.platform-ios .bar.bar-stable {
     height: 60px !important;
 }
 .bar .buttons span.back-text{
@@ -1366,4 +1369,37 @@ margin-right: 5px;
     color: #888888;
 }
 
-
+/***************** ANDROID *****************/
+.platform-android .login .img-centered img{
+    width:80px;
+}
+.platform-android .form {
+    padding-bottom: 30px;
+}
+.platform-android .login .bg-textured{
+    height: 400px;
+}
+.platform-android .bar .title {
+    line-height: 50px;
+}
+.platform-android .has-header {
+    top: 44px;
+}
+.platform-android .speech-bubble{
+    bottom: 20px;
+}
+.platform-android .btm-bar .btn-icon{
+    line-height: 55px;
+}
+.platform-android.keyboard-open .btm-bar .btn-icon{
+    bottom: 60px;
+}
+.platform-android .bar .buttons.buttons-right{
+    top: 7px;
+    padding: 10px;
+    height: auto;
+    width:40px;
+}
+.platform-android .timeline .speech-bubble{
+    bottom: auto;
+}

@@ -6,7 +6,7 @@ angular.module('starter', [
   'yaru22.angular-timeago',
   'ngPinchZoom'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
@@ -20,15 +20,36 @@ angular.module('starter', [
      //window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
     
 
-      var notificationOpenedCallback = function(jsonData) {
-        console.log('didReceiveRemoteNotificationCallBack:');
-        console.log(jsonData);
-      };
+    var notificationOpenedCallback = function(jsonData) {
+      console.log('didReceiveRemoteNotificationCallBack:');
+      console.log(jsonData);
+    };
 
-      window.plugins.OneSignal
-        .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
-        .handleNotificationOpened(notificationOpenedCallback)
-        .endInit();
+    window.plugins.OneSignal
+      .startInit("994578be-5e8b-43d6-88ae-8c551b4054ce")
+      .handleNotificationOpened(notificationOpenedCallback)
+      .endInit();
+
+    // Test to see if user has already granted consent
+    // If user hasn't granted consent then
+    //window.plugins.OneSignal.setRequiresUserPrivacyConsent(true);
+
+    // Display a modal window asking for GDPR consent
+    // Capture the consent (or not) and update OneSignal
+    //window.plugins.OneSignal.provideUserConsent(true);  
+
+    window.plugins.OneSignal.getIds(function(ids) {
+        // if (debugRegisterAndGetOneSignalNotificationIDS)
+            console.log('RegisterAndGetOneSignalNotificationIDS: window.plugins.OneSignal.getIds: getIds: ' + JSON.stringify(ids));
+
+        $rootScope.notificationIDS = { userId: ids.userId , pushToken: ids.pushToken };
+
+        // if (debugRegisterAndGetOneSignalNotificationIDS)
+            //console.log("RegisterAndGetOneSignalNotificationIDS: notificationIDS = " + JSON.stringify(notificationIDS));
+    } , function () {
+        console.log("window.plugins.OneSignal.getIds appears to have failed");
+        $rootScope.notificationIDS = { userId: null , pushToken: null };
+    }); 
 
   });
 })
