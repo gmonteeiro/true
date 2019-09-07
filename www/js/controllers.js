@@ -1884,7 +1884,7 @@ angular.module('starter.controllers', [])
     deleta: deleta
   };
 
-  var ApiURL = 'https://qualitydigitalserver2.com.br/TruePetAPI/api/';
+  var ApiURL = 'https://qualitydigitalserver2.com.br/TruePetAPIv2/api/';
 
   function get(url, param, success, failure) {
     return $http.get(ApiURL + url + param)
